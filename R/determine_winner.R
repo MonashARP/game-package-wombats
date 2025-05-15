@@ -4,6 +4,7 @@
 #' @param dealer_hand A `blackjack_hand` object
 #' @return Outcome string or named character vector if multiple hands
 #' @export
+
 determine_winner <- function(player_hand, dealer_hand) {
   # STRONG defensive check: list of blackjack_hand only
   is_valid_hand_list <- function(x) {
@@ -31,14 +32,20 @@ determine_winner <- function(player_hand, dealer_hand) {
   d_blackjack <- is_blackjack(dealer_hand)
   p_charlie <- is_five_card_charlie(player_hand)
 
-  if (p_charlie) return("Player wins with 5-card Charlie")
+  if (p_score > 21 && d_score > 21) return("Both bust — Dealer wins by rule")
   if (p_score > 21) return("Dealer wins")
   if (d_score > 21) return("Player wins")
-  if (p_blackjack && !d_blackjack) return("Player wins with Blackjack")
-  if (!p_blackjack && d_blackjack) return("Dealer wins with Blackjack")
+
+  if (p_blackjack && d_blackjack) return("Push (both Blackjack)")
+  if (p_blackjack) return("Player wins with Blackjack")
+  if (d_blackjack) return("Dealer wins with Blackjack")
+
+  if (p_charlie) return("Player wins with 5-card Charlie")
+
   if (p_score > d_score) return("Player wins")
   if (p_score < d_score) return("Dealer wins")
 
   return("Push")
+
 }
 
