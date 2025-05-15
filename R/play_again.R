@@ -4,7 +4,8 @@
 
 ask_play_again <- function() {
   repeat {
-    again <- tolower(readline(prompt = "\nType 'again' to play another game, or 'exit' to quit: "))
+    cat("\n")
+    again <- tolower(readline(prompt = "Type 'again' to play another game, or 'exit' to quit: "))
     if (again == "again") return(TRUE)
     if (again == "exit") return(FALSE)
     cat("Invalid input. Please type 'again' or 'exit'.\n")

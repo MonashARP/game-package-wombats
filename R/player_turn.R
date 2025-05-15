@@ -2,7 +2,7 @@
 #' @description Allows each player (human or computer) to take their turns (hit, stand, double).
 #' @param player_hands A named list of lists of blackjack_hand objects, keyed by player name.
 #' @param deck A character vector representing the remaining deck.
-#' @param players A named list of player info (each has 'coins', 'bets', and 'type' e.g. "human" or "computer").
+#' @param players A named list of player info (each has 'coins', 'bets', and 'is_computer' flag).
 #' @return A list containing updated player_hands, deck, and players.
 
 play_player_turns <- function(player_hands, deck, players) {
@@ -12,19 +12,23 @@ play_player_turns <- function(player_hands, deck, players) {
   for (player_name in names(updated_player_hands)) {
     hands <- updated_player_hands[[player_name]]
     player <- players[[player_name]]
+    player_type <- if (isTRUE(player$is_computer)) "computer" else "human"
 
-    cat(paste0("\n--- ", player_name, " ('", player$type, "') Playing ---\n"))
+    cat(paste0("\n--- ", player_name, " ('", player_type, "') Playing ---\n"))
 
     for (j in seq_along(hands)) {
       hand <- hands[[j]]
+      score <- calculate_score(hand)
+
       cat(paste0("Hand ", j, ": [", paste(vctrs::field(hand, "cards"), collapse = ", "), "]\n"))
+      cat("Score:", score, "\n")
 
       first_move <- TRUE
       repeat {
         action <- NULL
 
         # Decide action: human prompt or computer logic
-        if (player$type == "human") {
+        if (!isTRUE(player$is_computer)) {
           prompt_msg <- if (first_move) {
             "Hit, Stand or Double? (hit/stand/double/exit): "
           } else {
@@ -42,7 +46,7 @@ play_player_turns <- function(player_hands, deck, players) {
             cat("Goodbye!\n")
             return(invisible(NULL))
           }
-        } else if (player$type == "computer") {
+        } else {
           # Simple AI: hit if score < 17, stand otherwise; double only if first move and coins allow and score in reasonable range
           score <- calculate_score(hand)
 

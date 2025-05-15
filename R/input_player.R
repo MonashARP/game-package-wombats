@@ -2,9 +2,8 @@
 #' @description Allows input of human player names, creates computer players, loads or creates player data with coins.
 #' @return A named list of players (human + computer), where each element is a list with player info (name, money, is_computer).
 #' @export
-input_players <- function() {
-  # Load existing players from disk
-  players_db <- load_players()
+
+input_players <- function(players_db) {
 
   # Input total number of players
   repeat {
@@ -47,7 +46,7 @@ input_players <- function() {
           }
 
           if (cont == "yes") {
-            cat("Welcome back, ", name, "! You have ", players_db[[name]]$money, " coins remaining.\n", sep = "")
+            cat("Welcome back, ", name, "! You have ", players_db[[name]]$coins, " coins remaining.\n", sep = "")
             session_players[[name]] <- players_db[[name]]
             session_players[[name]]$is_computer <- FALSE
             break
@@ -57,7 +56,7 @@ input_players <- function() {
           }
         } else {
           # New human player with default coins
-          players_db[[name]] <- list(name = name, money = 1000, is_computer = FALSE)
+          players_db[[name]] <- list(name = name, coins = 1000, is_computer = FALSE)
           cat("New player created: ", name, " with 1000 coins.\n", sep = "")
           session_players[[name]] <- players_db[[name]]
           break
@@ -79,7 +78,7 @@ input_players <- function() {
       if (comp_name %in% names(players_db)) {
         session_players[[comp_name]] <- players_db[[comp_name]]
       } else {
-        players_db[[comp_name]] <- list(name = comp_name, money = 1000, is_computer = TRUE)
+        players_db[[comp_name]] <- list(name = comp_name, coins = 1000, is_computer = TRUE)
         cat("New computer player created: ", comp_name, " with 1000 coins.\n", sep = "")
         session_players[[comp_name]] <- players_db[[comp_name]]
       }
@@ -89,5 +88,5 @@ input_players <- function() {
   # Save updated player database
   save_players(players_db)
 
-  return(session_players)
+  return(list(session_players = session_players, players_db = players_db))
 }

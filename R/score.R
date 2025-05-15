@@ -3,6 +3,7 @@
 #' @param cards Character vector of card values, e.g. c("A", "10", "5")
 #' @return A `blackjack_hand` S3 object
 #' @export
+
 new_blackjack_hand <- function(cards) {
   stopifnot(all(cards %in% c("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K")))
   vctrs::new_rcrd(list(cards = cards), class = "blackjack_hand")

@@ -3,34 +3,58 @@
 #' @export
 
 play <- function() {
-  repeat {
-    # Input human and computer players
-    players <- input_players()
+  cat("\n🎲 Welcome to Blackjack Deluxe! 🎲\n")
+  cat("This is a multiplayer Blackjack game where you can:\n")
+  cat("- Play with up to 6 players (human and computer opponents)\n")
+  cat("- Bet coins, double down, split hands, and use insurance\n")
+  cat("- Play against a dealer controlled by the computer\n")
+  cat("- Save your player names and coin balances between sessions\n\n")
+  cat("Get ready to test your luck and strategy!\n\n")
 
-    # Get bets from all players, update players with bets and coins
+  saved_data <- load_players()
+  players_db <- saved_data$players
+  bankroll_history <- saved_data$bankroll_history
+
+  repeat {
+
+    input_res <- input_players(players_db)
+    players <- input_res$session_players
+    players_db <- input_res$players_db
+
     players <- get_bets(players)
 
-    # Setup initial deck, hands, and updated players
     initial_setup <- setup_and_display_initial(players)
     deck <- initial_setup$deck
+
     player_hands <- initial_setup$player_hands
     dealer_hand <- initial_setup$dealer_hand
     players <- initial_setup$players
 
-    # Insurance and dealer blackjack check
-    dealer_blackjack <- handle_insurance(dealer_hand)
-    if (dealer_blackjack) next  # restart loop if dealer blackjack
+    insurance_res <- handle_insurance(dealer_hand, players)
+    dealer_blackjack <- insurance_res$dealer_blackjack
+    players <- insurance_res$players
 
-    # Handle splitting hands
-    player_hands <- handle_splitting(player_hands, deck)
+    if (dealer_blackjack) {
+      cat("Dealer has Blackjack. Round ends.\n")
+      res <- suppressWarnings(end_round(player_hands, dealer_hand, players_db, bankroll_history))
+      players <- res$players
+      bankroll_history <- res$bankroll_history
 
-    # Play player turns: update hands, deck, and players with updated coins and bets
+      if (!ask_play_again()) break
+      next
+    }
+
+    player_hands <- handle_splitting(player_hands, deck, players)
+
     res <- play_player_turns(player_hands, deck, players)
+    if (is.null(res)) {
+      cat("\nGame ended due to player exit during turns.\n")
+      break
+    }
     player_hands <- res$player_hands
     deck <- res$deck
     players <- res$players
 
-    # Dealer plays only if at least one hand didn't bust
     all_scores <- unlist(purrr::map(player_hands, ~ purrr::map_dbl(.x, calculate_score)))
     if (any(all_scores <= 21)) {
       dealer_res <- dealer_action(dealer_hand, deck)
@@ -38,10 +62,14 @@ play <- function() {
       deck <- dealer_res$deck
     }
 
-    # Display final results with player coins and info
-    display_final_results(player_hands, dealer_hand, players)
+    res <- suppressWarnings(end_round(player_hands, dealer_hand, players, players_db, bankroll_history))
+    players <- res$players
+    bankroll_history <- res$bankroll_history
 
-    # Prompt to play again
+    players_db <- modifyList(players_db, players)
+
+    save_players(players_db, bankroll_history)
+
     if (!ask_play_again()) break
   }
 }
