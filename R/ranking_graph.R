@@ -15,25 +15,20 @@ plot_player_ranking <- function(players) {
   df$rank <- seq_len(nrow(df))
   df$player <- factor(df$player, levels = df$player)
 
+  # Tooltip only
+  df$Tooltip <- paste0("Rank: ", df$rank,
+                       "<br>Player: ", df$player,
+                       "<br>Coins: ", df$coins)
+
   p <- plotly::plot_ly(
     data = df,
     x = ~player,
     y = ~coins,
     type = 'bar',
-    text = ~coins,
-    textposition = "inside",  # safer inside
-    marker = list(color = 'skyblue')
-  )
-
-  p <- plotly::add_trace(
-    p,
-    x = ~player,
-    y = ~coins + max(df$coins) * 0.15,  # push rank label higher
-    text = ~paste0("Rank ", rank),
-    type = "scatter",
-    mode = "text",
-    marker = NULL,  # prevent marker warning
-    textfont = list(color = "black", size = 12),
+    marker = list(color = 'skyblue'),
+    hovertext = ~Tooltip,
+    hoverinfo = 'text',
+    textinfo = 'none',
     showlegend = FALSE
   )
 
@@ -42,7 +37,8 @@ plot_player_ranking <- function(players) {
     title = "📊 Player Coin Ranking",
     xaxis = list(title = "Player"),
     yaxis = list(title = "Coins"),
-    margin = list(b = 100)
+    margin = list(b = 100),
+    showlegend = FALSE
   )
 
   return(p)

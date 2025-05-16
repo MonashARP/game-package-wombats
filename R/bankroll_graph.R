@@ -9,7 +9,6 @@ plot_bankroll_history <- function(bankroll_history) {
     return(invisible(NULL))
   }
 
-  # Efficiently create the data frame
   df <- data.frame(
     Round = unlist(lapply(seq_along(bankroll_history), function(i) rep(i, length(bankroll_history[[i]])))),
     Player = unlist(lapply(bankroll_history, names)),
@@ -18,12 +17,26 @@ plot_bankroll_history <- function(bankroll_history) {
   )
 
   if (nrow(df) > 0) {
-    p <- plotly::plot_ly(df, x = ~Round, y = ~Coins, color = ~Player,
-                         type = 'scatter', mode = 'lines+markers')
+    # Create custom text for the tooltip
+    df$Tooltip <- paste0("Player: ", df$Player, "<br>Coins: ", df$Coins)
+
+    p <- plotly::plot_ly(
+      df,
+      x = ~Round,
+      y = ~Coins,
+      type = 'scatter',
+      mode = 'lines+markers',
+      text = ~Tooltip,
+      hoverinfo = 'text',
+      color = ~Player,
+      showlegend = FALSE
+    )
+
     p <- plotly::layout(p,
                         title = "💰 Bankroll Over Time",
                         xaxis = list(title = "Round"),
-                        yaxis = list(title = "Coins")
+                        yaxis = list(title = "Coins"),
+                        showlegend = FALSE  # double-check legend is hidden in layout
     )
     return(p)
   } else {

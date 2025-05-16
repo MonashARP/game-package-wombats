@@ -1,11 +1,21 @@
-Package: WomJack
+Package: blackjack_wombats
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Sun Yan Joanna", "Ma",
+      email = "smaa0048@student.monash.edu",
+      role = c("aut", "cre")
+    ), 
+    person(
+      "Wei Zhu", "Chen",
+      email = "wche0192@student.monash.edu",
+      role = c("aut", "cre")
+    ), 
+    person(
+      "Aneesh", "Agarwal",
+      email = "aaga0022@student.monash.edu",
       role = c("aut", "cre")
     )
   )
@@ -14,3 +24,7 @@ Description: More about what it does (maybe more than one line).
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports:
+    vctrs, 
+    plotly, 
+    purrr
