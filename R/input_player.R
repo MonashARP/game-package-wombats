@@ -1,5 +1,6 @@
 #' @title Input and validate human and computer players
 #' @description Allows input of human player names, creates computer players, loads or creates player data with coins.
+#' @param players_db Player Database in Local Directory
 #' @return A named list of players (human + computer), where each element is a list with player info (name, money, is_computer).
 #' @export
 
@@ -7,14 +8,14 @@ input_players <- function(players_db) {
 
   # Input total number of players
   repeat {
-    total_players <- suppressWarnings(as.integer(readline("Enter total number of players (1–6): ")))
+    total_players <- suppressWarnings(as.integer(readline("Enter total number of players (1-6): ")))
     if (!is.na(total_players) && total_players >= 1 && total_players <= 6) break
     cat("Invalid input. Please enter a number between 1 and 6.\n")
   }
 
   # Input number of computer players
   repeat {
-    num_computers <- suppressWarnings(as.integer(readline(paste0("Enter number of computer players (0–", total_players, "): "))))
+    num_computers <- suppressWarnings(as.integer(readline(paste0("Enter number of computer players (0-", total_players, "): "))))
     if (!is.na(num_computers) && num_computers >= 0 && num_computers <= total_players) break
     cat("Invalid input. Please enter a valid number of computer players.\n")
   }

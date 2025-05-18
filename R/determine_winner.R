@@ -32,7 +32,7 @@ determine_winner <- function(player_hand, dealer_hand) {
   d_blackjack <- is_blackjack(dealer_hand)
   p_charlie <- is_five_card_charlie(player_hand)
 
-  if (p_score > 21 && d_score > 21) return("Both bust — Dealer wins by rule")
+  if (p_score > 21 && d_score > 21) return("Both bust - Dealer wins by rule")
   if (p_score > 21) return("Dealer wins")
   if (d_score > 21) return("Player wins")
 

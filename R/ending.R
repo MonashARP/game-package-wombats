@@ -5,6 +5,7 @@
 #' @param dealer_hand Dealer's hand.
 #' @param players Named list of players with coin balances.
 #' @param bankroll_history List tracking coin balances over rounds.
+#' @param players_db Player Database in Local Directory
 #' @return A list with updated `players` and `bankroll_history`.
 #' @export
 
@@ -32,7 +33,7 @@ end_round <- function(player_hands, dealer_hand, players, players_db, bankroll_h
   # Add layout without pipe
   combined_plot <- plotly::layout(
     combined_plot,
-    title = "🃏 Blackjack Game Summary",
+    title = "\U0001f0cf Blackjack Game Summary",
     margin = list(t = 80)
   )
 

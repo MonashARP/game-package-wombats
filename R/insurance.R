@@ -30,9 +30,9 @@ handle_insurance <- function(dealer_hand, players) {
           if (dealer_has_blackjack) {
             payout <- insurance_bet * 2
             players[[name]]$coins <- players[[name]]$coins + payout
-            cat("✔️ ", name, " (computer): Dealer has Blackjack. Insurance bet wins ", payout, " coins!\n", sep = "")
+            cat("\u2714\ufe0f", name, " (computer): Dealer has Blackjack. Insurance bet wins ", payout, " coins!\n", sep = "")
           } else {
-            cat("❌ ", name, " (computer): Dealer does not have Blackjack. Insurance bet lost.\n", sep = "")
+            cat("\u274c", name, " (computer): Dealer does not have Blackjack. Insurance bet lost.\n", sep = "")
           }
         } else {
           cat(name, " (computer) chooses NOT to buy insurance.\n")
@@ -56,9 +56,9 @@ handle_insurance <- function(dealer_hand, players) {
           if (dealer_has_blackjack) {
             payout <- insurance_bet * 2
             players[[name]]$coins <- players[[name]]$coins + payout
-            cat("✔️ ", name, ": Dealer has Blackjack. Insurance bet wins ", payout, " coins!\n", sep = "")
+            cat("\u2714\ufe0f", name, ": Dealer has Blackjack. Insurance bet wins ", payout, " coins!\n", sep = "")
           } else {
-            cat("❌ ", name, ": Dealer does not have Blackjack. Insurance bet lost.\n", sep = "")
+            cat("\u274c", name, ": Dealer does not have Blackjack. Insurance bet lost.\n", sep = "")
           }
         }
       }
@@ -67,7 +67,7 @@ handle_insurance <- function(dealer_hand, players) {
 
   if (dealer_upcard %in% c("10", "J", "Q", "K")) {
     if (dealer_has_blackjack) {
-      cat("⚠️ Dealer has Blackjack with a 10-value upcard!\n")
+      cat("\u26a0\ufe0f Dealer has Blackjack with a 10-value upcard!\n")
       cat("Dealer hand: [", paste(vctrs::field(dealer_hand, "cards"), collapse = ", "), "]\n")
     }
   }

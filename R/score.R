@@ -9,6 +9,12 @@ new_blackjack_hand <- function(cards) {
   vctrs::new_rcrd(list(cards = cards), class = "blackjack_hand")
 }
 
+
+#' @title Format a Blackjack Hand
+#' @description Custom print method for `blackjack_hand` objects.
+#' @param x A `blackjack_hand` object
+#' @param ... Additional arguments (ignored)
+#' @return A character string representing the hand
 #' @export
 format.blackjack_hand <- function(x, ...) {
   paste0("Hand: [", paste0(vctrs::field(x, "cards"), collapse = ", "), "]")

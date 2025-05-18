@@ -1,30 +1,25 @@
-Package: blackjack_wombats
 Type: Package
-Title: What the Package Does (Title Case)
+Package: wombat21
+Title: Multiplayer Blackjack Simulation with Betting and Analytics in R
 Version: 0.1.0
 Authors@R: c(
-    person(
-      "Sun Yan Joanna", "Ma",
-      email = "smaa0048@student.monash.edu",
-      role = c("aut", "cre")
-    ), 
-    person(
-      "Wei Zhu", "Chen",
-      email = "wche0192@student.monash.edu",
-      role = c("aut", "cre")
-    ), 
-    person(
-      "Aneesh", "Agarwal",
-      email = "aaga0022@student.monash.edu",
-      role = c("aut", "cre")
-    )
+    person("Sun Yan Joanna", "Ma", , "smaa0048@student.monash.edu", role = c("aut", "cre")),
+    person("Wei Zhu", "Chen", , "wche0192@student.monash.edu", role = c("aut", "ctb")),
+    person("Aneesh", "Agarwal", , "aaga0022@student.monash.edu", role = c("aut", "ctb"))
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-License: What license is it under?
+Description: Simulates multiplayer Blackjack with support for computer
+    players, betting, and persistent player data. Tracks coin balances,
+    enforces unique player names, and includes visualizations for coin
+    changes and player rankings.
+License: GPL (>= 3)
+Imports:
+    plotly,
+    purrr,
+    vctrs,
+    rlang
 Encoding: UTF-8
 LazyData: true
-Imports:
-    vctrs, 
-    plotly, 
-    purrr
+RoxygenNote: 7.3.2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

@@ -34,7 +34,7 @@ plot_player_ranking <- function(players) {
 
   p <- plotly::layout(
     p,
-    title = "📊 Player Coin Ranking",
+    title = "\U0001f4ca Player Coin Ranking",
     xaxis = list(title = "Player"),
     yaxis = list(title = "Coins"),
     margin = list(b = 100),

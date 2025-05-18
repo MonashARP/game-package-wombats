@@ -30,9 +30,9 @@ player_action <- function(hand, deck, action, player) {
     if (player$coins >= player$bets) {
       player$coins <- player$coins - player$bets
       player$bets <- player$bets * 2
-      cat("💰 You doubled your bet. New bet:", player$bets, "\n")
+      cat("\U0001f4b0 You doubled your bet. New bet:", player$bets, "\n")
     } else {
-      cat("⚠️ Not enough coins to double. Treated as a hit instead.\n")
+      cat("\u26a0\ufe0f Not enough coins to double. Treated as a hit instead.\n")
     }
   }
 

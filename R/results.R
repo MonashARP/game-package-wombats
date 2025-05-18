@@ -4,7 +4,6 @@
 #' @param player_hands A named list of lists of blackjack_hand objects, keyed by player name.
 #' @param dealer_hand A blackjack_hand object.
 #' @param players A named list of players (as returned by `input_players()`), where each player has a `money` field.
-#' @param bets A named list of numeric bets keyed by player names.
 #' @return Updated players list with adjusted money balances after the round.
 #' @export
 display_final_results <- function(player_hands, dealer_hand, players) {
@@ -37,31 +36,31 @@ display_final_results <- function(player_hands, dealer_hand, players) {
       payout <- 0
       if (grepl("^Player wins with Blackjack$", outcome_msg)) {
         payout <- 1.5 * bet
-        cat("    🎉 Wins with Blackjack! Payout:", payout, "\n")
+        cat("    \U0001f389 Wins with Blackjack! Payout:", payout, "\n")
       } else if (grepl("^Dealer wins with Blackjack$", outcome_msg)) {
         payout <- -bet
-        cat("    ❌ Dealer wins with Blackjack. You lose your bet.\n")
+        cat("    \u274c Dealer wins with Blackjack. You lose your bet.\n")
       } else if (grepl("^Player wins with 5-card Charlie$", outcome_msg)) {
         payout <- bet
-        cat("    💫 Wins with 5-card Charlie! Payout:", payout, "\n")
+        cat("    \U0001f4ab Wins with 5-card Charlie! Payout:", payout, "\n")
       } else if (grepl("^Dealer wins with 5-card Charlie$", outcome_msg)) {
         payout <- -bet
-        cat("    ❌ Dealer wins with 5-card Charlie. You lose your bet.\n")
+        cat("    \u274c Dealer wins with 5-card Charlie. You lose your bet.\n")
       } else if (grepl("^Player wins", outcome_msg)) {
         payout <- bet
-        cat("    🏆 Wins with higher score! Payout:", payout, "\n")
+        cat("    \U0001f3c6 Wins with higher score! Payout:", payout, "\n")
       } else if (grepl("^Dealer wins", outcome_msg)) {
         payout <- -bet
-        cat("    ❌ Dealer wins. You lose your bet.\n")
+        cat("    \u274c Dealer wins. You lose your bet.\n")
       } else if (grepl("Push", outcome_msg)) {
         payout <- 0
-        cat("    🤝 Pushes with dealer. Bet returned.\n")
+        cat("    \U0001f91d Pushes with dealer. Bet returned.\n")
       } else if (grepl("^Player busted$", outcome_msg)) {
         payout <- -bet
-        cat("    💥 Busted! You lose your bet.\n")
+        cat("    \U0001f4a5 Busted! You lose your bet.\n")
       } else if (grepl("^Dealer busted$", outcome_msg)) {
         payout <- bet
-        cat("    💰 Dealer busted! You win your bet.\n")
+        cat("    \U0001f4b0 Dealer busted! You win your bet.\n")
       } else {
         payout <- 0
         cat("    Outcome unclear. No payout.\n")

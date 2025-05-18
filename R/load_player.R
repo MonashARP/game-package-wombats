@@ -1,5 +1,4 @@
 #' @title Load players from disk
-#' @param dir The directory where 'players.rds' is located. Defaults to the current working directory.
 #' @return A list containing players and bankroll_history, or default empty lists if none found
 
 load_players <- function() {

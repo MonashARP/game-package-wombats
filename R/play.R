@@ -3,7 +3,7 @@
 #' @export
 
 play <- function() {
-  cat("\n🎲 Welcome to Blackjack Deluxe! 🎲\n")
+  cat("\n\U0001f3b2 Welcome to Blackjack Deluxe! \U0001f3b2\n")
   cat("This is a multiplayer Blackjack game where you can:\n")
   cat("- Play with up to 6 players (human and computer opponents)\n")
   cat("- Bet coins, double down, split hands, and use insurance\n")

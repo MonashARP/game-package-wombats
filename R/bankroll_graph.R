@@ -33,7 +33,7 @@ plot_bankroll_history <- function(bankroll_history) {
     )
 
     p <- plotly::layout(p,
-                        title = "💰 Bankroll Over Time",
+                        title = "\U0001f4b0 Bankroll Over Time",
                         xaxis = list(title = "Round"),
                         yaxis = list(title = "Coins"),
                         showlegend = FALSE  # double-check legend is hidden in layout
