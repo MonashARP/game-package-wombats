@@ -1,1 +1,47 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/7yy0sjQL)
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# wombat21
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+## What is wombat21?
+
+**wombat21** is an R package that simulates a fully playable game of
+Blackjack (21). It supports:
+
+- Multiplayer (up to 6 players)
+
+- Computer-controlled opponents
+
+- Betting system with coin tracking
+
+- Game logic: splitting, doubling down, and insurance
+
+- Dealer logic (automated play)
+
+- Player profiles saved locally
+
+- Graphs for coin history and ranking
+
+## Installation
+
+You can install the development version of wombat21 from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("MonashARP/game-package-wombats")
+```
+
+Then load the package:
+
+``` r
+library(wombat21)
+```
+
+## Saving Game Data
+
+Player data (names, coin balances, history) are stored locally using
+`get_home_dir()`. Unique player names are enforced.

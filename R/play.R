@@ -1,5 +1,30 @@
-#' @title Play interactive Blackjack (full version)
-#' @description Supports insurance, split, double down, computer players, and win logic
+#' @title Play a Full Interactive Game of Blackjack
+#'
+#' @description
+#' Launches an interactive multiplayer game of Blackjack with full game mechanics.
+#' The game supports up to six players (human or computer), betting, doubling down,
+#' splitting hands, insurance, and dealer logic. Player data (names and coin balances)
+#' is saved between sessions.
+#'
+#' Features include:
+#' - Computer-controlled dealer and players
+#' - Coin betting system with balance persistence
+#' - Support for Blackjack rules: insurance, double down, and split
+#' - Persistent storage of player profiles and bankroll history
+#'
+#' @details
+#' This is the main function to run the full-featured Blackjack game. The game is played
+#' in rounds. After each round, players are asked if they wish to continue. The game
+#' loop will end if no players wish to continue or a player exits early.
+#'
+#' @return No return value. This function is run for its side effects: interactive gameplay,
+#' screen output, and updates to stored player data.
+#'
+#' @examples
+#' if (interactive()) {
+#'   play()
+#' }
+#'
 #' @export
 
 play <- function() {

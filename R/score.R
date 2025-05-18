@@ -16,6 +16,7 @@ new_blackjack_hand <- function(cards) {
 #' @param ... Additional arguments (ignored)
 #' @return A character string representing the hand
 #' @export
+
 format.blackjack_hand <- function(x, ...) {
   paste0("Hand: [", paste0(vctrs::field(x, "cards"), collapse = ", "), "]")
 }

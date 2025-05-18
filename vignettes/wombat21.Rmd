@@ -1,0 +1,93 @@
+---
+title: "wombat21: Multiplayer Blackjack in R"
+author: "Sun Yan Joanna Ma, Wei Zhu Chen, Aneesh Agarwal"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{wombat21: Multiplayer Blackjack in R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## 🃏 What is `wombat21`?
+
+**`wombat21`** is a fun and interactive Blackjack package built in R. It supports multiplayer games with both human and computer players, coin betting, and persistent tracking of player performance over multiple sessions.
+
+```{r eval=FALSE}
+library(wombat21)
+```
+
+Whether you're learning R or love card games, this package is a playful and engaging way to explore programming concepts through Blackjack.
+
+## 🎮 Features
+
+-   Human and AI players (up to 6)
+
+-   Split, double down, insurance, and bust rules
+
+-   Persistent coin balances (saved locally)
+
+-   Validated betting system
+
+-   Graphs of coin trends
+
+-   Leaderboard/rankings
+
+## 🚀 Start Playing
+
+```{r eval = FALSE}
+play()
+```
+
+To begin a game, simply run:
+
+You’ll be prompted to:
+
+-   Choose human or computer player
+
+-   Enter player names
+
+-   Place your bet
+
+-   Make moves (hit, stand, split, etc.)
+
+## 💸 Betting and Coins
+
+Each player starts with a coin balance. You bet each round. Outcomes impact your balance:
+
+-   Blackjack: **1.5× payout**
+
+-   Win: **1× payout**
+
+-   Push: **bet returned**
+
+-   Loss: **bet lost**
+
+-   5-card Charlie: **auto win**
+
+-   Your coin balance is saved between sessions under your player name.
+
+## 🤖 Computer Players
+
+AI players follow simple strategy:
+
+-   Bet 10 coins or remaining balance (whichever is less)
+
+-   Hit below 16, stand at 17+
+
+-   They participate fully in the round, including betting and insurance logic.
+
+## 🔁 Play Again or Exit
+
+At the end of each round, you'll be prompted to either continue or exit:
+
+```{r eval=FALSE}
+again()
+exit()
+```
