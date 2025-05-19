@@ -11,7 +11,7 @@
 
 end_round <- function(player_hands, dealer_hand, players, players_db, bankroll_history) {
   players <- display_final_results(player_hands, dealer_hand, players)
-  save_players(players)
+  players_db <- modifyList(players_db, players)
 
   coin_snapshot <- sapply(players_db, function(p) p$coins)
   bankroll_history[[length(bankroll_history) + 1]] <- coin_snapshot
