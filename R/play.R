@@ -59,10 +59,6 @@ play <- function() {
     dealer_blackjack <- insurance_res$dealer_blackjack
     players <- insurance_res$players
 
-    insurance_res <- handle_insurance(dealer_hand, players)
-    dealer_blackjack <- insurance_res$dealer_blackjack
-    players <- insurance_res$players
-
     if (dealer_blackjack) {
       cat("Dealer has Blackjack. Round ends.\n")
       res <- suppressWarnings(end_round(player_hands, dealer_hand, players_db, bankroll_history))
