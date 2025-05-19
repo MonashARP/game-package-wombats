@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# wombat21 <img src="WOMBAT.png" align="right" height="139" alt="" />
+# wombat21 <img src= "https://monasharp.github.io/game-package-wombats/logo.png" align="right" height="139" alt="" />
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -25,7 +25,7 @@ Blackjack (21). It supports:
 
 - Graphs for coin history and ranking
 
-## Installationpkg
+## Installation
 
 You can install the development version of wombat21 from
 [GitHub](https://github.com/) with:

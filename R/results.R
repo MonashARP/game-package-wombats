@@ -8,8 +8,11 @@
 #' @export
 display_final_results <- function(player_hands, dealer_hand, players) {
   cat("\n=== Final Results ===\n")
-  cat("Dealer hand: [", paste(vctrs::field(dealer_hand, "cards"), collapse = ", "),
-      "], Score:", calculate_score(dealer_hand), "\n")
+  d_cards <- vctrs::field(dealer_hand, "cards")
+  d_suits <- vctrs::field(dealer_hand, "suits")
+  d_display <- paste0(d_suits, d_cards)
+  cat("Dealer hand: [", paste(d_display, collapse = " "), "]",
+      " Score:", calculate_score(dealer_hand), "\n")
 
   all_player_hands <- unlist(player_hands, recursive = FALSE)
   outcomes <- determine_winner(all_player_hands, dealer_hand)
@@ -29,8 +32,10 @@ display_final_results <- function(player_hands, dealer_hand, players) {
       outcome_msg <- outcomes[outcome_index]
       outcome_index <- outcome_index + 1
 
-      cat(hand_label, ": [", paste(vctrs::field(hand, "cards"), collapse = ", "),
-          "]  Score:", p_score, "\n")
+      cards <- vctrs::field(hand, "cards")
+      suits <- vctrs::field(hand, "suits")
+      display_cards <- paste0(suits, cards)
+      cat(hand_label, ": [", paste(display_cards, collapse = " "), "]  Score:", p_score, "\n")
 
       # Calculate payout based on outcome message and bet
       payout <- 0

@@ -4,6 +4,7 @@
 #' @param deck A character vector representing the remaining deck.
 #' @param players A named list of player info (each has 'coins', 'bets', and 'is_computer' flag).
 #' @return A list containing updated player_hands, deck, and players.
+#' @export
 
 play_player_turns <- function(player_hands, deck, players) {
   current_deck <- deck
@@ -20,7 +21,11 @@ play_player_turns <- function(player_hands, deck, players) {
       hand <- hands[[j]]
       score <- calculate_score(hand)
 
-      cat(paste0("Hand ", j, ": [", paste(vctrs::field(hand, "cards"), collapse = ", "), "]\n"))
+      cards <- vctrs::field(hand, "cards")
+      suits <- vctrs::field(hand, "suits")
+      display_cards <- paste0(suits, cards)
+
+      cat(paste0("Hand ", j, ": [", paste(display_cards, collapse = " "), "]\n"))
       cat("Score:", score, "\n")
 
       first_move <- TRUE
@@ -70,7 +75,11 @@ play_player_turns <- function(player_hands, deck, players) {
 
         score <- calculate_score(hand)
 
-        cat("You now have: [", paste(vctrs::field(hand, "cards"), collapse = ", "), "]\n")
+        cards <- vctrs::field(hand, "cards")
+        suits <- vctrs::field(hand, "suits")
+        display_cards <- paste0(suits, cards)
+
+        cat("You now have: [", paste(display_cards, collapse = " "), "]\n")
         cat("Score:", score, "\n")
 
         if (action == "double") {

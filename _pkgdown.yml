@@ -1,4 +1,100 @@
 url: https://monasharp.github.io/game-package-wombats/
+
 template:
   bootstrap: 5
+  bootswatch: flatly
 
+home:
+  title: "wombat21"
+  description: >
+    An R package for simulating multiplayer Blackjack games with support for
+    human and computer players, betting systems, game logic (split, double, insurance),
+    and player history visualization.
+
+navbar:
+  structure:
+    left: ["home", "get-started", "reference"]
+    right: ["GitHub"]
+
+  components:
+    home:
+      text: "Home"
+      href: index.html
+    get-started:
+      text: "Get Started"
+      href: articles/wombat21.html
+    reference:
+      text: "Reference"
+      href: reference/index.html
+    GitHub:
+      icon: fa-github
+      href: https://github.com/MonashARP/game-package-wombats
+      aria-label: "GitHub project repository"
+
+
+reference:
+  - title: "Core Gameplay"
+    desc: Main control flow of the Blackjack game.
+    contents:
+      - play
+      - ask_play_again
+      - play_player_turns
+      - determine_winner
+      - exit
+
+  - title: "Player Mechanics"
+    desc: Player actions, bets, input/output, and turn logic.
+    contents:
+      - input_players
+      - player_action
+      - handle_splitting
+      - handle_insurance
+      - get_bets
+
+  - title: "Outcome and Scoring"
+    desc: Game ending, scoring, and decision helpers.
+    contents:
+      - calculate_score
+      - is_blackjack
+      - is_five_card_charlie
+      - end_round
+
+  - title: "Data Management"
+    desc: Saving/loading player data and managing results.
+    contents:
+      - save_players
+      - load_players
+      - display_final_results
+      - plot_player_ranking
+      - plot_bankroll_history
+
+  - title: "Initial Setup & Utilities"
+    desc: Supporting functions for initial game state and dealer logic.
+    contents:
+      - deal_cards
+      - dealer_action
+      - setup_and_display_initial
+      - reset_game_data
+
+  - title: "Internal Utilities"
+    desc: Useful internal helpers exposed to users.
+    contents:
+      - get_home_dir
+      - new_blackjack_hand
+      - format.blackjack_hand
+
+articles:
+  - title: "Getting Started"
+    contents:
+      - wombat21
+
+authors:
+  "Sun Yan Joanna Ma":
+    roles: [aut, cre]
+    href: https://github.com/joanna1016ma
+  "Wei Zhu Chen":
+    roles: [aut]
+    href: https://github.com/WZ-Ch01
+  "Aneesh Agarwal":
+    roles: [aut]
+    href: https://github.com/AneeshAgarwala

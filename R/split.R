@@ -4,6 +4,7 @@
 #' @param deck A character vector representing the remaining deck.
 #' @param players A named list of player objects (including names and is_computer flag).
 #' @return An updated list of lists of blackjack_hand objects after potential splits.
+#' @export
 
 handle_splitting <- function(player_hands, deck, players) {
   updated_player_hands <- player_hands
@@ -43,8 +44,16 @@ handle_splitting <- function(player_hands, deck, players) {
         second <- new_blackjack_hand(c(ph_cards[2], deck[deck_index + 1]))
         updated_player_hands[[i]] <- list(first, second)
         cat(player_name, "split into:\n")
-        cat("  Hand 1: [", paste(vctrs::field(first, "cards"), collapse = ", "), "]\n")
-        cat("  Hand 2: [", paste(vctrs::field(second, "cards"), collapse = ", "), "]\n")
+        # Hand 1
+        f_cards <- vctrs::field(first, "cards")
+        f_suits <- vctrs::field(first, "suits")
+        f_display <- paste0(f_suits, f_cards)
+        cat("  Hand 1: [", paste(f_display, collapse = " "), "]\n")
+        # Hand 2
+        s_cards <- vctrs::field(second, "cards")
+        s_suits <- vctrs::field(second, "suits")
+        s_display <- paste0(s_suits, s_cards)
+        cat("  Hand 2: [", paste(s_display, collapse = " "), "]\n")
         deck_index <- deck_index + 2
       }
     }

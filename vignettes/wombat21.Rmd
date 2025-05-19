@@ -25,6 +25,13 @@ library(wombat21)
 
 Whether you're learning R or love card games, this package is a playful and engaging way to explore programming concepts through Blackjack.
 
+Install dependencies (if needed):
+
+```{r eval=FALSE}
+install.packages(c("ggplot2", "dplyr"))
+```
+
+
 ## 🎮 Features
 
 -   Human and AI players (up to 6)

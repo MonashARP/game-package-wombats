@@ -5,8 +5,12 @@
 #' @export
 
 new_blackjack_hand <- function(cards) {
-  stopifnot(all(cards %in% c("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K")))
-  vctrs::new_rcrd(list(cards = cards), class = "blackjack_hand")
+  suits <- sample(c("♠", "♥", "♦", "♣"), size = length(cards), replace = TRUE)
+
+  structure(
+    list(cards = cards, suits = suits),
+    class = "blackjack_hand"
+  )
 }
 
 

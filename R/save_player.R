@@ -1,6 +1,7 @@
 #' @title Save players to disk
 #' @param players named list of players
 #' @param bankroll_history A list. Each element is a named numeric vector of player coins per round.
+#' @export
 
 save_players <- function(players, bankroll_history = NULL) {
   file_path <- file.path(get_home_dir(), "players.rds")

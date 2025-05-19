@@ -1,5 +1,6 @@
 #' @title Load players from disk
 #' @return A list containing players and bankroll_history, or default empty lists if none found
+#' @export
 
 load_players <- function() {
   file_path <- file.path(get_home_dir(), "players.rds")

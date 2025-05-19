@@ -1,6 +1,7 @@
 #' @title Ask to play again
 #' @description Prompts the user to play another round or exit the game.
 #' @return A logical indicating whether the player wants to play again (TRUE) or exit (FALSE).
+#' @export
 
 ask_play_again <- function() {
   repeat {

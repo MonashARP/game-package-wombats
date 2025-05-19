@@ -22,20 +22,20 @@ setup_and_display_initial <- function(players) {
   for (i in seq_along(player_names)) {
     player_hands[[player_names[i]]] <- list(player_hands_raw[[i]])  # Wrap in list
 
-    # Get cards vector for current player's hand
+    # Get card values and suits
     cards <- vctrs::field(player_hands_raw[[i]], "cards")
+    suits <- vctrs::field(player_hands_raw[[i]], "suits")
+    display_cards <- paste0(suits, cards)
 
     # Show full hand for humans, only first card for computers
     if (players[[player_names[i]]]$is_computer) {
-      display_cards <- cards[1]  # Show only first card
-      cat(player_names[i], "'s hand: ", display_cards, " | Bet: ", players[[player_names[i]]]$bets, "\n", sep = "")
+      cat(player_names[i], "'s hand: ", display_cards[1], " | Bet: ", players[[player_names[i]]]$bets, "\n", sep = "")
     } else {
-      display_cards <- paste(cards, collapse = ", ")
-      cat(player_names[i], "'s hand: ", display_cards, " | Bet: ", players[[player_names[i]]]$bets, "\n", sep = "")
+      cat(player_names[i], "'s hand: ", paste(display_cards, collapse = " "), " | Bet: ", players[[player_names[i]]]$bets, "\n", sep = "")
     }
   }
 
-  cat("Dealer shows: ", vctrs::field(dealer_hand[[1]], "cards")[1], ", ?\n")
+  cat("Dealer shows: ", paste0(dealer_hand$suits[1], dealer_hand$cards[1]), " ?\n")
 
   return(list(
     deck = deck,
