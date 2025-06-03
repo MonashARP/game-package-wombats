@@ -6,7 +6,7 @@
 #' @return An updated list of lists of blackjack_hand objects after potential splits.
 #' @export
 
-handle_splitting <- function8(player_hands, deck, players) {
+handle_splitting <- function(player_hands, deck, players) {
   updated_player_hands <- player_hands
   deck_index <- 1
   player_names <- names(players)
