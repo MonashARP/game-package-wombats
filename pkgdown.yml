@@ -3,7 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   wombat21: wombat21.html
-last_built: 2025-06-03T22:10Z
+last_built: 2025-06-03T22:42Z
 urls:
   reference: https://monasharp.github.io/game-package-wombats/reference
   article: https://monasharp.github.io/game-package-wombats/articles
