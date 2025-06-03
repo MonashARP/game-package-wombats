@@ -5,10 +5,11 @@
 #' @export
 
 new_blackjack_hand <- function(cards) {
-  suits <- sample(c("♠", "♥", "♦", "♣"), size = length(cards), replace = TRUE)
-
+  if (!inherits(cards, "card")) {
+    stop("`cards` must be a `card` vector (rank + suit).")
+  }
   structure(
-    list(cards = cards, suits = suits),
+    list(cards = cards),
     class = "blackjack_hand"
   )
 }
@@ -37,13 +38,7 @@ calculate_score <- function(hand) {
 
   cards <- vctrs::field(hand, "cards")
 
-  # Metaprogramming: dynamically evaluate card values
-  card_expr <- rlang::exprs(
-    `2` = 2, `3` = 3, `4` = 4, `5` = 5, `6` = 6, `7` = 7,
-    `8` = 8, `9` = 9, `10` = 10, J = 10, Q = 10, K = 10, A = 11
-  )
-
-  values <- purrr::map_dbl(cards, ~rlang::eval_tidy(card_expr[[.x]]))
+  values <- values <- blackjack_values[cards]
 
   total <- sum(values)
   ace_count <- sum(cards == "A")
