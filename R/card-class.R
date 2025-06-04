@@ -1,10 +1,10 @@
-# R/card-class.R
-
 #' Create a card vector
 #'
-#' @param rank   Character vector, allowed values:："A","2",...,"10","J","Q","K"
-#' @param suit   Character vector, allowed values："♠","♥","♦","♣"
-#' @return       A vctrs record vector with the class "card"
+#' Constructs a custom card object using vctrs::new_rcrd().
+#'
+#' @param rank Character vector, allowed values: "A","2",...,"10","J","Q","K"
+#' @param suit Character vector, allowed values: "♠","♥","♦","♣"
+#' @return A vctrs record vector with class "card"
 #' @export
 card <- function(rank = character(), suit = character()) {
   stopifnot(
@@ -19,6 +19,12 @@ card <- function(rank = character(), suit = character()) {
   )
 }
 
+#' Format a card vector
+#'
+#' Returns a character representation like "A♠", "10♦".
+#'
+#' @param x A card vector
+#' @return A character vector
 #' @export
 format.card <- function(x, ...) {
   ranks <- vctrs::field(x, "rank")
@@ -26,42 +32,53 @@ format.card <- function(x, ...) {
   paste0(ranks, suits)
 }
 
-# When both objects are cards, return an empty card prototype to facilitate the merging of vctrs
-#' @export
-vec_ptype2.card <- function(x, y, ...) {
+#' Cast character vector to card
+#'
+#' Converts character like "A♠", "10♦" into a card object.
+#'
+#' @param x A character vector
+#' @param to A card prototype
+#' @return A card vector
+#' @exportS3Method vctrs::vec_cast card.character
+vec_cast.card.character <- function(x, to, ...) {
+  message("vec_cast.card.character called!")
+  ranks <- sub("^(.+?)([♠♥♦♣])$", "\\1", x)
+  suits <- sub("^(.+?)([♠♥♦♣])$", "\\2", x)
+  card(ranks, suits)
+}
+
+#' Cast card to character vector
+#'
+#' Converts a card object back to character like "Q♥".
+#'
+#' @param x A card object
+#' @param to Unused
+#' @return Character vector
+#' @exportS3Method vctrs::vec_cast character.card
+vec_cast.character.card <- function(x, to, ...) {
+  paste0(vctrs::field(x, "rank"), vctrs::field(x, "suit"))
+}
+
+#' Type promotion: card + character → card
+#'
+#' @exportS3Method vctrs::vec_ptype2 card.character
+vec_ptype2.card.character <- function(x, y, ...) card()
+
+#' Type promotion: character + card → card
+#'
+#' @exportS3Method vctrs::vec_ptype2 character.card
+vec_ptype2.character.card <- function(x, y, ...) card()
+
+#' Type promotion: card + card → card prototype
+#'
+#' @exportS3Method vctrs::vec_ptype2 card.card
+vec_ptype2.card.card <- function(x, y, ...) {
   if (inherits(y, "card")) {
-    # As long as both sides are cards, a record of length 0 and both fields rank/suit are Characters will be returned
     vctrs::new_rcrd(
       list(rank = character(), suit = character()),
       class = "card"
     )
   } else {
-    # When the types on both sides do not match, return error
     vctrs::stop_incompatible_type(x, y)
   }
-}
-
-# Support from the character vector (in the form "A♠", "10♦") -> card
-#' @export
-vec_cast.card <- function(x, to, ...) {
-
-  if (!inherits(to, "card")) vctrs::stop_incompatible_cast(x, to)
-  if (inherits(x, "card")) return(x)
-  if (!is.character(x)) vctrs::stop_incompatible_cast(x, to)
-
-  ranks <- sub("^([0-9A-Z]{1,2})([♠♥♦♣])$", "\\1", x)
-  suits <- sub("^([0-9A-Z]{1,2})([♠♥♦♣])$", "\\2", x)
-
-  # checjk for invalid values
-  invalid <- !(suits %in% c("♠","♥","♦","♣")) | grepl("^$", ranks)
-  if (any(invalid)) {
-    bad_vals <- x[invalid]
-    msg <- paste0(
-      "Can't convert these values to <card>: ",
-      paste0("'", bad_vals, "'", collapse = ", ")
-    )
-    vctrs::stop_incompatible_cast(x, to, details = msg)
-  }
-
-  card(ranks, suits)
 }

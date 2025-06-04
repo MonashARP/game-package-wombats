@@ -20,7 +20,7 @@
 #' @return No return value. This function is run for its side effects: interactive gameplay,
 #' screen output, and updates to stored player data.
 #'
-#' @example
+#' @examples
 #'\dontrun{
 #'   play()
 #'}
