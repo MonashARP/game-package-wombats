@@ -36,9 +36,14 @@ card_value <- function(x) {
   }, integer(1))
 }
 
+#' Extract the suit from a card vector
+#'
 #' @param x   A card vector
 #' @return    Character vectors, such as "♠","♥","♦","♣"
 #' @export
+#' @examples
+#' cards <- as_card(c("A♠", "10♦", "Q♥"))
+#' card_suit(cards)
 card_suit <- function(x) {
   vctrs::field(x, "suit")
 }

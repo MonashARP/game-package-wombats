@@ -1,5 +1,3 @@
-# R/card-class.R
-
 #' Create a card vector
 #'
 #' @importFrom vctrs vec_cast vec_ptype2 new_rcrd
@@ -21,6 +19,12 @@ card <- function(suit, rank) {
   )
 }
 
+#' Format a card vector
+#'
+#' Returns a character representation like "A♠", "10♦".
+#'
+#' @param x A card vector
+#' @return A character vector
 #' @export
 format.card <- function(x, ...) {
   ranks <- vctrs::field(x, "rank")
@@ -28,17 +32,53 @@ format.card <- function(x, ...) {
   paste0(suits, ranks)
 }
 
-# When both objects are cards, return an empty card prototype to facilitate the merging of vctrs
-#' @export
-vec_ptype2.card <- function(x, y, ...) {
+#' Cast character vector to card
+#'
+#' Converts character like "A♠", "10♦" into a card object.
+#'
+#' @param x A character vector
+#' @param to A card prototype
+#' @return A card vector
+#' @exportS3Method vctrs::vec_cast card.character
+vec_cast.card.character <- function(x, to, ...) {
+  message("vec_cast.card.character called!")
+  ranks <- sub("^(.+?)([♠♥♦♣])$", "\\1", x)
+  suits <- sub("^(.+?)([♠♥♦♣])$", "\\2", x)
+  card(ranks, suits)
+}
+
+#' Cast card to character vector
+#'
+#' Converts a card object back to character like "Q♥".
+#'
+#' @param x A card object
+#' @param to Unused
+#' @return Character vector
+#' @exportS3Method vctrs::vec_cast character.card
+vec_cast.character.card <- function(x, to, ...) {
+  paste0(vctrs::field(x, "rank"), vctrs::field(x, "suit"))
+}
+
+#' Type promotion: card + character → card
+#'
+#' @exportS3Method vctrs::vec_ptype2 card.character
+vec_ptype2.card.character <- function(x, y, ...) card()
+
+#' Type promotion: character + card → card
+#'
+#' @exportS3Method vctrs::vec_ptype2 character.card
+vec_ptype2.character.card <- function(x, y, ...) card()
+
+#' Type promotion: card + card → card prototype
+#'
+#' @exportS3Method vctrs::vec_ptype2 card.card
+vec_ptype2.card.card <- function(x, y, ...) {
   if (inherits(y, "card")) {
-    # As long as both sides are cards, a record of length 0 and both fields rank/suit are Characters will be returned
     vctrs::new_rcrd(
       list(rank = character(), suit = character()),
       class = "card"
     )
   } else {
-    # When the types on both sides do not match, return error
     vctrs::stop_incompatible_type(x, y)
   }
 }
