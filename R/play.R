@@ -20,7 +20,7 @@
 #' @return No return value. This function is run for its side effects: interactive gameplay,
 #' screen output, and updates to stored player data.
 #'
-#' @example
+#' @examples
 #'\dontrun{
 #'   play()
 #'}
@@ -61,7 +61,7 @@ play <- function() {
 
     if (dealer_blackjack) {
       cat("Dealer has Blackjack. Round ends.\n")
-      res <- suppressWarnings(end_round(player_hands, dealer_hand, players_db, bankroll_history))
+      res <- suppressWarnings(end_round(player_hands, dealer_hand, players, players_db, bankroll_history))
       players <- res$players
       bankroll_history <- res$bankroll_history
 
@@ -69,7 +69,9 @@ play <- function() {
       next
     }
 
-    player_hands <- handle_splitting(player_hands, deck, players)
+    split_res <- handle_splitting(player_hands, deck, players)
+    player_hands <- split_res$player_hands
+    deck <- deck[-(1:(split_res$deck_index - 1))]
 
     res <- play_player_turns(player_hands, deck, players)
     if (is.null(res)) {

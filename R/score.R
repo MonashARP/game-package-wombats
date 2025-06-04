@@ -37,11 +37,12 @@ calculate_score <- function(hand) {
   }
 
   cards <- vctrs::field(hand, "cards")
+  ranks <- card_rank(cards)  # extract ranks from cards
 
-  values <- values <- blackjack_values[cards]
+  values <- blackjack_values[ranks]  # lookup values by rank
 
   total <- sum(values)
-  ace_count <- sum(cards == "A")
+  ace_count <- sum(ranks == "A")
 
   while (total > 21 && ace_count > 0) {
     total <- total - 10

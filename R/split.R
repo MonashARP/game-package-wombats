@@ -9,32 +9,38 @@
 handle_splitting <- function(player_hands, deck, players) {
   updated_player_hands <- player_hands
   deck_index <- 1
-  player_names <- names(players)
 
-  for (i in seq_along(updated_player_hands)) {
-    hand_list <- updated_player_hands[[i]]
-    hand      <- hand_list[[1]]  # assume first hand is the main one
-    player_name <- names_list[i]
+  for (player_name in names(updated_player_hands)) {
+    hand_list <- updated_player_hands[[player_name]]
+    hand_list <- lapply(hand_list, function(h) {
+      if (!inherits(h, "blackjack_hand")) {
+        new_blackjack_hand(h)
+      } else {
+        h
+      }
+    })
+    hand <- hand_list[[1]]  # assume first hand is the main one
     is_cp <- players[[player_name]]$is_computer
 
     if (needs_split(hand)) {
       do_split <- FALSE
+
       if (is_cp) {
-        do_split <- ai_decide_split(hand) # AI logic to decide split
+        do_split <- ai_decide_split(hand)
         if (do_split) {
           cat(player_name, "decides to split a pair of ",
               vctrs::field(hand, "rank")[1], "s.\n", sep = "")
         } else {
           cat(player_name, "decides NOT to split a pair of ",
               vctrs::field(hand, "rank")[1], "s.\n", sep = "")
-         }
-        } else {
-        do_split <- ask_human_split(player_name, hand) # Human decision
+        }
+      } else {
+        do_split <- ask_human_split(player_name, hand)
       }
 
       if (do_split) {
         res <- perform_split(hand, deck, deck_index)
-        updated_player_hands[[i]] <- res$split_hands
+        updated_player_hands[[player_name]] <- res$split_hands
         deck_index <- res$new_deck_index
 
         cat(player_name, "split into:\n")
@@ -61,17 +67,18 @@ handle_splitting <- function(player_hands, deck, players) {
 }
 
 
+
 # Check split condition: exactly two cards in the hand with the same point value
 #' @noRd
 needs_split <- function(hand) {
-  ranks <- vctrs::field(hand, "rank")
+  ranks <- card_rank(hand)
   length(ranks) == 2 && ranks[1] == ranks[2]
 }
 
 # AI decision: split if 8 or A in hand, otherwise no split
 #' @noRd
 ai_decide_split <- function(hand, coins = NULL) {
-  ranks <- vctrs::field(hand, "rank")
+  ranks <- card_rank(hand)
   rank <- ranks[1]
   rank %in% c("8", "A")
 }
@@ -79,7 +86,7 @@ ai_decide_split <- function(hand, coins = NULL) {
 # ask human whether to split
 #' @noRd
 ask_human_split <- function(name, hand) {
-  ranks <- vctrs::field(hand, "rank")
+  ranks <- card_rank(hand)
   rank <- ranks[1]
   repeat {
     prompt <- paste0(

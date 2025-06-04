@@ -21,11 +21,7 @@ player_action <- function(hand, deck, action, player) {
   }
 
   if (length(deck) == 0) stop("Deck is empty!")
-  new_card <- deck[1]
-  updated_hand <- new_blackjack_hand(c(vctrs::field(hand, "cards"), new_card))
-  updated_deck <- deck[-1]
 
-  # Handle double down logic
   if (action == "double") {
     if (player$coins >= player$bets) {
       player$coins <- player$coins - player$bets
@@ -33,8 +29,14 @@ player_action <- function(hand, deck, action, player) {
       cat("\U0001f4b0 You doubled your bet. New bet:", player$bets, "\n")
     } else {
       cat("\u26a0\ufe0f Not enough coins to double. Treated as a hit instead.\n")
+      action <- "hit"  # downgrade to hit
     }
   }
+
+  # Draw a card (only now!)
+  new_card <- deck[1]
+  updated_hand <- new_blackjack_hand(c(vctrs::field(hand, "cards"), new_card))
+  updated_deck <- deck[-1]
 
   return(list(hand = updated_hand, deck = updated_deck, player = player))
 }

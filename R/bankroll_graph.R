@@ -43,3 +43,4 @@ plot_bankroll_history <- function(bankroll_history) {
     return(invisible(NULL))
   }
 }
+list(c(You = 1100, Computer_1 = 900), c(You = 1200, Computer_1 = 800))

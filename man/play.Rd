@@ -27,3 +27,9 @@ This is the main function to run the full-featured Blackjack game. The game is p
 in rounds. After each round, players are asked if they wish to continue. The game
 loop will end if no players wish to continue or a player exits early.
 }
+\examples{
+\dontrun{
+  play()
+}
+
+}

@@ -4,7 +4,7 @@
 \alias{handle_insurance}
 \title{Handle insurance and dealer blackjack check}
 \usage{
-handle_insurance(dealer_hand, players)
+handle_insurance(dealer_hand, players, ai_prob = 0.5, input_fun = readline)
 }
 \arguments{
 \item{dealer_hand}{A blackjack_hand object.}

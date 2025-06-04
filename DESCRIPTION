@@ -16,7 +16,8 @@ Imports:
     plotly,
     purrr,
     vctrs,
-    rlang
+    rlang, 
+    stringr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2

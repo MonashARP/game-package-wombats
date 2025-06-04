@@ -10,20 +10,31 @@ play_player_turns <- function(player_hands, deck, players) {
   current_deck <- deck
   updated_player_hands <- player_hands
 
+  print(names(updated_player_hands))
+
   for (player_name in names(updated_player_hands)) {
-    hands <- updated_player_hands[[player_name]]
+    hand_list <- updated_player_hands[[player_name]]
+    hand <- hand_list[[1]]
+    is_cp <- players[[player_name]]$is_computer
     player <- players[[player_name]]
     player_type <- if (isTRUE(player$is_computer)) "computer" else "human"
 
     cat(paste0("\n--- ", player_name, " ('", player_type, "') Playing ---\n"))
 
-    for (j in seq_along(hands)) {
-      hand <- hands[[j]]
+    for (j in seq_along(hand_list)) {
+      hand <- hand_list[[j]]
+
+      # Force wrap into blackjack_hand if not already
+      if (!inherits(hand, "blackjack_hand")) {
+        hand <- new_blackjack_hand(hand)
+        hand_list[[j]] <- hand  # Update it back in the hand list
+      }
+
       score <- calculate_score(hand)
 
-      cards <- vctrs::field(hand, "cards")
-      suits <- vctrs::field(hand, "suits")
-      display_cards <- paste0(suits, cards)
+      ranks <- card_rank(hand$cards)
+      suits <- card_suit(hand$cards)
+      display_cards <- paste0(suits, ranks)
 
       cat(paste0("Hand ", j, ": [", paste(display_cards, collapse = " "), "]\n"))
       cat("Score:", score, "\n")
@@ -75,9 +86,9 @@ play_player_turns <- function(player_hands, deck, players) {
 
         score <- calculate_score(hand)
 
-        cards <- vctrs::field(hand, "cards")
-        suits <- vctrs::field(hand, "suits")
-        display_cards <- paste0(suits, cards)
+        ranks <- card_rank(hand$cards)
+        suits <- card_suit(hand$cards)
+        display_cards <- paste0(suits, ranks)
 
         cat("You now have: [", paste(display_cards, collapse = " "), "]\n")
         cat("Score:", score, "\n")
