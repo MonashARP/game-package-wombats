@@ -44,24 +44,6 @@ calculate_score <- function(hand) {
   cards <- vctrs::field(hand, "cards")
   ranks <- card_rank(cards)
 
-  # Map ranks to numeric values explicitly
-  values <- sapply(ranks, function(rank) {
-    if (rank %in% c("J", "Q", "K")) {
-      10
-    } else if (rank == "A") {
-      11
-    } else {
-      as.numeric(rank)
-    }
-  })
-
-  total <- sum(values)
-  ace_count <- sum(ranks == "A")
-
-  while (total > 21 && ace_count > 0) {
-    total <- total - 10
-    ace_count <- ace_count - 1
-  }
-
-  return(total)
+  # Use C++ implementation
+  return(calculate_score_cpp(ranks))
 }
