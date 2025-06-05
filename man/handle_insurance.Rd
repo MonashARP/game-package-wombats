@@ -4,20 +4,38 @@
 \alias{handle_insurance}
 \title{Handle insurance and dealer blackjack check}
 \usage{
-handle_insurance(dealer_hand, players, ai_prob = 0.5, input_fun = readline)
+handle_insurance(dealer_hand, players, input_fun = readline, ai_prob = 0.5)
 }
 \arguments{
-\item{dealer_hand}{A blackjack_hand object.}
+\item{dealer_hand}{A \code{blackjack_hand} object. Should be a list containing a \code{cards} character vector,
+e.g., \code{cards = c("A♠", "10♦")}.}
 
-\item{players}{A named list of player info (must include player name and coins).}
+\item{players}{A named list of player info. Each element should be a list that includes at least:
+\itemize{
+  \item{\code{is_computer}: Logical, whether the player is controlled by the computer}
+  \item{\code{coins}: Numeric, the current coins}
+  \item{\code{bets}: Numeric, the current round's bet amount}
+}}
+
+\item{input_fun}{Function to handle user input for insurance. Defaults to \code{readline}. Can be replaced for testing.}
+
+\item{ai_prob}{Probability (between 0 and 1) that the computer player will buy insurance if eligible. Default is 0.5.}
 }
 \value{
 A list with two elements:
   \describe{
     \item{dealer_blackjack}{Logical indicating if the dealer had Blackjack}
-    \item{players}{Updated list with possible insurance changes}
+    \item{players}{Updated named list of players, with insurance bet results applied}
   }
 }
 \description{
-Offers insurance if the dealer shows an Ace, and checks if the dealer has Blackjack when showing a 10-value card.
+Offers insurance to all players if the dealer's upcard is an Ace,
+and settles insurance bets depending on whether the dealer has a Blackjack.
+Also reveals the dealer's hand if the upcard is a 10-value card and the dealer has Blackjack.
+}
+\details{
+- When the dealer's upcard is Ace (\code{"A♠"}, \code{"A♥"}, etc.), all players are prompted (or computers decide)
+  whether to buy insurance for half their original bet. If the dealer does have Blackjack, the insurance pays out 2:1.
+- If the upcard is a 10-value card (\code{"10"}, \code{"J"}, \code{"Q"}, \code{"K"}), and the dealer has Blackjack,
+  the dealer's full hand is revealed.
 }

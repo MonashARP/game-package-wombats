@@ -1,3 +1,48 @@
+# R/player_turn.R
+
+#' @noRd
+#' Return a string for display, e.g., "10♠", "A♥".
+format_hand_display <- function(cards) {paste(cards, collapse = " ")}
+
+#' @noRd
+#' Decide action for AI player given hand, coins, bet, and current score.
+ai_decide_action <- function(hand, player, first_move) {
+  score <- calculate_score(hand)
+  if (first_move && player$coins >= player$bets && score >= 9 && score <= 11) {
+    cat("Computer chooses to double down.\n")
+    return("double")
+  } else if (score < 17) {
+    cat("Computer chooses to hit.\n")
+    return("hit")
+  } else {
+    cat("Computer chooses to stand.\n")
+    return("stand")
+  }
+}
+
+#' @noRd
+#' Prompt human player for action. Returns string ("hit", "stand", "double", "exit").
+human_prompt_action <- function(first_move) {
+  prompt_msg <- if (first_move) {
+    "Hit, Stand or Double? (hit/stand/double/exit): "
+  } else {
+    "Hit or Stand? (hit/stand/exit): "
+  }
+  repeat {
+    action <- tolower(readline(prompt_msg))
+    valid_actions <- if (first_move) c("hit", "stand", "double", "exit") else c("hit", "stand", "exit")
+    if (action %in% valid_actions) return(action)
+    cat("Invalid input. Please enter one of: ", paste(valid_actions, collapse = "/"), "\n")
+  }
+ }
+
+#' @noRd
+#' Wrap a vector of card strings as a blackjack_hand S3 object, if not already.
+ensure_blackjack_hand <- function(hand) {
+  if (!inherits(hand, "blackjack_hand")) new_blackjack_hand(hand) else hand
+}
+
+
 #' @title Play player turns (with coins and computer players)
 #' @description Allows each player (human or computer) to take their turns (hit, stand, double).
 #' @param player_hands A named list of lists of blackjack_hand objects, keyed by player name.
@@ -5,99 +50,51 @@
 #' @param players A named list of player info (each has 'coins', 'bets', and 'is_computer' flag).
 #' @return A list containing updated player_hands, deck, and players.
 #' @export
-
 play_player_turns <- function(player_hands, deck, players) {
   current_deck <- deck
   updated_player_hands <- player_hands
 
-  print(names(updated_player_hands))
-
   for (player_name in names(updated_player_hands)) {
     hand_list <- updated_player_hands[[player_name]]
-    hand <- hand_list[[1]]
-    is_cp <- players[[player_name]]$is_computer
     player <- players[[player_name]]
     player_type <- if (isTRUE(player$is_computer)) "computer" else "human"
-
     cat(paste0("\n--- ", player_name, " ('", player_type, "') Playing ---\n"))
 
     for (j in seq_along(hand_list)) {
-      hand <- hand_list[[j]]
-
-      # Force wrap into blackjack_hand if not already
-      if (!inherits(hand, "blackjack_hand")) {
-        hand <- new_blackjack_hand(hand)
-        hand_list[[j]] <- hand  # Update it back in the hand list
-      }
-
+      hand <- ensure_blackjack_hand(hand_list[[j]])
       score <- calculate_score(hand)
 
-      ranks <- card_rank(hand$cards)
-      suits <- card_suit(hand$cards)
-      display_cards <- paste0(suits, ranks)
-
-      cat(paste0("Hand ", j, ": [", paste(display_cards, collapse = " "), "]\n"))
+      # Show hand
+      cat(paste0("Hand ", j, ": [", format_hand_display(hand$cards), "]\n"))
       cat("Score:", score, "\n")
 
       first_move <- TRUE
       repeat {
-        action <- NULL
-
-        # Decide action: human prompt or computer logic
-        if (!isTRUE(player$is_computer)) {
-          prompt_msg <- if (first_move) {
-            "Hit, Stand or Double? (hit/stand/double/exit): "
-          } else {
-            "Hit or Stand? (hit/stand/exit): "
-          }
-
-          repeat {
-            action <- tolower(readline(prompt_msg))
-            valid_actions <- if (first_move) c("hit", "stand", "double", "exit") else c("hit", "stand", "exit")
-            if (action %in% valid_actions) break
-            cat("Invalid input. Please enter one of: ", paste(valid_actions, collapse = "/"), "\n")
-          }
-
+        # Decide action
+        if (isTRUE(player$is_computer)) {
+          action <- ai_decide_action(hand, player, first_move)
+        } else {
+          action <- human_prompt_action(first_move)
           if (action == "exit") {
             cat("Goodbye!\n")
             return(invisible(NULL))
           }
-        } else {
-          # Simple AI: hit if score < 17, stand otherwise; double only if first move and coins allow and score in reasonable range
-          score <- calculate_score(hand)
-
-          if (first_move && player$coins >= player$bets && score >= 9 && score <= 11) {
-            action <- "double"
-            cat("Computer chooses to double down.\n")
-          } else if (score < 17) {
-            action <- "hit"
-            cat("Computer chooses to hit.\n")
-          } else {
-            action <- "stand"
-            cat("Computer chooses to stand.\n")
-          }
         }
-
-        # Execute action and update hand, deck, and player's coins/bets
+        # Execute action (by your modular player_action, assumed ready)
         res <- player_action(hand, current_deck, action, player)
         hand <- res$hand
         current_deck <- res$deck
         player <- res$player
 
-        score <- calculate_score(hand)
-
-        ranks <- card_rank(hand$cards)
-        suits <- card_suit(hand$cards)
-        display_cards <- paste0(suits, ranks)
-
-        cat("You now have: [", paste(display_cards, collapse = " "), "]\n")
-        cat("Score:", score, "\n")
+        # Show updated hand
+        cat("You now have: [", format_hand_display(hand$cards), "]\n")
+        cat("Score:", calculate_score(hand), "\n")
 
         if (action == "double") {
           cat("You chose to double down: one card only.\n")
           break
         }
-        if (action == "stand" || score > 21) break
+        if (action == "stand" || calculate_score(hand) > 21) break
 
         first_move <- FALSE
       }
@@ -106,6 +103,5 @@ play_player_turns <- function(player_hands, deck, players) {
       players[[player_name]] <- player
     }
   }
-
   return(list(player_hands = updated_player_hands, deck = current_deck, players = players))
 }

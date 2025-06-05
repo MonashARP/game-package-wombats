@@ -1,3 +1,5 @@
+# R/card-class.R
+
 #' Create a card vector
 #'
 #' @importFrom vctrs vec_cast vec_ptype2 new_rcrd

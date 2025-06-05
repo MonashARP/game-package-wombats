@@ -11,9 +11,8 @@ setup_and_display_initial <- function(players) {
   ranks <- rep(c("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"), 4)
   suits <- rep(c("♠","♥","♦","♣"), each = 13)
 
-  deck_char <- paste0(suits, ranks) #devt Create character vector of cards
-  deck_char <- sample(deck_char, length(deck_char)) # Shuffle the deck
-  deck <- vctrs::vec_cast(deck_char, to = card(suit = character(), rank = character())) # Convert to card class
+  deck <- paste0(suits, ranks) #devt Create character vector of cards
+  deck <- sample(deck_char, length(deck_char)) # Shuffle the deck
 
   # Deal cards
   deal_result <- deal_cards(deck, num_players)

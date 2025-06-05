@@ -9,14 +9,12 @@ deal_cards <- function(deck = NULL, num_players = 1) {
   if (is.null(deck)) {
     ranks <- c("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K")
     suits <- c("♠", "♥", "♦", "♣")
-    deck_char <- paste0(rep(suits, times = 13), rep(ranks, each = 4))
-    deck_char <- sample(deck_char)
-    deck <- vctrs::vec_cast(deck_char, to = card())
+    deck <- as.vector(outer(ranks, suits, paste0))
+    deck <- sample(deck, length(deck))
   }
 
-  valid_pattern <- "^([♠♥♦♣])(A|10|[2-9JQK])$"
-  if (!all(grepl(valid_pattern, deck))) {
-    stop("Invalid card values in deck. Cards must be suit + rank (e.g. '♠A').")
+  if (!all(grepl("^(A|10|[2-9]|J|Q|K)[♠♥♦♣]$", deck))) {
+    stop("Invalid card values in deck.")
   }
 
   # Ensure enough cards to deal

@@ -8,9 +8,8 @@
 #' @export
 display_final_results <- function(player_hands, dealer_hand, players) {
   cat("\n=== Final Results ===\n")
-  d_ranks <- card_rank(dealer_hand$cards)
-  d_suits <- card_suit(dealer_hand$cards)
-  d_display <- paste0(d_suits, d_ranks)
+  # Dealer hand display
+  d_display <- dealer_hand$cards
   cat("Dealer hand: [", paste(d_display, collapse = " "), "]",
       " Score:", calculate_score(dealer_hand), "\n")
 
@@ -32,9 +31,7 @@ display_final_results <- function(player_hands, dealer_hand, players) {
       outcome_msg <- outcomes[outcome_index]
       outcome_index <- outcome_index + 1
 
-      ranks <- card_rank(hand$cards)
-      suits <- card_suit(hand$cards)
-      display_cards <- paste0(suits, ranks)
+      display_cards <- hand$cards
       cat(hand_label, ": [", paste(display_cards, collapse = " "), "]  Score:", p_score, "\n")
 
       # Calculate payout based on outcome message and bet

@@ -4,6 +4,8 @@
 #' @return TRUE if Blackjack, else FALSE
 #' @export
 is_blackjack <- function(hand) {
-  cards <- vctrs::field(hand, "cards")
-  return(length(cards) == 2 && calculate_score(hand) == 21)
+  cards <- hand$cards
+  ranks <- get_rank(cards)
+  length(cards) == 2 && any(ranks == "A") && any(ranks %in% c("10", "J", "Q", "K"))
 }
+

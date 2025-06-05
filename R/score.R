@@ -5,15 +5,13 @@
 #' @export
 
 new_blackjack_hand <- function(cards) {
-  if (!inherits(cards, "card")) {
-    stop("`cards` must be a `card` vector (rank + suit).")
-  }
+  # cards: character vector like c("A♠", "10♥")
+  suits <- sub(".*([♠♥♦♣])$", "\\1", cards)
   structure(
-    list(cards = cards),
+    list(cards = cards, suits = suits),
     class = "blackjack_hand"
   )
 }
-
 
 #' @title Format a Blackjack Hand
 #' @description Custom print method for `blackjack_hand` objects.
@@ -37,9 +35,10 @@ calculate_score <- function(hand) {
   }
 
   cards <- vctrs::field(hand, "cards")
-  ranks <- card_rank(cards)  # extract ranks from cards
+  ranks <- get_rank(cards)
 
-  values <- blackjack_values[ranks]  # lookup values by rank
+  values <- as.numeric(ranks)
+  values[is.na(values)] <- ifelse(ranks[is.na(values)] %in% c("J", "Q", "K"), 10, 11)
 
   total <- sum(values)
   ace_count <- sum(ranks == "A")
