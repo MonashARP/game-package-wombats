@@ -1,8 +1,50 @@
-# R/player_turn.R
+# R/player_logic.R
 
-#' Return a string for display, e.g., "10♠", "A♥".
-#' @noRd
-format_hand_display <- function(cards) {paste(cards, collapse = " ")}
+# --------------------------- player_actions ---------------------------------
+#' @title Player action: hit, stand, or double (with betting)
+#' @param hand A `blackjack_hand` object
+#' @param deck A character vector of remaining cards
+#' @param action A string: "hit", "stand", or "double"
+#' @param player A list representing the player (with 'coins' and 'bets')
+#' @return A list with updated `hand`, `deck`, and `player`
+#' @export
+
+player_action <- function(hand, deck, action, player) {
+  if (!inherits(hand, "blackjack_hand")) {
+    stop("Input 'hand' must be of class 'blackjack_hand'")
+  }
+
+  action <- tolower(action)
+  if (!action %in% c("hit", "stand", "double")) {
+    stop("Invalid action: must be 'hit', 'stand', or 'double'")
+  }
+
+  if (action == "stand") {
+    return(list(hand = hand, deck = deck, player = player))
+  }
+
+  if (length(deck) == 0) stop("Deck is empty!")
+
+  if (action == "double") {
+    if (player$coins >= player$bets) {
+      player$coins <- player$coins - player$bets
+      player$bets <- player$bets * 2
+      cat("\U0001f4b0 You doubled your bet. New bet:", player$bets, "\n")
+    } else {
+      cat("\u26a0\ufe0f Not enough coins to double. Treated as a hit instead.\n")
+      action <- "hit"  # downgrade to hit
+    }
+  }
+
+  # Draw a card (only now!)
+  new_card <- deck[1]
+  updated_hand <- new_blackjack_hand(c(vctrs::field(hand, "cards"), new_card))
+  updated_deck <- deck[-1]
+
+  return(list(hand = updated_hand, deck = updated_deck, player = player))
+}
+
+# --------------------------- player_turn ----------------------------------
 
 #' Decide action for AI player given hand, coins, bet, and current score.
 #' @noRd
@@ -34,14 +76,7 @@ human_prompt_action <- function(first_move) {
     if (action %in% valid_actions) return(action)
     cat("Invalid input. Please enter one of: ", paste(valid_actions, collapse = "/"), "\n")
   }
- }
-
-#' Wrap a vector of card strings as a blackjack_hand S3 object, if not already.
-#' @noRd
-ensure_blackjack_hand <- function(hand) {
-  if (!inherits(hand, "blackjack_hand")) new_blackjack_hand(hand) else hand
 }
-
 
 #' @title Play player turns (with coins and computer players)
 #' @description Allows each player (human or computer) to take their turns (hit, stand, double).

@@ -1,3 +1,5 @@
+# R/ deal_card.R
+
 #' @title Deal initial cards in Blackjack
 #' @description Deal two cards to the player and dealer each, from a shuffled deck.
 #' @param deck A character vector representing the deck. If NULL, a fresh 52-card deck is used.

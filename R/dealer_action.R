@@ -1,3 +1,6 @@
+# R/dealer_action.R
+# Dealer action logic
+
 #' @title Dealer action logic
 #' @description Simulate dealer's automatic behavior: keep hitting until score >= 17.
 #' @param hand A `blackjack_hand` object

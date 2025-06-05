@@ -3,21 +3,21 @@
 #' Check if a hand can be split (must have exactly two cards of the same rank)
 #' @noRd
 needs_split <- function(hand) {
-  ranks <- get_rank(hand$cards)
+  ranks <- card_rank(hand$cards)
   length(ranks) == 2 && ranks[1] == ranks[2]
 }
 
 #' AI decision to split: split only if pair is 8 or A
 #' @noRd
 ai_decide_split <- function(hand) {
-  ranks <- get_rank(hand$cards)
+  ranks <- card_rank(hand$cards)
   ranks[1] %in% c("8", "A")
 }
 
 #' Ask human player whether to split
 #' @noRd
 ask_human_split <- function(player_name, hand) {
-  rank <- get_rank(hand$cards)[1]
+  rank <- card_rank(hand$cards)[1]
   repeat {
     prompt <- paste0(
       player_name, ", you have a pair of ", rank, "s. Split hand? (yes/no): "
@@ -78,7 +78,7 @@ handle_splitting <- function(player_hands, deck, players) {
 
     if (needs_split(hand)) {
       do_split <- FALSE
-      rank <- get_rank(hand$cards)
+      rank <- card_rank(hand$cards)
 
       if (is_cp) {
         do_split <- ai_decide_split(hand)

@@ -1,5 +1,7 @@
+# R/game_loop.R
+# Interactive game loop functions
+
 #' @title Play a Full Interactive Game of Blackjack
-#'
 #' @description
 #' Launches an interactive multiplayer game of Blackjack with full game mechanics.
 #' The game supports up to six players (human or computer), betting, doubling down,
@@ -16,8 +18,7 @@
 #' This is the main function to run the full-featured Blackjack game. The game is played
 #' in rounds. After each round, players are asked if they wish to continue. The game
 #' loop will end if no players wish to continue or a player exits early.
-#'
-#' @return No return value. This function is run for its side effects: interactive gameplay,
+#'#' @return No return value. This function is run for its side effects: interactive gameplay,
 #' screen output, and updates to stored player data.
 #'
 #' @examples
@@ -100,3 +101,26 @@ play <- function() {
     if (!ask_play_again()) break
   }
 }
+
+#' @title Ask to play again
+#' @description Prompts the user to play another round or exit the game.
+#' @return A logical indicating whether the player wants to play again (TRUE) or exit (FALSE).
+#' @export
+
+ask_play_again <- function() {
+  repeat {
+    cat("\n")
+    again <- tolower(readline(prompt = "Type 'again' to play another game, or 'exit' to quit: "))
+    if (again == "again") return(TRUE)
+    if (again == "exit") return(FALSE)
+    cat("Invalid input. Please type 'again' or 'exit'.\n")
+  }
+}
+
+#' Exit Blackjack session
+#' @export
+exit <- function() {
+  cat("Exiting Blackjack session. Goodbye!\n")
+  return(invisible(NULL))
+}
+
