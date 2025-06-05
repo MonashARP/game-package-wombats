@@ -4,7 +4,7 @@
 \alias{vec_ptype2.character.card}
 \title{Type promotion: character + card → card}
 \usage{
-vec_ptype2.character.card(x, y, ...)
+\method{vec_ptype2}{character.card}(x, y, ...)
 }
 \description{
 Type promotion: character + card → card

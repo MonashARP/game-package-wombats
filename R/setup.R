@@ -11,9 +11,9 @@ setup_and_display_initial <- function(players) {
   ranks <- rep(c("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"), 4)
   suits <- rep(c("♠","♥","♦","♣"), each = 13)
 
-  deck_char <- paste0(suits, ranks)
+  deck_char <- paste0(ranks, suits)
   deck_char <- sample(deck_char, length(deck_char)) # Shuffle the deck
-  deck <- vctrs::vec_cast(deck_char, to = card(suit = character(), rank = character())) # Convert to card class
+  deck <- vctrs::vec_cast(deck_char, to = card(rank = character(), suit = character())) # Convert to card class
 
   # Deal cards
   deal_result <- deal_cards(deck, num_players)
@@ -33,20 +33,17 @@ setup_and_display_initial <- function(players) {
     hand_cards <- hand_obj$cards
     ranks <- card_rank(hand_cards)
     suits <- card_suit(hand_cards)
-    display_cards <- paste0(suits, ranks)
+    display_cards <- paste0(ranks, suits)
 
-    if (isTRUE(players[[player_name]]$is_computer)) {
-      cat(player_name, "'s hand: ", display_cards[1], " | Bet: ", players[[player_name]]$bets, "\n", sep = "")
-    } else {
-      cat(player_name, "'s hand: ", paste(display_cards, collapse = " "), " | Bet: ", players[[player_name]]$bets, "\n", sep = "")
-    }
+    # Show only the first card and "?" for all players
+    cat(player_name, "'s hand: ", display_cards[1], " ?", " | Bet: ", players[[player_name]]$bets, "\n", sep = "")
   }
 
-  # Show dealer's hand
+  # Dealer hand display outside loop
   dealer_rank <- card_rank(dealer_hand$cards)
   dealer_suit <- card_suit(dealer_hand$cards)
-  dealer_display <- paste0(dealer_suit, dealer_rank)
-  cat("Dealer shows: ", paste0(dealer_display, collapse = " "), " ?\n", sep = "")
+  dealer_display <- paste0(dealer_rank, dealer_suit)
+  cat("Dealer shows: ", dealer_display[1], " ?", "\n", sep = "")
 
   return(list(
     deck = deck,

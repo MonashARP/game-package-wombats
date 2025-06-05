@@ -8,7 +8,7 @@
 #' @param suit   Character vector, allowed values："♠","♥","♦","♣"
 #' @return       A vctrs record vector with the class "card"
 #' @export
-card <- function(suit, rank) {
+card <- function(rank = character(), suit = character()) {
   stopifnot(
     is.character(rank), is.character(suit),
     length(rank) == length(suit),
@@ -16,7 +16,7 @@ card <- function(suit, rank) {
     all(suit %in% c("♠","♥","♦","♣"))
   )
   vctrs::new_rcrd(
-    list(suit = suit, rank = rank),
+    list(rank = rank, suit = suit),
     class = "card"
   )
 }
@@ -31,7 +31,7 @@ card <- function(suit, rank) {
 format.card <- function(x, ...) {
   ranks <- vctrs::field(x, "rank")
   suits <- vctrs::field(x, "suit")
-  paste0(suits, ranks)
+  paste0(ranks, suits)
 }
 
 #' Cast character vector to card
@@ -94,7 +94,7 @@ vec_cast.card.character <- function(x, to, ..., x_arg = "x", to_arg = "to") {
   if (!is.character(x)) vctrs::stop_incompatible_cast(x, to, x_arg = x_arg, to_arg = to_arg)
 
   # Use stringr for proper UTF-8 matching
-  pattern <- "^([♠♥♦♣])(A|10|[2-9JQK])$"
+  pattern <- "^(A|10|[2-9JQK])([♠♥♦♣])$"
   matches <- stringr::str_match(x, pattern)
 
   if (any(is.na(matches[, 1]))) {
@@ -106,10 +106,10 @@ vec_cast.card.character <- function(x, to, ..., x_arg = "x", to_arg = "to") {
     )
   }
 
-  suits <- matches[, 2]
-  ranks <- matches[, 3]
+  ranks <- matches[, 2]
+  suits <- matches[, 3]
 
-  card(suits, ranks)
+  card(ranks, suits)
 }
 
 # Print method — user-facing display

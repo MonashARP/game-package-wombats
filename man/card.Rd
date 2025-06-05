@@ -4,12 +4,12 @@
 \alias{card}
 \title{Create a card vector}
 \usage{
-card(suit, rank)
+card(rank = character(), suit = character())
 }
 \arguments{
-\item{suit}{Character vector, allowed values："♠","♥","♦","♣"}
-
 \item{rank}{Character vector, allowed values:："A","2",...,"10","J","Q","K"}
+
+\item{suit}{Character vector, allowed values："♠","♥","♦","♣"}
 }
 \value{
 A vctrs record vector with the class "card"

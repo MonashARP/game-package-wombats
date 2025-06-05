@@ -4,7 +4,7 @@
 \alias{vec_cast.character.card}
 \title{Cast card to character vector}
 \usage{
-vec_cast.character.card(x, to, ...)
+\method{vec_cast}{character.card}(x, to, ...)
 }
 \arguments{
 \item{x}{A card object}

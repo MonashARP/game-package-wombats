@@ -5,7 +5,7 @@
 #' @export
 is_blackjack <- function(hand) {
   cards <- hand$cards
-  ranks <- get_rank(cards)
+  ranks <- card_rank(cards)
   length(cards) == 2 && any(ranks == "A") && any(ranks %in% c("10", "J", "Q", "K"))
 }
 

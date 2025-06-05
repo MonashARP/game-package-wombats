@@ -5,13 +5,17 @@
 #' @export
 
 new_blackjack_hand <- function(cards) {
-  if (!inherits(cards, "card")) {
-    stop("`cards` must be a `card` vector (suit + rank).")
+  # Convert character to card if needed
+  if (is.character(cards)) {
+    cards <- vctrs::vec_cast(cards, card())
   }
-  # cards: character vector like c("♠A", "♥10")
-  suits <- sub(".*([♠♥♦♣])$", "\\1", cards)
+
+  if (!inherits(cards, "card")) {
+    stop("cards must be a card vector (rank + suit).")
+  }
+
   structure(
-    list(cards = cards, suits = suits),
+    list(cards = cards),
     class = "blackjack_hand"
   )
 }
@@ -38,10 +42,18 @@ calculate_score <- function(hand) {
   }
 
   cards <- vctrs::field(hand, "cards")
-  ranks <- get_rank(cards)
+  ranks <- card_rank(cards)
 
-  values <- as.numeric(ranks)
-  values[is.na(values)] <- ifelse(ranks[is.na(values)] %in% c("J", "Q", "K"), 10, 11)
+  # Map ranks to numeric values explicitly
+  values <- sapply(ranks, function(rank) {
+    if (rank %in% c("J", "Q", "K")) {
+      10
+    } else if (rank == "A") {
+      11
+    } else {
+      as.numeric(rank)
+    }
+  })
 
   total <- sum(values)
   ace_count <- sum(ranks == "A")

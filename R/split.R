@@ -1,21 +1,21 @@
 # R/split.R
 
-#' @noRd
 #' Check if a hand can be split (must have exactly two cards of the same rank)
+#' @noRd
 needs_split <- function(hand) {
   ranks <- get_rank(hand$cards)
   length(ranks) == 2 && ranks[1] == ranks[2]
 }
 
-#' @noRd
 #' AI decision to split: split only if pair is 8 or A
+#' @noRd
 ai_decide_split <- function(hand) {
   ranks <- get_rank(hand$cards)
   ranks[1] %in% c("8", "A")
 }
 
-#' @noRd
 #' Ask human player whether to split
+#' @noRd
 ask_human_split <- function(player_name, hand) {
   rank <- get_rank(hand$cards)[1]
   repeat {
@@ -28,8 +28,8 @@ ask_human_split <- function(player_name, hand) {
   }
 }
 
-#' @noRd
 #' Perform the actual split operation and draw one card for each new hand
+#' @noRd
 perform_split <- function(hand, deck, deck_index) {
   # hand: blackjack_hand of two cards
   cards <- hand$cards
@@ -50,10 +50,6 @@ perform_split <- function(hand, deck, deck_index) {
 #' @param players A named list of player objects (including names and is_computer flag).
 #' @return An updated list of lists of blackjack_hand objects after potential splits.
 #' @export
-
-#' @noRd
-#' Handle all splitting logic for this round (for both human and AI)
-#' Each hand is assumed to be a blackjack_hand object with "point+symbol" cards.
 handle_splitting <- function(player_hands, deck, players) {
 
   if (!is.list(player_hands) || length(player_hands) == 0) {
@@ -75,6 +71,7 @@ handle_splitting <- function(player_hands, deck, players) {
     hand_list <- updated_player_hands[[player_name]]
 
     # Force wrap hands as blackjack_hand if needed
+
     hand_list <- lapply(hand_list, ensure_blackjack_hand)
     hand <- hand_list[[1]]  # only check the first (main) hand
     is_cp <- players[[player_name]]$is_computer

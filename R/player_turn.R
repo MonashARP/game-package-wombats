@@ -1,11 +1,11 @@
 # R/player_turn.R
 
-#' @noRd
 #' Return a string for display, e.g., "10♠", "A♥".
+#' @noRd
 format_hand_display <- function(cards) {paste(cards, collapse = " ")}
 
-#' @noRd
 #' Decide action for AI player given hand, coins, bet, and current score.
+#' @noRd
 ai_decide_action <- function(hand, player, first_move) {
   score <- calculate_score(hand)
   if (first_move && player$coins >= player$bets && score >= 9 && score <= 11) {
@@ -20,8 +20,8 @@ ai_decide_action <- function(hand, player, first_move) {
   }
 }
 
-#' @noRd
 #' Prompt human player for action. Returns string ("hit", "stand", "double", "exit").
+#' @noRd
 human_prompt_action <- function(first_move) {
   prompt_msg <- if (first_move) {
     "Hit, Stand or Double? (hit/stand/double/exit): "
@@ -36,8 +36,8 @@ human_prompt_action <- function(first_move) {
   }
  }
 
-#' @noRd
 #' Wrap a vector of card strings as a blackjack_hand S3 object, if not already.
+#' @noRd
 ensure_blackjack_hand <- function(hand) {
   if (!inherits(hand, "blackjack_hand")) new_blackjack_hand(hand) else hand
 }

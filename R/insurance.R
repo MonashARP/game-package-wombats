@@ -1,18 +1,10 @@
 # R/Insurance.R
 
-#' Extract card points
-#' @noRd
-get_rank <- function(card) sub("([AJQK0-9]+).*", "\\1", card)
-
-#' Extract card suits
-#' @noRd
-get_suit <- function(cards) {sub(".*([♠♥♦♣])$", "\\1", cards)}
-
 #' Whether the insurance needs to be triggered (dealer's clear card is A)
 #' @noRd
 needs_insurance <- function(dealer_hand) {
   upcard <- dealer_hand$cards[1]
-  get_rank(upcard) == "A"
+  card_rank(upcard) == "A"
 }
 
 # AI insurance decision(adjustable probability, fixed return during testing)
@@ -115,12 +107,12 @@ handle_insurance <- function(dealer_hand, players, input_fun = readline, ai_prob
   }
 
   # If the dealer's open hand is 10/J/Q/K and it is truly a Blackjack, reveal the hand
-  dealer_upcard_rank <- get_rank(dealer_hand$cards[1])
+  dealer_upcard_rank <- card_rank(dealer_hand$cards[1])
   if (dealer_upcard_rank %in% c("10", "J", "Q", "K") && dealer_has_blackjack) {
     cat("\u26a0\ufe0f Dealer has Blackjack with a 10-value upcard!\n")
     all_cards <- paste0(
-      card_suit(dealer_hand$cards),
-      card_rank(dealer_hand$cards)
+      card_rank(dealer_hand$cards),
+      card_suit(dealer_hand$cards)
     )
     cat("Dealer hand: [", paste(all_cards, collapse = ", "), "]\n")
 

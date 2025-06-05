@@ -90,8 +90,5 @@ input_players <- function(players_db) {
     }
   }
 
-  # Save updated player database
-  save_players(players_db)
-
   return(list(session_players = session_players, players_db = players_db))
 }

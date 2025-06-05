@@ -12,8 +12,10 @@ Type: play() to begin, or type exit() to quit."
 }
 
 .onLoad <- function(libname, pkgname) {
-  if (requireNamespace("vctrs", quietly = TRUE)) {
-    vctrs::s3_register("vctrs::vec_cast", "card.character")
-    vctrs::s3_register("vctrs::vec_ptype2", "card")
-  }
+  vctrs::s3_register("vctrs::vec_cast", "card.character")
+  vctrs::s3_register("vctrs::vec_cast", "character.card")
+  vctrs::s3_register("vctrs::vec_cast", "card")
+  vctrs::s3_register("vctrs::vec_ptype2", "card.character")
+  vctrs::s3_register("vctrs::vec_ptype2", "character.card")
+  vctrs::s3_register("vctrs::vec_ptype2", "card.card")
 }
