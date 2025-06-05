@@ -7,6 +7,17 @@
 <url><loc>https://monasharp.github.io/game-package-wombats/index.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/ask_play_again.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/calculate_score.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/calculate_score_cpp.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/card.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/card_is_ace.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/card_is_face.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/card_rank.blackjack_hand.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/card_rank.card.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/card_rank.character.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/card_rank.default.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/card_rank.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/card_suit.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/card_value.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/deal_cards.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/dealer_action.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/determine_winner.html</loc></url>
@@ -14,6 +25,7 @@
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/end_round.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/exit.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/format.blackjack_hand.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/format.card.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/get_bets.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/get_home_dir.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/handle_insurance.html</loc></url>
@@ -27,10 +39,16 @@
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/play.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/play_player_turns.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/player_action.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/players_data.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/plot_bankroll_history.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/plot_player_ranking.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/reset_game_data.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/save_players.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/setup_and_display_initial.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/vec_cast.card.character.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/vec_cast.character.card.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/vec_ptype2.card.card.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/vec_ptype2.card.character.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/vec_ptype2.character.card.html</loc></url>
 </urlset>
 
