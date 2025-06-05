@@ -2,13 +2,22 @@
 % Please edit documentation in R/io.R
 \name{load_players}
 \alias{load_players}
-\title{Load players from disk}
+\title{Load players and bankroll history from disk}
 \usage{
 load_players()
 }
 \value{
-A list containing players and bankroll_history, or default empty lists if none found
+A list with two elements:
+  \describe{
+    \item{players}{Named list of players.}
+    \item{bankroll_history}{List of bankroll history (can be empty).}
+  }
 }
 \description{
-Load players from disk
+Loads the saved player list and bankroll history from disk, or returns defaults if no save exists.
+}
+\examples{
+res <- load_players()
+str(res$players)
+str(res$bankroll_history)
 }

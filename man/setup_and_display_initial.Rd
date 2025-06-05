@@ -7,11 +7,25 @@
 setup_and_display_initial(players)
 }
 \arguments{
-\item{players}{A named list of player objects with 'name' and 'coins' fields.}
+\item{players}{A named list of player objects; each should include 'name', 'coins', and 'bets' fields.}
 }
 \value{
-A list: deck, player_hands, dealer_hand, and updated players (with bets deducted).
+A list with:
+  \describe{
+    \item{deck}{Remaining shuffled deck as a card vector.}
+    \item{player_hands}{Named list of each player's \code{blackjack_hand} (initial 2 cards).}
+    \item{dealer_hand}{The dealer's \code{blackjack_hand}.}
+    \item{players}{Updated players list (with bets already deducted).}
+  }
 }
 \description{
-Shuffles the deck, deals initial hands, deducts player bets, and shows hands.
+Shuffles the deck, deals initial hands to all players and the dealer, deducts bets, and displays the initial cards (only one revealed for each hand).
+}
+\examples{
+players <- list(
+  Alice = list(name = "Alice", coins = 1000, bets = 100),
+  Bob = list(name = "Bob", coins = 1000, bets = 100)
+)
+res <- setup_and_display_initial(players)
+# res$deck, res$player_hands, res$dealer_hand, res$players
 }

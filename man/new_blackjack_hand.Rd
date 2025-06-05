@@ -15,3 +15,6 @@ A `blackjack_hand` S3 object
 \description{
 Create a hand object representing a set of cards
 }
+\examples{
+new_blackjack_hand(c("A♠", "10♦"))
+}

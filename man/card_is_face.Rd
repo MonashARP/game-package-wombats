@@ -15,3 +15,7 @@ Logical vector, TRUE indicates that the corresponding rank is at c("J","Q","K").
 \description{
 judging J/Q/K
 }
+\examples{
+cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+card_is_face(cards)
+}

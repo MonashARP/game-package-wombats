@@ -17,3 +17,7 @@ A vctrs record vector with the class "card"
 \description{
 Create a card vector
 }
+\examples{
+cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+print(cards)
+}

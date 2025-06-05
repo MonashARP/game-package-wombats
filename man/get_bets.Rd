@@ -18,3 +18,12 @@ ensuring the bet is a positive integer and does not exceed their available coins
 Automatically assigns bets for computer players.
 Updates the player's 'bets' and deducts coins directly.
 }
+\examples{
+# Example with two players (one human, one computer)
+players <- list(
+  You = list(coins = 100, is_computer = FALSE),
+  Computer_1 = list(coins = 100, is_computer = TRUE)
+)
+# This will prompt for input in interactive mode:
+# get_bets(players)
+}

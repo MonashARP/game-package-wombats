@@ -7,16 +7,20 @@
 display_final_results(player_hands, dealer_hand, players)
 }
 \arguments{
-\item{player_hands}{A named list of lists of blackjack_hand objects, keyed by player name.}
+\item{player_hands}{Named list of player hands (each can be a list for split hands).}
 
-\item{dealer_hand}{A blackjack_hand object.}
+\item{dealer_hand}{Dealer's \code{blackjack_hand} object.}
 
-\item{players}{A named list of players (as returned by `input_players()`), where each player has a `money` field.}
+\item{players}{Named list of player info (must include 'coins', 'bets', etc.).}
 }
 \value{
-Updated players list with adjusted money balances after the round.
+Updated named list of players with adjusted coins after the round.
 }
 \description{
-Determines the winner for each player, shows the results with player names,
-their bets, and updates remaining coins accordingly.
+Determines the winner for each player, displays results, and updates coin balances.
+}
+\examples{
+\dontrun{
+display_final_results(player_hands, dealer_hand, players)
+}
 }

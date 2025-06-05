@@ -3,16 +3,24 @@
 # and data visualization.
 
 #' @title End round processing
-#' @description Handles end of round operations: displaying results, saving players,
+#' @description
+#' Handles end of round operations: displaying results, saving players,
 #' updating bankroll history, and plotting results.
-#' @param player_hands Named list of player hands.
-#' @param dealer_hand Dealer's hand.
-#' @param players Named list of players with coin balances.
+#' @param player_hands Named list of player hands (each may be a list of \code{blackjack_hand} objects).
+#' @param dealer_hand Dealer's \code{blackjack_hand} object.
+#' @param players Named list of player info (must include 'coins').
+#' @param players_db Named list: persistent player info.
 #' @param bankroll_history List tracking coin balances over rounds.
-#' @param players_db Player Database in Local Directory
-#' @return A list with updated `players` and `bankroll_history`.
+#' @return A list with:
+#'   \describe{
+#'     \item{players}{Updated named list of player info.}
+#'     \item{bankroll_history}{Updated coin history list.}
+#'   }
+#' @examples
+#' \dontrun{
+#' end_round(player_hands, dealer_hand, players, players_db, bankroll_history)
+#' }
 #' @export
-
 end_round <- function(player_hands, dealer_hand, players, players_db, bankroll_history) {
   players <- display_final_results(player_hands, dealer_hand, players)
   for (name in names(players)) {
@@ -50,12 +58,16 @@ end_round <- function(player_hands, dealer_hand, players, players_db, bankroll_h
 }
 
 #' @title Display final results with betting outcomes
-#' @description Determines the winner for each player, shows the results with player names,
-#' their bets, and updates remaining coins accordingly.
-#' @param player_hands A named list of lists of blackjack_hand objects, keyed by player name.
-#' @param dealer_hand A blackjack_hand object.
-#' @param players A named list of players (as returned by `input_players()`), where each player has a `money` field.
-#' @return Updated players list with adjusted money balances after the round.
+#' @description
+#' Determines the winner for each player, displays results, and updates coin balances.
+#' @param player_hands Named list of player hands (each can be a list for split hands).
+#' @param dealer_hand Dealer's \code{blackjack_hand} object.
+#' @param players Named list of player info (must include 'coins', 'bets', etc.).
+#' @return Updated named list of players with adjusted coins after the round.
+#' @examples
+#' \dontrun{
+#' display_final_results(player_hands, dealer_hand, players)
+#' }
 #' @export
 display_final_results <- function(player_hands, dealer_hand, players) {
   cat("\n=== Final Results ===\n")
@@ -131,12 +143,16 @@ display_final_results <- function(player_hands, dealer_hand, players) {
 }
 
 #' @title Determine winner(s) of a Blackjack game
-#' @description Handles single hand or list of hands; supports Blackjack, Charlie, Split
-#' @param player_hand A `blackjack_hand` or list of `blackjack_hand`
-#' @param dealer_hand A `blackjack_hand` object
-#' @return Outcome string or named character vector if multiple hands
+#' @description
+#' Determines outcome ("Player wins", "Dealer wins", "Push", etc.) for a hand or list of hands.
+#' @param player_hand A \code{blackjack_hand} or a list of them.
+#' @param dealer_hand Dealer's \code{blackjack_hand} object.
+#' @return A character outcome ("Player wins", ...) or a named vector if multiple hands.
+#' @examples
+#' hand <- new_blackjack_hand(c("A♠", "K♦"))
+#' dealer <- new_blackjack_hand(c("10♣", "8♥"))
+#' determine_winner(hand, dealer)
 #' @export
-
 determine_winner <- function(player_hand, dealer_hand) {
   # STRONG defensive check: list of blackjack_hand only
   is_valid_hand_list <- function(x) {
@@ -182,11 +198,15 @@ determine_winner <- function(player_hand, dealer_hand) {
 }
 
 #' @title Plot current player ranking
-#' @description Creates a bar chart showing player coin rankings, with a ranking number added to the chart.
-#' @param players A named list of player objects with 'coins'.
-#' @return A plotly bar chart object
+#' @description
+#' Creates a bar chart showing player coin rankings, with rank numbers on the chart.
+#' @param players Named list of player objects with 'coins' field.
+#' @return A plotly bar chart object.
+#' @examples
+#' \dontrun{
+#' plot_player_ranking(list(Alice = list(coins = 1200), Bob = list(coins = 900)))
+#' }
 #' @export
-
 plot_player_ranking <- function(players) {
   df <- data.frame(
     player = names(players),

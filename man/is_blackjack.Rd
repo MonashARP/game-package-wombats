@@ -15,3 +15,8 @@ TRUE if Blackjack, else FALSE
 \description{
 Returns TRUE if the hand has exactly 2 cards and total is 21
 }
+\examples{
+# Example: Blackjack (Ace + King)
+hand <- new_blackjack_hand(c("A♠", "K♦"))
+is_blackjack(hand)
+}

@@ -105,8 +105,12 @@ play <- function() {
 #' @title Ask to play again
 #' @description Prompts the user to play another round or exit the game.
 #' @return A logical indicating whether the player wants to play again (TRUE) or exit (FALSE).
+#' @examples
+#' \dontrun{
+#' ask_play_again()
+#' # User types 'again' or 'exit' at prompt
+#' }
 #' @export
-
 ask_play_again <- function() {
   repeat {
     cat("\n")
@@ -118,6 +122,11 @@ ask_play_again <- function() {
 }
 
 #' Exit Blackjack session
+#' @description
+#' Intended for ending an interactive Blackjack session without using play().
+#' @return Invisibly returns NULL.
+#' @examples
+#' exit()  # Prints "Exiting Blackjack session. Goodbye!"
 #' @export
 exit <- function() {
   cat("Exiting Blackjack session. Goodbye!\n")

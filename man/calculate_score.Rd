@@ -7,11 +7,17 @@
 calculate_score(hand)
 }
 \arguments{
-\item{hand}{A `blackjack_hand` object}
+\item{hand}{A \code{blackjack_hand} object.}
 }
 \value{
-Numeric score of the hand (integer)
+Integer. Total blackjack score for the hand.
 }
 \description{
-Calculates the total point value of a blackjack hand using C++
+Calculates the total point value of a blackjack hand using a fast C++ backend.
+}
+\examples{
+hand <- new_blackjack_hand(c("A♠", "10♦"))
+calculate_score(hand)   # 21
+hand2 <- new_blackjack_hand(c("7♣", "8♦", "6♥"))
+calculate_score(hand2)  # 21
 }

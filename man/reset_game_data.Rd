@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{reset_game_data}
 \alias{reset_game_data}
-\title{Reset game memory: players_db and/or bankroll_history}
+\title{Reset game memory: players and/or bankroll history}
 \usage{
 reset_game_data(
   players_db,
@@ -12,17 +12,26 @@ reset_game_data(
 )
 }
 \arguments{
-\item{players_db}{Player Database in Local Directory}
+\item{players_db}{Named list of players (before reset).}
 
-\item{bankroll_history}{List tracking coin balances over rounds.}
+\item{bankroll_history}{List tracking coin balances over rounds (before reset).}
 
-\item{reset_players}{Logical. Whether to clear players_db}
+\item{reset_players}{Logical. Whether to clear \code{players_db} (default TRUE).}
 
-\item{reset_history}{Logical. Whether to clear bankroll_history}
+\item{reset_history}{Logical. Whether to clear \code{bankroll_history} (default TRUE).}
 }
 \value{
-A list with (possibly reset) players_db and bankroll_history
+A list with two elements:
+  \describe{
+    \item{players_db}{Possibly reset players database (list).}
+    \item{bankroll_history}{Possibly reset bankroll history (list).}
+  }
 }
 \description{
-Reset game memory: players_db and/or bankroll_history
+Clears and saves player database and/or bankroll history, depending on arguments.
+}
+\examples{
+players_db <- list(Alice = list(coins = 1000))
+bankroll_history <- list()
+reset_game_data(players_db, bankroll_history)
 }

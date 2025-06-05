@@ -2,13 +2,24 @@
 
 # --------------------------- player_actions ---------------------------------
 #' @title Player action: hit, stand, or double (with betting)
-#' @param hand A `blackjack_hand` object
-#' @param deck A character vector of remaining cards
-#' @param action A string: "hit", "stand", or "double"
-#' @param player A list representing the player (with 'coins' and 'bets')
-#' @return A list with updated `hand`, `deck`, and `player`
+#' @description
+#' Apply a player action ("hit", "stand", or "double") for one hand, updating hand, deck, and player's coin/bet info.
+#' @param hand A \code{blackjack_hand} object.
+#' @param deck A character vector of remaining cards.
+#' @param action Character: "hit", "stand", or "double".
+#' @param player A list representing the player (fields: 'coins', 'bets', etc.).
+#' @return A list with updated elements:
+#'   \describe{
+#'     \item{hand}{Updated blackjack hand (\code{blackjack_hand}).}
+#'     \item{deck}{Updated deck (character vector).}
+#'     \item{player}{Updated player info (list).}
+#'   }
+#' @examples
+#' hand <- new_blackjack_hand(c("8♠", "3♦"))
+#' deck <- c("10♣", "4♥", "6♣")
+#' player <- list(coins = 900, bets = 100)
+#' player_action(hand, deck, "hit", player)
 #' @export
-
 player_action <- function(hand, deck, action, player) {
   if (!inherits(hand, "blackjack_hand")) {
     stop("Input 'hand' must be of class 'blackjack_hand'")
@@ -46,7 +57,14 @@ player_action <- function(hand, deck, action, player) {
 
 # --------------------------- player_turn ----------------------------------
 
-#' Decide action for AI player given hand, coins, bet, and current score.
+#' @title Decide action for AI player
+#' @description
+#' Logic for AI player: chooses "double" on first move if conditions are right, otherwise "hit" or "stand".
+#' @param hand A \code{blackjack_hand} object.
+#' @param player A list with player info (coins, bets, etc.).
+#' @param first_move Logical. Is this the player's first move?
+#' @return Character: one of "hit", "stand", or "double".
+#' @keywords internal
 #' @noRd
 ai_decide_action <- function(hand, player, first_move) {
   score <- calculate_score(hand)
@@ -62,7 +80,11 @@ ai_decide_action <- function(hand, player, first_move) {
   }
 }
 
-#' Prompt human player for action. Returns string ("hit", "stand", "double", "exit").
+#' @title Prompt human for player action
+#' @description Prompts a human for their action; returns string ("hit", "stand", "double", "exit").
+#' @param first_move Logical. Is this the player's first move?
+#' @return Character: one of "hit", "stand", "double", "exit".
+#' @keywords internal
 #' @noRd
 human_prompt_action <- function(first_move) {
   prompt_msg <- if (first_move) {
@@ -78,12 +100,30 @@ human_prompt_action <- function(first_move) {
   }
 }
 
-#' @title Play player turns (with coins and computer players)
-#' @description Allows each player (human or computer) to take their turns (hit, stand, double).
-#' @param player_hands A named list of lists of blackjack_hand objects, keyed by player name.
-#' @param deck A character vector representing the remaining deck.
-#' @param players A named list of player info (each has 'coins', 'bets', and 'is_computer' flag).
-#' @return A list containing updated player_hands, deck, and players.
+#' @title Play player turns for all players
+#' @description
+#' Allows each player (human or computer) to play their turn for all hands (with hit/stand/double logic).
+#' @param player_hands A named list of lists of \code{blackjack_hand} objects, one list per player.
+#' @param deck Character vector of remaining cards.
+#' @param players Named list of player info (fields: 'coins', 'bets', 'is_computer', etc.).
+#' @return A list:
+#'   \describe{
+#'     \item{player_hands}{Updated list of player hands.}
+#'     \item{deck}{Updated deck after all turns.}
+#'     \item{players}{Updated player info.}
+#'       }
+#' @examples
+#' # Simulate a single turn for two players
+#' player_hands <- list(
+#'   Alice = list(new_blackjack_hand(c("9♠", "7♦"))),
+#'   Bob = list(new_blackjack_hand(c("5♣", "K♥")))
+#' )
+#' deck <- c("8♣", "2♦", "4♠")
+#' players <- list(
+#'   Alice = list(coins = 800, bets = 100, is_computer = FALSE),
+#'   Bob = list(coins = 800, bets = 100, is_computer = TRUE)
+#' )
+#' play_player_turns(player_hands, deck, players)
 #' @export
 play_player_turns <- function(player_hands, deck, players) {
   if (!is.list(player_hands) || length(player_hands) == 0) {

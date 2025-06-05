@@ -1,7 +1,18 @@
+# R/bankroll_graph.R
+
 #' @title Plot bankroll history over rounds
 #' @description Creates a line chart of bankrolls over time using Plotly.
 #' @param bankroll_history A list. Each element is a named numeric vector of player coins per round.
 #' @return A plotly line chart object
+#' @examples
+#' # Example data: 2 rounds, 2 players
+#' bhist <- list(
+#'   c(You = 1100, Computer_1 = 900),
+#'   c(You = 1200, Computer_1 = 800)
+#' )
+#' if (requireNamespace("plotly", quietly = TRUE)) {
+#'   plot_bankroll_history(bhist)
+#' }
 #' @export
 plot_bankroll_history <- function(bankroll_history) {
   if (length(bankroll_history) == 0) {

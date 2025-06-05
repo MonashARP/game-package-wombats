@@ -6,6 +6,12 @@
 \usage{
 exit()
 }
+\value{
+Invisibly returns NULL.
+}
 \description{
-Exit Blackjack session
+Intended for ending an interactive Blackjack session without using play().
+}
+\examples{
+exit()  # Prints "Exiting Blackjack session. Goodbye!"
 }

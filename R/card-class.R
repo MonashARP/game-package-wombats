@@ -7,6 +7,9 @@
 #' @param rank   Character vector, allowed values:："A","2",...,"10","J","Q","K"
 #' @param suit   Character vector, allowed values："♠","♥","♦","♣"
 #' @return       A vctrs record vector with the class "card"
+#' @examples
+#' cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+#' print(cards)
 #' @export
 card <- function(rank = character(), suit = character()) {
   stopifnot(
@@ -29,6 +32,9 @@ card <- function(rank = character(), suit = character()) {
 #' @param ... Additional arguments passed to or from other methods
 #' @keywords internal
 #' @return A character vector
+#' @examples
+#' cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+#' format(cards)   # Returns: "A♠" "10♦" "Q♥"
 #' @export
 format.card <- function(x, ...) {
   ranks <- vctrs::field(x, "rank")
@@ -42,8 +48,11 @@ format.card <- function(x, ...) {
 #'
 #' @param x A character vector
 #' @param to A card prototype
-#' @keywords internal
+#' @param ... Additional arguments passed to or from other methods
+#' @param x_arg Name of the x argument (used for error messages)
+#' @param to_arg Name of the to argument (used for error messages)
 #' @return A card vector
+#' @keywords internal
 #' @exportS3Method vctrs::vec_cast card.character
 vec_cast.card.character <- function(x, to, ...) {
   message("vec_cast.card.character called!")
@@ -147,20 +156,46 @@ vec_cast.card.character <- function(x, to, ..., x_arg = "x", to_arg = "to") {
   card(ranks, suits)
 }
 
-# Print method — user-facing display
+#' Print a card vector
+#'
+#' Nicely prints a card vector as "A♠ 10♦ Q♥".
+#'
+#' @param x A card vector
+#' @param ... Additional arguments passed to or from other methods
+#' @examples
+#' cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+#' print(cards)
 #' @export
 print.card <- function(x, ...) {
   cat(paste0(format(x), collapse = " "), "\n")
   invisible(x)
 }
 
-#' @method vec_cast card
+#' Cast anything to card (identity or error)
+#'
+#' Used internally by vctrs for S3 casting.
+#'
+#' @param x Input object.
+#' @param to Card prototype.
+#' @param ... Additional arguments (ignored)
+#' @return Card vector or error
+#' @keywords internal
 #' @export
 vec_cast.card <- function(x, to, ...) {
   if (inherits(x, "card")) return(x)
   vctrs::stop_incompatible_cast(x, to)
 }
 
+#' Coerce card vector to character
+#'
+#' Returns a character vector like "A♠", "10♦".
+#'
+#' @param x A card vector
+#' @param ... Additional arguments (ignored)
+#' @return A character vector
+#' @examples
+#' cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+#' as.character(cards) # [1] "A♠" "10♦" "Q♥"
 #' @export
 as.character.card <- function(x, ...) {
   format(x, ...)

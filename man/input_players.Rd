@@ -10,8 +10,20 @@ input_players(players_db)
 \item{players_db}{Player Database in Local Directory}
 }
 \value{
-A named list of players (human + computer), where each element is a list with player info (name, money, is_computer).
+A list with two elements:
+  \describe{
+    \item{session_players}{A named list of players (human and computer) with their info for the current session.}
+    \item{players_db}{The updated player database (named list).}
+  }
 }
 \description{
-Allows input of human player names, creates computer players, loads or creates player data with coins.
+Allows input of human player names, creates computer players,
+             loads or creates player data with coins.
+}
+\examples{
+\dontrun{
+# Typical usage (prompts user for input):
+res <- input_players(players_db = list())
+str(res$session_players)
+}
 }

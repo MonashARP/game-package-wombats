@@ -12,3 +12,9 @@ A logical indicating whether the player wants to play again (TRUE) or exit (FALS
 \description{
 Prompts the user to play another round or exit the game.
 }
+\examples{
+\dontrun{
+ask_play_again()
+# User types 'again' or 'exit' at prompt
+}
+}

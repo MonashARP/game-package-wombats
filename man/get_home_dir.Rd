@@ -12,3 +12,8 @@ A character string containing the path to the user's home directory. If unavaila
 \description{
 Returns a robust path to the user's home directory, with fallbacks for different operating systems.
 }
+\examples{
+get_home_dir()
+# Example output (on Linux): "/home/username"
+# Example output (on Windows): "C:/Users/username"
+}

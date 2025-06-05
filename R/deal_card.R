@@ -1,11 +1,29 @@
 # R/ deal_card.R
 
 #' @title Deal initial cards in Blackjack
-#' @description Deal two cards to the player and dealer each, from a shuffled deck.
+#' @description
+#' Deal two cards to each player and to the dealer from a shuffled deck.
+#' Returns player and dealer hands in Blackjack format.
 #' @param deck A character vector representing the deck. If NULL, a fresh 52-card deck is used.
 #' @param num_players An integer (default = 1). Number of players to deal cards to.
-#' @return A list with `player_hands` (a list of blackjack_hand objects) and `dealer_hand`.
+#' @return A list with the following components:
+#'   \describe{
+#'     \item{player_hands}{A list of \code{blackjack_hand} objects, one for each player (each hand has 2 cards).}
+#'     \item{dealer_hand}{A \code{blackjack_hand} object for the dealer (2 cards).}
+#'     \item{deck}{The remaining deck as a character vector (undealt cards).}
+#'   }
+#' @examples
+#' # Deal for 2 players from a fresh deck
+#' hands <- deal_cards(num_players = 2)
+#' hands$player_hands      # list of 2 blackjack_hand objects
+#' hands$dealer_hand       # dealer's hand
+#' hands$deck[1:5]         # top 5 cards of remaining deck
+#'
+#' # Deal from a given deck (e.g. after removing cards)
+#' custom_deck <- c("A♠", "10♦", "5♥", "7♣", "Q♠", "3♦", "K♣", "8♠", "6♥", "2♣")
+#' deal_cards(deck = custom_deck, num_players = 1)
 #' @export
+
 deal_cards <- function(deck = NULL, num_players = 1) {
   # Create a standard 52-card deck if none supplied
   if (is.null(deck)) {

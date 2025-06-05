@@ -1,7 +1,20 @@
+# R/input_player.R
+
 #' @title Input and validate human and computer players
-#' @description Allows input of human player names, creates computer players, loads or creates player data with coins.
+#' @description Allows input of human player names, creates computer players,
+#'              loads or creates player data with coins.
 #' @param players_db Player Database in Local Directory
-#' @return A named list of players (human + computer), where each element is a list with player info (name, money, is_computer).
+#' @return A list with two elements:
+#'   \describe{
+#'     \item{session_players}{A named list of players (human and computer) with their info for the current session.}
+#'     \item{players_db}{The updated player database (named list).}
+#'   }
+#' @examples
+#' \dontrun{
+#' # Typical usage (prompts user for input):
+#' res <- input_players(players_db = list())
+#' str(res$session_players)
+#' }
 #' @export
 input_players <- function(players_db) {
   # Input total number of players

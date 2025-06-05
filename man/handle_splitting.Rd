@@ -2,20 +2,38 @@
 % Please edit documentation in R/split.R
 \name{handle_splitting}
 \alias{handle_splitting}
-\title{Handle splitting}
+\title{Handle splitting of pairs}
 \usage{
 handle_splitting(player_hands, deck, players)
 }
 \arguments{
-\item{player_hands}{A list of lists of blackjack_hand objects.}
+\item{player_hands}{A named list of lists of \code{blackjack_hand} objects (hands for each player).}
 
-\item{deck}{A character vector representing the remaining deck.}
+\item{deck}{Character vector: the remaining deck.}
 
-\item{players}{A named list of player objects (including names and is_computer flag).}
+\item{players}{Named list of player objects (must include player name and is_computer).}
 }
 \value{
-An updated list of lists of blackjack_hand objects after potential splits.
+A list with:
+  \describe{
+    \item{player_hands}{Updated list of player hands (split if chosen).}
+    \item{deck_index}{Updated index for next available card in the deck.}
+  }
 }
 \description{
-Allows players with pairs to split their hand.
+Allows eligible players (pair of same rank) to split their hand. Handles human/AI decision and draws new cards for each split.
+}
+\examples{
+\dontrun{
+players <- list(
+  Alice = list(is_computer = FALSE),
+  Bot = list(is_computer = TRUE)
+)
+hands <- list(
+  Alice = list(new_blackjack_hand(c("8♠", "8♦"))),
+  Bot = list(new_blackjack_hand(c("A♣", "A♥")))
+)
+deck <- c("10♣", "7♠", "6♥", "5♦")
+handle_splitting(hands, deck, players)
+}
 }

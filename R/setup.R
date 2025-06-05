@@ -1,7 +1,23 @@
+# R/setup.R
+
 #' @title Set up the game and display initial hands with bets
-#' @description Shuffles the deck, deals initial hands, deducts player bets, and shows hands.
-#' @param players A named list of player objects with 'name' and 'coins' fields.
-#' @return A list: deck, player_hands, dealer_hand, and updated players (with bets deducted).
+#' @description
+#' Shuffles the deck, deals initial hands to all players and the dealer, deducts bets, and displays the initial cards (only one revealed for each hand).
+#' @param players A named list of player objects; each should include 'name', 'coins', and 'bets' fields.
+#' @return A list with:
+#'   \describe{
+#'     \item{deck}{Remaining shuffled deck as a card vector.}
+#'     \item{player_hands}{Named list of each player's \code{blackjack_hand} (initial 2 cards).}
+#'     \item{dealer_hand}{The dealer's \code{blackjack_hand}.}
+#'     \item{players}{Updated players list (with bets already deducted).}
+#'   }
+#' @examples
+#' players <- list(
+#'   Alice = list(name = "Alice", coins = 1000, bets = 100),
+#'   Bob = list(name = "Bob", coins = 1000, bets = 100)
+#' )
+#' res <- setup_and_display_initial(players)
+#' # res$deck, res$player_hands, res$dealer_hand, res$players
 #' @export
 
 setup_and_display_initial <- function(players) {

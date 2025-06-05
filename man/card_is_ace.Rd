@@ -15,3 +15,7 @@ Logical vector, TRUE indicates that rank == "A"
 \description{
 judging A (Ace)
 }
+\examples{
+cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+card_is_ace(cards)
+}

@@ -1,22 +1,38 @@
 # R/Insurance.R
 # Core insurance functions for handling insurance logic for human and AI players in a Blackjack game.
 
-
-#' Whether the insurance needs to be triggered (dealer's clear card is A)
+#' @title Check if insurance should be offered
+#' @description Returns TRUE if the dealer's upcard is an Ace (i.e., insurance should be offered).
+#' @param dealer_hand A \code{blackjack_hand} object representing the dealer's hand.
+#' @return Logical. TRUE if insurance is offered, otherwise FALSE.
+#' @keywords internal
 #' @noRd
 needs_insurance <- function(dealer_hand) {
   upcard_rank <- card_rank(dealer_hand$cards)[1]
   identical(upcard_rank, "A")
 }
 
-# AI insurance decision(adjustable probability, fixed return during testing)
+#' @title AI insurance decision logic
+#' @description Determines if a computer player buys insurance, using available coins and probability.
+#' @param coins Numeric. Current coins of the player.
+#' @param insurance_bet Numeric. Insurance bet amount.
+#' @param prob_buy Numeric, probability that AI will buy insurance (0~1).
+#' @return Logical. TRUE if insurance is bought, FALSE otherwise.
+#' @keywords internal
 #' @noRd
 ai_decide_insurance <- function(coins, insurance_bet, prob_buy = 0.5) {
   if (coins < insurance_bet) return(FALSE)
   runif(1) < prob_buy
 }
 
-#' Human player input (input_fun mockable)
+#' @title Prompt human for insurance decision
+#' @description Prompts a human player to buy insurance if eligible.
+#' @param name Character. The player's name.
+#' @param coins Numeric. Player's available coins.
+#' @param insurance_bet Numeric. Insurance bet amount.
+#' @param input_fun Function for input (default: readline); useful for testing/mocking.
+#' @return Logical. TRUE if the player buys insurance, FALSE otherwise.
+#' @keywords internal
 #' @noRd
 ask_human_insurance <- function(name, coins, insurance_bet, input_fun = readline) {
   if (coins < insurance_bet) {
@@ -31,7 +47,17 @@ ask_human_insurance <- function(name, coins, insurance_bet, input_fun = readline
   }
 }
 
-#' Insurance Settlement Logic
+#' @title Insurance settlement logic
+#' @description Computes new coins and payout after an insurance bet is resolved.
+#' @param coins Numeric. Original coins before insurance bet.
+#' @param insurance_bet Numeric. Insurance bet size.
+#' @param dealer_has_blackjack Logical. TRUE if dealer has blackjack, else FALSE.
+#' @return A list with two elements:
+#'   \describe{
+#'     \item{coins}{Player's coins after settlement.}
+#'     \item{payout}{Insurance payout amount (0 or 2×bet).}
+#'   }
+#' @keywords internal
 #' @noRd
 resolve_insurance <- function(coins, insurance_bet, dealer_has_blackjack) {
 coins_new <- coins - insurance_bet
@@ -40,16 +66,30 @@ coins_new <- coins_new + payout
 list(coins = coins_new, payout = payout)
 }
 
-#' @title Handle insurance and dealer blackjack check
+#' @title Handle insurance offers and dealer blackjack check
 #' @description
 #' Offers insurance to all players if the dealer's upcard is an Ace,
 #' and settles insurance bets depending on whether the dealer has a Blackjack.
-#' Also reveals the dealer's hand if the upcard is a 10-value card and the dealer has Blackjack.#'
-#' @param dealer_hand A \code{blackjack_hand} object.
-#' @param players Named list，Contain fields such as is_computer, coins, bets, etc. for each player.
-#' @param input_fun When users input functions, the default is readline
-#' @param ai_prob The probability of a computer buying insurance.
-#' @return list(dealer_blackjack, players) Updated player information.
+#' Also reveals the dealer's hand if the upcard is a 10-value card and the dealer has Blackjack.
+#' @param dealer_hand A \code{blackjack_hand} object for the dealer.
+#' @param players Named list of players (each with is_computer, coins, bets, etc.).
+#' @param input_fun Function for user input (default: readline).
+#' @param ai_prob Numeric, probability of AI buying insurance (default 0.5).
+#' @return A list with:
+#'   \describe{
+#'     \item{dealer_blackjack}{Logical: whether the dealer has Blackjack.}
+#'     \item{players}{Updated player list after insurance resolution.}
+#'   }
+#' @examples
+#' \dontrun{
+#' # Example: dealer showing Ace, with player and computer
+#' players <- list(
+#'   Alice = list(is_computer = FALSE, coins = 1000, bets = 100),
+#'   Bot = list(is_computer = TRUE, coins = 1000, bets = 100)
+#' )
+#' dealer_hand <- new_blackjack_hand(c("A♠", "10♦"))
+#' handle_insurance(dealer_hand, players)
+#' }
 #' @export
 handle_insurance <- function(dealer_hand, players, input_fun = readline, ai_prob = 0.5) {
   dealer_has_blackjack <- is_blackjack(dealer_hand)

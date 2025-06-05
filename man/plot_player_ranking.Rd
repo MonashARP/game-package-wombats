@@ -7,11 +7,16 @@
 plot_player_ranking(players)
 }
 \arguments{
-\item{players}{A named list of player objects with 'coins'.}
+\item{players}{Named list of player objects with 'coins' field.}
 }
 \value{
-A plotly bar chart object
+A plotly bar chart object.
 }
 \description{
-Creates a bar chart showing player coin rankings, with a ranking number added to the chart.
+Creates a bar chart showing player coin rankings, with rank numbers on the chart.
+}
+\examples{
+\dontrun{
+plot_player_ranking(list(Alice = list(coins = 1200), Bob = list(coins = 900)))
+}
 }

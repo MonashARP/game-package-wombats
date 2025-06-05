@@ -6,6 +6,9 @@
 #'
 #' @param x  A card vector
 #' @return   Logical vector, TRUE indicates that the corresponding rank is at c("J","Q","K").
+#' @examples
+#' cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+#' card_is_face(cards)
 #' @export
 card_is_face <- function(x) {
   ranks <- vctrs::field(x, "rank")
@@ -16,6 +19,9 @@ card_is_face <- function(x) {
 #'
 #' @param x  A card vector
 #' @return   Logical vector, TRUE indicates that rank == "A"
+#' @examples
+#' cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+#' card_is_ace(cards)
 #' @export
 card_is_ace <- function(x) {
   ranks <- vctrs::field(x, "rank")
@@ -114,6 +120,7 @@ card_rank.character <- function(x) {
 format_hand_display <- function(cards) {paste(cards, collapse = " ")}
 
 #' Blackjack point mapping table
+#' @keywords internal
 #' @noRd
 blackjack_values <- c(
   "2"  = 2, "3"  = 3, "4"  = 4, "5"  = 5, "6"  = 6,
@@ -128,15 +135,9 @@ blackjack_values <- c(
 #' @param x A blackjack_hand object.
 #' @keywords internal
 #' @return Character vector of ranks for each card in the hand.
-#' @export
+#' @noRd
 card_rank.blackjack_hand <- function(x) {
   cards <- vctrs::field(x, "cards")
   card_rank(cards)
 }
 
-#' Wrap a vector of card strings as a blackjack_hand S3 object, if not already.
-#' @noRd
-#' @keywords internal
-ensure_blackjack_hand <- function(hand) {
-  if (!inherits(hand, "blackjack_hand")) new_blackjack_hand(hand) else hand
-}

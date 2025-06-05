@@ -7,17 +7,28 @@
 player_action(hand, deck, action, player)
 }
 \arguments{
-\item{hand}{A `blackjack_hand` object}
+\item{hand}{A \code{blackjack_hand} object.}
 
-\item{deck}{A character vector of remaining cards}
+\item{deck}{A character vector of remaining cards.}
 
-\item{action}{A string: "hit", "stand", or "double"}
+\item{action}{Character: "hit", "stand", or "double".}
 
-\item{player}{A list representing the player (with 'coins' and 'bets')}
+\item{player}{A list representing the player (fields: 'coins', 'bets', etc.).}
 }
 \value{
-A list with updated `hand`, `deck`, and `player`
+A list with updated elements:
+  \describe{
+    \item{hand}{Updated blackjack hand (\code{blackjack_hand}).}
+    \item{deck}{Updated deck (character vector).}
+    \item{player}{Updated player info (list).}
+  }
 }
 \description{
-Player action: hit, stand, or double (with betting)
+Apply a player action ("hit", "stand", or "double") for one hand, updating hand, deck, and player's coin/bet info.
+}
+\examples{
+hand <- new_blackjack_hand(c("8♠", "3♦"))
+deck <- c("10♣", "4♥", "6♣")
+player <- list(coins = 900, bets = 100)
+player_action(hand, deck, "hit", player)
 }

@@ -1,7 +1,18 @@
+# R/score_cal.R
+
+#' @useDynLib wombat21
+#' @importFrom Rcpp sourceCpp
+NULL
+
 #' @title Calculate Blackjack Score
-#' @description Calculates the total point value of a blackjack hand using C++
-#' @param hand A `blackjack_hand` object
-#' @return Numeric score of the hand (integer)
+#' @description Calculates the total point value of a blackjack hand using a fast C++ backend.
+#' @param hand A \code{blackjack_hand} object.
+#' @return Integer. Total blackjack score for the hand.
+#' @examples
+#' hand <- new_blackjack_hand(c("A♠", "10♦"))
+#' calculate_score(hand)   # 21
+#' hand2 <- new_blackjack_hand(c("7♣", "8♦", "6♥"))
+#' calculate_score(hand2)  # 21
 #' @export
 calculate_score <- function(hand) {
   if (!inherits(hand, "blackjack_hand")) {
@@ -15,6 +26,4 @@ calculate_score <- function(hand) {
   return(calculate_score_cpp(ranks))
 }
 
-#' @useDynLib wombat21
-#' @importFrom Rcpp sourceCpp
-NULL
+

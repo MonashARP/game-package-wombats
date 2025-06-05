@@ -7,20 +7,29 @@
 end_round(player_hands, dealer_hand, players, players_db, bankroll_history)
 }
 \arguments{
-\item{player_hands}{Named list of player hands.}
+\item{player_hands}{Named list of player hands (each may be a list of \code{blackjack_hand} objects).}
 
-\item{dealer_hand}{Dealer's hand.}
+\item{dealer_hand}{Dealer's \code{blackjack_hand} object.}
 
-\item{players}{Named list of players with coin balances.}
+\item{players}{Named list of player info (must include 'coins').}
 
-\item{players_db}{Player Database in Local Directory}
+\item{players_db}{Named list: persistent player info.}
 
 \item{bankroll_history}{List tracking coin balances over rounds.}
 }
 \value{
-A list with updated `players` and `bankroll_history`.
+A list with:
+  \describe{
+    \item{players}{Updated named list of player info.}
+    \item{bankroll_history}{Updated coin history list.}
+  }
 }
 \description{
 Handles end of round operations: displaying results, saving players,
 updating bankroll history, and plotting results.
+}
+\examples{
+\dontrun{
+end_round(player_hands, dealer_hand, players, players_db, bankroll_history)
+}
 }

@@ -38,57 +38,100 @@ reference:
     contents:
       - play
       - ask_play_again
-      - play_player_turns
-      - determine_winner
       - exit
 
   - title: "Player Mechanics"
-    desc: Player actions, bets, input/output, and turn logic.
+    desc: Player actions, bets, and interactive logic.
     contents:
       - input_players
-      - player_action
-      - handle_splitting
-      - handle_insurance
       - get_bets
+      - player_action
+      - play_player_turns
+      - handle_splitting
+      - ask_human_split
+      - handle_insurance
+
+  - title: "Cards & Hands"
+    desc: Card creation, hand objects, and utilities.
+    contents:
+      - card
+      - new_blackjack_hand
+      - deal_cards
+      - card_is_face
+      - card_is_ace
+      - card_value
+      - card_suit
+      - card_rank
+      - setup_and_display_initial
 
   - title: "Outcome and Scoring"
-    desc: Game ending, scoring, and decision helpers.
+    desc: Scoring functions and end-of-round utilities.
     contents:
       - calculate_score
       - calculate_score_cpp
       - is_blackjack
       - is_five_card_charlie
+      - determine_winner
       - end_round
-
-  - title: "Data Management"
-    desc: Saving/loading player data and managing results.
-    contents:
-      - save_players
-      - load_players
       - display_final_results
       - plot_player_ranking
       - plot_bankroll_history
 
-  - title: "Initial Setup & Utilities"
-    desc: Supporting functions for initial game state and dealer logic.
+  - title: "Simulation"
+    desc: "Simulate AI blackjack games."
     contents:
-      - card
-      - card_is_ace
-      - card_is_face
-      - card_rank
-      - card_suit
-      - card_value
-      - deal_cards
-      - dealer_action
-      - setup_and_display_initial
-      - reset_game_data
+      - simulate_blackjack
 
-  - title: "Internal Utilities"
-    desc: Useful internal helpers exposed to users.
+  - title: "Internal: Card and Hand Methods"
+    desc: Internal methods for card and hand objects, including formatting and casting.
+    contents:
+      - format.card
+      - print.card
+      - vec_cast.card
+      - vec_cast.card.character
+      - as.character.card
+      - card_rank.default
+      - card_rank.card
+      - card_rank.character
+      - format.blackjack_hand
+      - ensure_blackjack_hand
+      - blackjack_values
+      - card_rank.blackjack_hand
+      - vec_ptype2.card.character
+      - vec_ptype2.character.card
+      - vec_ptype2.card.card
+
+  - title: "Internal: Hand Splitting Logic"
+    desc: Internal functions related to card division determination and splitting.
+    contents:
+      - needs_split
+      - ai_decide_split
+      - ask_human_split
+      - perform_split
+
+  - title: "Internal: Insurance Logic"
+    desc: Insurance-related determination and branch logic.
+    contents:
+      - needs_insurance
+      - ai_decide_insurance
+      - ask_human_insurance
+      - resolve_insurance
+
+  - title: "Internal: Dealer and AI Action"
+    desc: AI/Dealer Operations and Round Decision-making.
+    contents:
+      - dealer_action
+      - ai_decide_action
+      - human_prompt_action
+
+  - title: "Internal: Data and Utilities"
+    desc: Auxiliary tool functions and internal data.
     contents:
       - get_home_dir
-      - new_blackjack_hand
       - players_data
+      - format.blackjack_hand
+      - ensure_blackjack_hand
+      - load_internal_dataset
 
 articles:
   - title: "Getting Started"

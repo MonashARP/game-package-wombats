@@ -1,8 +1,8 @@
 test_that("needs_split detects pairs correctly", {
-  hand1 <- card(rank = c("8", "8"), suit = c("♠", "♥"))
-  hand2 <- card(rank = c("10", "J"), suit = c("♣", "♦"))
-  hand3 <- card(rank = c("A", "A"), suit = c("♠", "♦"))
-  hand4 <- card(rank = c("5", "5", "5"), suit = c("♠", "♦", "♣"))
+  hand1 <- new_blackjack_hand(card(rank = c("8", "8"), suit = c("♠", "♥")))
+  hand2 <- new_blackjack_hand(card(rank = c("10", "J"), suit = c("♣", "♦")))
+  hand3 <- new_blackjack_hand(card(rank = c("A", "A"), suit = c("♠", "♦")))
+  hand4 <- new_blackjack_hand(card(rank = c("5", "5", "5"), suit = c("♠", "♦", "♣")))
 
   expect_true(needs_split(hand1))
   expect_false(needs_split(hand2))
@@ -11,9 +11,9 @@ test_that("needs_split detects pairs correctly", {
 })
 
 test_that("ai_decide_split returns correct decision", {
-  hand1 <- card(rank = c("A", "A"), suit = c("♠", "♣"))
-  hand2 <- card(rank = c("8", "8"), suit = c("♦", "♥"))
-  hand3 <- card(rank = c("10", "10"), suit = c("♣", "♠"))
+  hand1 <- new_blackjack_hand(card(rank = c("A", "A"), suit = c("♠", "♣")))
+  hand2 <- new_blackjack_hand(card(rank = c("8", "8"), suit = c("♦", "♥")))
+  hand3 <- new_blackjack_hand(card(rank = c("10", "10"), suit = c("♣", "♠")))
 
   expect_true(ai_decide_split(hand1))
   expect_true(ai_decide_split(hand2))
@@ -21,7 +21,7 @@ test_that("ai_decide_split returns correct decision", {
 })
 
 test_that("perform_split creates two new hands with additional cards", {
-  hand <- card(rank = c("A", "A"), suit = c("♠", "♣"))
+  hand <- new_blackjack_hand(card(rank = c("A", "A"), suit = c("♠", "♣")))
   deck <- card(rank = c("9", "10", "J"), suit = c("♦", "♥", "♠"))
 
   result <- perform_split(hand, deck, deck_index = 1)

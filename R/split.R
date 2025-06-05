@@ -1,54 +1,33 @@
 # R/split.R
 
-#' Check if a hand can be split (must have exactly two cards of the same rank)
-#' @noRd
-needs_split <- function(hand) {
-  ranks <- card_rank(hand$cards)
-  length(ranks) == 2 && ranks[1] == ranks[2]
-}
+#' @importFrom stats runif
+#' @importFrom utils modifyList
+NULL
 
-#' AI decision to split: split only if pair is 8 or A
-#' @noRd
-ai_decide_split <- function(hand) {
-  ranks <- card_rank(hand$cards)
-  ranks[1] %in% c("8", "A")
-}
-
-#' Ask human player whether to split
-#' @noRd
-ask_human_split <- function(player_name, hand) {
-  rank <- card_rank(hand$cards)[1]
-  repeat {
-    prompt <- paste0(
-      player_name, ", you have a pair of ", rank, "s. Split hand? (yes/no): "
-    )
-    ans <- tolower(readline(prompt))
-    if (ans %in% c("yes", "no")) return(ans == "yes")
-    cat("Invalid input. Please enter 'yes' or 'no'.\n")
-  }
-}
-
-#' Perform the actual split operation and draw one card for each new hand
-#' @noRd
-perform_split <- function(hand, deck, deck_index) {
-  # hand: blackjack_hand of two cards
-  cards <- hand$cards
-  new1 <- c(cards[1], deck[deck_index])
-  new2 <- c(cards[2], deck[deck_index + 1])
-  hand1 <- new_blackjack_hand(new1)
-  hand2 <- new_blackjack_hand(new2)
-  list(
-    split_hands = list(hand1, hand2),
-    new_deck_index = deck_index + 2
-  )
-}
-
-#' @title Handle splitting
-#' @description Allows players with pairs to split their hand.
-#' @param player_hands A list of lists of blackjack_hand objects.
-#' @param deck A character vector representing the remaining deck.
-#' @param players A named list of player objects (including names and is_computer flag).
-#' @return An updated list of lists of blackjack_hand objects after potential splits.
+#' @title Handle splitting of pairs
+#' @description
+#' Allows eligible players (pair of same rank) to split their hand. Handles human/AI decision and draws new cards for each split.
+#' @param player_hands A named list of lists of \code{blackjack_hand} objects (hands for each player).
+#' @param deck Character vector: the remaining deck.
+#' @param players Named list of player objects (must include player name and is_computer).
+#' @return A list with:
+#'   \describe{
+#'     \item{player_hands}{Updated list of player hands (split if chosen).}
+#'     \item{deck_index}{Updated index for next available card in the deck.}
+#'   }
+#' @examples
+#' \dontrun{
+#' players <- list(
+#'   Alice = list(is_computer = FALSE),
+#'   Bot = list(is_computer = TRUE)
+#' )
+#' hands <- list(
+#'   Alice = list(new_blackjack_hand(c("8♠", "8♦"))),
+#'   Bot = list(new_blackjack_hand(c("A♣", "A♥")))
+#' )
+#' deck <- c("10♣", "7♠", "6♥", "5♦")
+#' handle_splitting(hands, deck, players)
+#' }
 #' @export
 handle_splitting <- function(player_hands, deck, players) {
 
@@ -108,61 +87,66 @@ handle_splitting <- function(player_hands, deck, players) {
   )
 }
 
-
-
-# Check split condition: exactly two cards in the hand with the same point value
+#' @title Check if a hand can be split
+#' @description Returns TRUE if the hand contains exactly two cards of the same rank.
+#' @param hand A \code{blackjack_hand} object (or card vector of length 2).
+#' @return Logical: TRUE if eligible for split, otherwise FALSE.
+#' @keywords internal
 #' @noRd
 needs_split <- function(hand) {
-  if (length(hand) != 2) {
-    return(FALSE)  # Can't split non-pairs or already-played hands
-  }
-  ranks <- card_rank(hand)
-  if (length(ranks) != 2) {
-    warning("Unexpected rank extraction in needs_split")
-    return(FALSE)
-  }
-  ranks[1] == ranks[2]
+  ranks <- card_rank(hand$cards)
+  length(ranks) == 2 && ranks[1] == ranks[2]
 }
 
-# AI decision: split if 8 or A in hand, otherwise no split
+#' @title AI split decision logic
+#' @description Returns TRUE if AI should split a pair (e.g., only for 8 or A).
+#' @param hand A \code{blackjack_hand} or card vector.
+#' @param coins Optional. Player coins (not always used).
+#' @return Logical: TRUE to split, FALSE otherwise.
+#' @keywords internal
 #' @noRd
-ai_decide_split <- function(hand, coins = NULL) {
-  ranks <- card_rank(hand)
-  rank <- ranks[1]
-  rank %in% c("8", "A")
+ai_decide_split <- function(hand) {
+  ranks <- card_rank(hand$cards)
+  ranks[1] %in% c("8", "A")
 }
 
-# ask human whether to split
+#' @title Prompt human for split decision
+#' @description Asks a human player if they want to split a pair, via console input.
+#' @param name Character. Player name.
+#' @param hand A \code{blackjack_hand} or card vector.
+#' @return Logical: TRUE if player chooses to split, otherwise FALSE.
+#' @keywords internal
 #' @noRd
-ask_human_split <- function(name, hand) {
-  ranks <- card_rank(hand)
-  rank <- ranks[1]
+ask_human_split <- function(player_name, hand) {
+  rank <- card_rank(hand$cards)[1]
   repeat {
     prompt <- paste0(
-      name, ", you have a pair of ", rank,
-      "s. Split hand? (yes/no): "
+      player_name, ", you have a pair of ", rank, "s. Split hand? (yes/no): "
     )
     ans <- tolower(readline(prompt))
-    if (ans %in% c("yes", "no")) {
-      return(ans == "yes")
-    }
+    if (ans %in% c("yes", "no")) return(ans == "yes")
     cat("Invalid input. Please enter 'yes' or 'no'.\n")
   }
 }
 
-# Perform the split operation
+#' @title Perform a split operation
+#' @description
+#' Given a pair, splits it into two new hands and draws a card for each.
+#' @param hand A \code{blackjack_hand} or card vector of length 2.
+#' @param deck Character vector: the deck to draw from.
+#' @param deck_index Integer: next card(s) to draw.
+#' @return List with:
+#'   \describe{
+#'     \item{split_hands}{List of two new \code{blackjack_hand} objects.}
+#'     \item{new_deck_index}{Integer, index after the split.}
+#'   }
+#' @keywords internal
 #' @noRd
 perform_split <- function(hand, deck, deck_index) {
-  # hand: card vsrector of length 2
-  # deck_index: next two cards to draw from the deck
-
-  if (deck_index + 1 > length(deck)) {
-    stop("Not enough cards remaining in deck to complete split")
-  }
-  first_card  <- hand[1]
-  second_card <- hand[2]
-  new1 <- vctrs::vec_c(first_card, deck[deck_index])
-  new2 <- vctrs::vec_c(second_card, deck[deck_index + 1])
+  # hand: blackjack_hand of two cards
+  cards <- hand$cards
+  new1 <- c(cards[1], deck[deck_index])
+  new2 <- c(cards[2], deck[deck_index + 1])
   hand1 <- new_blackjack_hand(new1)
   hand2 <- new_blackjack_hand(new2)
   list(
@@ -170,8 +154,3 @@ perform_split <- function(hand, deck, deck_index) {
     new_deck_index = deck_index + 2
   )
 }
-
-#' @importFrom stats runif
-#' @importFrom utils modifyList
-NULL
-

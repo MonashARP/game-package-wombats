@@ -6,7 +6,8 @@
 #' @param hand A `blackjack_hand` object
 #' @param deck A character vector of remaining cards
 #' @return A list with updated `hand` and `deck`
-#' @export
+#' @keywords internal
+#' @noRd
 dealer_action <- function(hand, deck) {
   if (!inherits(hand, "blackjack_hand")) {
     stop("Input 'hand' must be of class 'blackjack_hand'")

@@ -15,3 +15,8 @@ TRUE if qualifies as 5-card Charlie, else FALSE
 \description{
 Returns TRUE if the hand has 5 or more cards and score ≤ 21
 }
+\examples{
+# Example: 5-card Charlie
+hand <- new_blackjack_hand(c("2♠", "3♥", "4♦", "5♣", "7♠"))
+is_five_card_charlie(hand)
+}
