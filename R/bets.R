@@ -21,7 +21,7 @@ get_bets <- function(players) {
         if (!is.na(bet) && bet > 0 && bet <= player$coins) {
           break
         }
-        cat("\u274c nvalid bet. Please enter a positive number no greater than your current balance.\n")
+        cat("\u274c Invalid bet. Please enter a positive number no greater than your current balance.\n")
       }
     }
 

@@ -12,6 +12,10 @@ reset_game_data(
 )
 }
 \arguments{
+\item{players_db}{Player Database in Local Directory}
+
+\item{bankroll_history}{List tracking coin balances over rounds.}
+
 \item{reset_players}{Logical. Whether to clear players_db}
 
 \item{reset_history}{Logical. Whether to clear bankroll_history}

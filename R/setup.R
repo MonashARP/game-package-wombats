@@ -9,7 +9,7 @@ setup_and_display_initial <- function(players) {
 
   # Prepare deck
   ranks <- rep(c("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"), 4)
-  suits <- rep(c("♠","♥","♦","♣"), each = 13)
+  suits <- rep(c("\u2660", "\u2665", "\u2666", "\u2663"), each = 13)
 
   deck_char <- paste0(ranks, suits)
   deck_char <- sample(deck_char, length(deck_char)) # Shuffle the deck

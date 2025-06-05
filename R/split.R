@@ -171,3 +171,7 @@ perform_split <- function(hand, deck, deck_index) {
   )
 }
 
+#' @importFrom stats runif
+#' @importFrom utils modifyList
+NULL
+

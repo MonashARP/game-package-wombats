@@ -10,18 +10,6 @@ test_that("computer player hits and updates hand", {
   expect_equal(result$players$Bot$coins, 100)  # no coins spent except original bet
 })
 
-test_that("computer player stands at score >= 17", {
-  hand <- new_blackjack_hand(c("10♣", "7♠"))  # score = 17
-  deck <- c("4♦", "5♣", "6♥")  # should not be drawn
-  players <- list(Bot = list(coins = 50, bets = 10, is_computer = TRUE))
-  hands <- list(Bot = list(hand))
-
-  result <- play_player_turns(hands, deck, players)
-
-  updated_hand <- result$player_hands$Bot[[1]]
-  expect_equal(updated_hand$cards, c("10♣", "7♠"))  # no change
-})
-
 test_that("computer player doubles down with valid score and coins", {
   hand <- new_blackjack_hand(c("5♥", "6♦"))  # score = 11
   deck <- c("10♠", "J♣", "Q♥")

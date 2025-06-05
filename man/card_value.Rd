@@ -17,3 +17,7 @@ Integer vector
 Obtain the initial points of a single card in Blackjack
 (ensure J/Q/K == 10，A == 11)
 }
+\examples{
+cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+card_value(cards)
+}

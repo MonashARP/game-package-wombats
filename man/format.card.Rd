@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{A card vector}
+
+\item{...}{Additional arguments passed to or from other methods}
 }
 \value{
 A character vector

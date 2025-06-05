@@ -16,6 +16,6 @@ Character vectors, such as "♠","♥","♦","♣"
 Extract the suit from a card vector
 }
 \examples{
-cards <- as_card(c("A♠", "10♦", "Q♥"))
+cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
 card_suit(cards)
 }

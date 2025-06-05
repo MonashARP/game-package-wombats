@@ -28,6 +28,9 @@ card_is_ace <- function(x) {
 #' @param x  A card vector
 #' @return   Integer vector
 #' @export
+#' @examples
+#' cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+#' card_value(cards)
 card_value <- function(x) {
   ranks <- vctrs::field(x, "rank")
   vapply(ranks, function(r) {
@@ -43,7 +46,7 @@ card_value <- function(x) {
 #' @return    Character vectors, such as "♠","♥","♦","♣"
 #' @export
 #' @examples
-#' cards <- as_card(c("A♠", "10♦", "Q♥"))
+#' cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
 #' card_suit(cards)
 card_suit <- function(x) {
   vctrs::field(x, "suit")
@@ -56,6 +59,9 @@ card_suit <- function(x) {
 #' @param x An object representing a card (e.g., a \code{card} object or character vector like "A♠").
 #' @return A character vector of ranks.
 #' @export
+#' @examples
+#' cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+#' card_rank(cards)
 card_rank <- function(x) {
   UseMethod("card_rank")
 }

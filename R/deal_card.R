@@ -10,12 +10,12 @@ deal_cards <- function(deck = NULL, num_players = 1) {
   # Create a standard 52-card deck if none supplied
   if (is.null(deck)) {
     ranks <- c("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K")
-    suits <- c("♠", "♥", "♦", "♣")
+    suits <- c("\u2660", "\u2665", "\u2666", "\u2663")
     deck <- as.vector(outer(ranks, suits, paste0))
     deck <- sample(deck, length(deck))
   }
 
-  if (!all(grepl("^(A|10|[2-9]|J|Q|K)[♠♥♦♣]$", deck))) {
+  if (!all(grepl("^(A|10|[2-9]|J|Q|K)[\u2660\u2665\u2666\u2663]$", deck))) {
     stop("Invalid card values in deck.")
   }
 

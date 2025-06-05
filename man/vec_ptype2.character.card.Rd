@@ -2,10 +2,20 @@
 % Please edit documentation in R/card-class.R
 \name{vec_ptype2.character.card}
 \alias{vec_ptype2.character.card}
-\title{Type promotion: character + card → card}
+\title{Type promotion method for card objects}
 \usage{
 \method{vec_ptype2}{character.card}(x, y, ...)
 }
+\arguments{
+\item{x}{A card or character vector}
+
+\item{y}{Another card or character vector}
+
+\item{...}{Additional arguments passed to or from other methods}
+}
+\value{
+A card prototype
+}
 \description{
-Type promotion: character + card → card
+Implements method dispatch for combining card and character/card types.
 }

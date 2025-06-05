@@ -19,3 +19,7 @@ Extract the rank of a card
 Generic function to extract the rank (e.g., "A", "10", "J") from an object representing a card.
 This function supports objects of class \code{card} or character strings representing cards.
 }
+\examples{
+cards <- card(rank = c("A", "10", "Q"), suit = c("♠", "♦", "♥"))
+card_rank(cards)
+}

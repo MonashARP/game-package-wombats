@@ -13,7 +13,7 @@ card <- function(rank = character(), suit = character()) {
     is.character(rank), is.character(suit),
     length(rank) == length(suit),
     all(rank %in% c("A","2","3","4","5","6","7","8","9","10","J","Q","K")),
-    all(suit %in% c("♠","♥","♦","♣"))
+    all(suit %in% c("\u2660", "\u2665", "\u2666", "\u2663"))
   )
   vctrs::new_rcrd(
     list(rank = rank, suit = suit),
@@ -26,6 +26,7 @@ card <- function(rank = character(), suit = character()) {
 #' Returns a character representation like "A♠", "10♦".
 #'
 #' @param x A card vector
+#' @param ... Additional arguments passed to or from other methods
 #' @return A character vector
 #' @export
 format.card <- function(x, ...) {
@@ -44,8 +45,8 @@ format.card <- function(x, ...) {
 #' @exportS3Method vctrs::vec_cast card.character
 vec_cast.card.character <- function(x, to, ...) {
   message("vec_cast.card.character called!")
-  ranks <- sub("^(.+?)([♠♥♦♣])$", "\\1", x)
-  suits <- sub("^(.+?)([♠♥♦♣])$", "\\2", x)
+  ranks <- sub("^(.+?)([\u2660\u2665\u2666\u2663])$", "\\1", x)
+  suits <- sub("^(.+?)([\u2660\u2665\u2666\u2663])$", "\\2", x)
   card(ranks, suits)
 }
 
@@ -55,24 +56,43 @@ vec_cast.card.character <- function(x, to, ...) {
 #'
 #' @param x A card object
 #' @param to Unused
+#' @param ... Additional arguments passed to or from other methods
 #' @return Character vector
 #' @exportS3Method vctrs::vec_cast character.card
 vec_cast.character.card <- function(x, to, ...) {
   paste0(vctrs::field(x, "rank"), vctrs::field(x, "suit"))
 }
 
-#' Type promotion: card + character → card
+#' Type promotion method for card objects
 #'
+#' Implements method dispatch for combining card and character/card types.
+#'
+#' @param x A card or character vector
+#' @param y Another card or character vector
+#' @param ... Additional arguments passed to or from other methods
+#' @return A card prototype
 #' @exportS3Method vctrs::vec_ptype2 card.character
 vec_ptype2.card.character <- function(x, y, ...) card()
 
-#' Type promotion: character + card → card
+#' Type promotion method for card objects
 #'
+#' Implements method dispatch for combining card and character/card types.
+#'
+#' @param x A card or character vector
+#' @param y Another card or character vector
+#' @param ... Additional arguments passed to or from other methods
+#' @return A card prototype
 #' @exportS3Method vctrs::vec_ptype2 character.card
 vec_ptype2.character.card <- function(x, y, ...) card()
 
-#' Type promotion: card + card → card prototype
+#' Type promotion method for card objects
 #'
+#' Implements method dispatch for combining card and character/card types.
+#'
+#' @param x A card or character vector
+#' @param y Another card or character vector
+#' @param ... Additional arguments passed to or from other methods
+#' @return A card prototype
 #' @exportS3Method vctrs::vec_ptype2 card.card
 vec_ptype2.card.card <- function(x, y, ...) {
   if (inherits(y, "card")) {
@@ -85,16 +105,24 @@ vec_ptype2.card.card <- function(x, y, ...) {
   }
 }
 
-# Support from the character vector (in the form "♠A", "♦10") -> card
-#' @method vec_cast card.character
-#' @export
+#' Cast character vector to card
+#'
+#' Converts character like "A♠", "10♦" into a card object.
+#'
+#' @param x A character vector
+#' @param to A card prototype
+#' @param ... Additional arguments passed to or from other methods
+#' @param x_arg Name of the x argument (used for error messages)
+#' @param to_arg Name of the to argument (used for error messages)
+#' @return A card vector
+#' @exportS3Method vctrs::vec_cast card.character
 vec_cast.card.character <- function(x, to, ..., x_arg = "x", to_arg = "to") {
   if (!inherits(to, "card")) vctrs::stop_incompatible_cast(x, to, x_arg = x_arg, to_arg = to_arg)
   if (inherits(x, "card")) return(x)
   if (!is.character(x)) vctrs::stop_incompatible_cast(x, to, x_arg = x_arg, to_arg = to_arg)
 
   # Use stringr for proper UTF-8 matching
-  pattern <- "^(A|10|[2-9JQK])([♠♥♦♣])$"
+  pattern <- "^(A|10|[2-9JQK])([\u2660\u2665\u2666\u2663])$"
   matches <- stringr::str_match(x, pattern)
 
   if (any(is.na(matches[, 1]))) {

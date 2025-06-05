@@ -30,6 +30,8 @@ load_players <- function() {
 }
 
 #' @title Reset game memory: players_db and/or bankroll_history
+#' @param bankroll_history List tracking coin balances over rounds.
+#' @param players_db Player Database in Local Directory
 #' @param reset_players Logical. Whether to clear players_db
 #' @param reset_history Logical. Whether to clear bankroll_history
 #' @return A list with (possibly reset) players_db and bankroll_history

@@ -7,6 +7,8 @@
 handle_insurance(dealer_hand, players, input_fun = readline, ai_prob = 0.5)
 }
 \arguments{
+\item{dealer_hand}{A \code{blackjack_hand} object.}
+
 \item{players}{Named list，Contain fields such as is_computer, coins, bets, etc. for each player.}
 
 \item{input_fun}{When users input functions, the default is readline}
@@ -19,5 +21,5 @@ list(dealer_blackjack, players) Updated player information.
 \description{
 Offers insurance to all players if the dealer's upcard is an Ace,
 and settles insurance bets depending on whether the dealer has a Blackjack.
-Also reveals the dealer's hand if the upcard is a 10-value card and the dealer has Blackjack.#' @param dealer_hand A \code{blackjack_hand} object.
+Also reveals the dealer's hand if the upcard is a 10-value card and the dealer has Blackjack.#'
 }

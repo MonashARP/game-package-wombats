@@ -10,6 +10,8 @@
 \item{x}{A card object}
 
 \item{to}{Unused}
+
+\item{...}{Additional arguments passed to or from other methods}
 }
 \value{
 Character vector

@@ -5,15 +5,27 @@
 \title{Cast character vector to card}
 \usage{
 \method{vec_cast}{card.character}(x, to, ..., x_arg = "x", to_arg = "to")
+
+\method{vec_cast}{card.character}(x, to, ..., x_arg = "x", to_arg = "to")
 }
 \arguments{
 \item{x}{A character vector}
 
 \item{to}{A card prototype}
+
+\item{...}{Additional arguments passed to or from other methods}
+
+\item{x_arg}{Name of the x argument (used for error messages)}
+
+\item{to_arg}{Name of the to argument (used for error messages)}
 }
 \value{
 A card vector
+
+A card vector
 }
 \description{
+Converts character like "A♠", "10♦" into a card object.
+
 Converts character like "A♠", "10♦" into a card object.
 }
