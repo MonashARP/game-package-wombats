@@ -55,6 +55,7 @@ reference:
     desc: Game ending, scoring, and decision helpers.
     contents:
       - calculate_score
+      - calculate_score_cpp
       - is_blackjack
       - is_five_card_charlie
       - end_round
@@ -71,6 +72,12 @@ reference:
   - title: "Initial Setup & Utilities"
     desc: Supporting functions for initial game state and dealer logic.
     contents:
+      - card
+      - card_is_ace
+      - card_is_face
+      - card_rank
+      - card_suit
+      - card_value
       - deal_cards
       - dealer_action
       - setup_and_display_initial
@@ -81,7 +88,7 @@ reference:
     contents:
       - get_home_dir
       - new_blackjack_hand
-      - format.blackjack_hand
+      - players_data
 
 articles:
   - title: "Getting Started"

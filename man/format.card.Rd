@@ -17,3 +17,4 @@ A character vector
 \description{
 Returns a character representation like "A♠", "10♦".
 }
+\keyword{internal}

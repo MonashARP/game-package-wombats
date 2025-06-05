@@ -29,3 +29,4 @@ Converts character like "A♠", "10♦" into a card object.
 
 Converts character like "A♠", "10♦" into a card object.
 }
+\keyword{internal}

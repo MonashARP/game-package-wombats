@@ -12,3 +12,4 @@
 \description{
 Returns \code{NULL} for unsupported classes.
 }
+\keyword{internal}

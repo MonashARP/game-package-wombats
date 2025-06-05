@@ -27,6 +27,7 @@ card <- function(rank = character(), suit = character()) {
 #'
 #' @param x A card vector
 #' @param ... Additional arguments passed to or from other methods
+#' @keywords internal
 #' @return A character vector
 #' @export
 format.card <- function(x, ...) {
@@ -41,6 +42,7 @@ format.card <- function(x, ...) {
 #'
 #' @param x A character vector
 #' @param to A card prototype
+#' @keywords internal
 #' @return A card vector
 #' @exportS3Method vctrs::vec_cast card.character
 vec_cast.card.character <- function(x, to, ...) {
@@ -57,6 +59,7 @@ vec_cast.card.character <- function(x, to, ...) {
 #' @param x A card object
 #' @param to Unused
 #' @param ... Additional arguments passed to or from other methods
+#' @keywords internal
 #' @return Character vector
 #' @exportS3Method vctrs::vec_cast character.card
 vec_cast.character.card <- function(x, to, ...) {
@@ -70,6 +73,7 @@ vec_cast.character.card <- function(x, to, ...) {
 #' @param x A card or character vector
 #' @param y Another card or character vector
 #' @param ... Additional arguments passed to or from other methods
+#' @keywords internal
 #' @return A card prototype
 #' @exportS3Method vctrs::vec_ptype2 card.character
 vec_ptype2.card.character <- function(x, y, ...) card()
@@ -81,6 +85,7 @@ vec_ptype2.card.character <- function(x, y, ...) card()
 #' @param x A card or character vector
 #' @param y Another card or character vector
 #' @param ... Additional arguments passed to or from other methods
+#' @keywords internal
 #' @return A card prototype
 #' @exportS3Method vctrs::vec_ptype2 character.card
 vec_ptype2.character.card <- function(x, y, ...) card()
@@ -92,6 +97,7 @@ vec_ptype2.character.card <- function(x, y, ...) card()
 #' @param x A card or character vector
 #' @param y Another card or character vector
 #' @param ... Additional arguments passed to or from other methods
+#' @keywords internal
 #' @return A card prototype
 #' @exportS3Method vctrs::vec_ptype2 card.card
 vec_ptype2.card.card <- function(x, y, ...) {
@@ -115,6 +121,7 @@ vec_ptype2.card.card <- function(x, y, ...) {
 #' @param x_arg Name of the x argument (used for error messages)
 #' @param to_arg Name of the to argument (used for error messages)
 #' @return A card vector
+#' @keywords internal
 #' @exportS3Method vctrs::vec_cast card.character
 vec_cast.card.character <- function(x, to, ..., x_arg = "x", to_arg = "to") {
   if (!inherits(to, "card")) vctrs::stop_incompatible_cast(x, to, x_arg = x_arg, to_arg = to_arg)

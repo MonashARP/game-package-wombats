@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 **`wombat21`** is a fun and interactive Blackjack package built in R. It supports multiplayer games with both human and computer players, coin betting, and persistent tracking of player performance over multiple sessions.
 
-```{r eval=FALSE}
+```{r eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 library(wombat21)
 ```
 
@@ -30,7 +30,6 @@ Install dependencies (if needed):
 ```{r eval=FALSE}
 install.packages(c("ggplot2", "dplyr"))
 ```
-
 
 ## 🎮 Features
 
@@ -89,6 +88,24 @@ AI players follow simple strategy:
 -   Hit below 16, stand at 17+
 
 -   They participate fully in the round, including betting and insurance logic.
+
+### 🏆 Player Rankings
+
+Shows the current coin totals of all players at the end of a round:
+
+```{r}
+load(file = "../data/players_data.rda")
+
+plot_player_ranking(players = players_data$players)
+```
+
+### 📈 Bankroll History
+
+Plot each player’s coin balance over time:
+
+```{r}
+plot_bankroll_history(bankroll_history = players_data$bankroll_history)
+```
 
 ## 🔁 Play Again or Exit
 

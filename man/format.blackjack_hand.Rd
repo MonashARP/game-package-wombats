@@ -17,3 +17,4 @@ A character string representing the hand
 \description{
 Custom print method for `blackjack_hand` objects.
 }
+\keyword{internal}

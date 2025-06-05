@@ -19,3 +19,4 @@ Character vector
 \description{
 Converts a card object back to character like "Q♥".
 }
+\keyword{internal}

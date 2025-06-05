@@ -27,6 +27,7 @@ new_blackjack_hand <- function(cards) {
 #' @param x A `blackjack_hand` object
 #' @param ... Additional arguments (ignored)
 #' @return A character string representing the hand
+#' @keywords internal
 #' @export
 
 format.blackjack_hand <- function(x, ...) {

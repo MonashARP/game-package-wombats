@@ -19,3 +19,4 @@ A card prototype
 \description{
 Implements method dispatch for combining card and character/card types.
 }
+\keyword{internal}

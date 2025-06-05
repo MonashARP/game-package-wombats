@@ -15,3 +15,4 @@ Character vector of ranks.
 \description{
 Extracts the rank from character strings like "A♠", "10♦".
 }
+\keyword{internal}

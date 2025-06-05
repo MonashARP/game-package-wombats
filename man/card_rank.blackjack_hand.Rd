@@ -15,3 +15,4 @@ Character vector of ranks for each card in the hand.
 \description{
 Extracts ranks from the cards contained in a blackjack_hand.
 }
+\keyword{internal}

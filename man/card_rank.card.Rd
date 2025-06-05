@@ -15,3 +15,4 @@ Character vector of ranks.
 \description{
 Extracts the rank field from a \code{card} object.
 }
+\keyword{internal}

@@ -71,6 +71,7 @@ card_rank <- function(x) {
 #' Returns \code{NULL} for unsupported classes.
 #'
 #' @param x Object of any class.
+#' @keywords internal
 #' @return NULL
 #' @export
 card_rank.default <- function(x) {
@@ -83,6 +84,7 @@ card_rank.default <- function(x) {
 #' Extracts the rank field from a \code{card} object.
 #'
 #' @param x A \code{card} object.
+#' @keywords internal
 #' @return Character vector of ranks.
 #' @export
 card_rank.card <- function(x) {
@@ -94,6 +96,7 @@ card_rank.card <- function(x) {
 #' Extracts the rank from character strings like "A♠", "10♦".
 #'
 #' @param x Character vector of card representations.
+#' @keywords internal
 #' @return Character vector of ranks.
 #' @export
 card_rank.character <- function(x) {
@@ -107,6 +110,7 @@ card_rank.character <- function(x) {
 
 #' Return a string for display, e.g., "10♠", "A♥".
 #' @noRd
+#' @keywords internal
 format_hand_display <- function(cards) {paste(cards, collapse = " ")}
 
 #' Blackjack point mapping table
@@ -122,6 +126,7 @@ blackjack_values <- c(
 #' Extracts ranks from the cards contained in a blackjack_hand.
 #'
 #' @param x A blackjack_hand object.
+#' @keywords internal
 #' @return Character vector of ranks for each card in the hand.
 #' @export
 card_rank.blackjack_hand <- function(x) {
@@ -131,6 +136,7 @@ card_rank.blackjack_hand <- function(x) {
 
 #' Wrap a vector of card strings as a blackjack_hand S3 object, if not already.
 #' @noRd
+#' @keywords internal
 ensure_blackjack_hand <- function(hand) {
   if (!inherits(hand, "blackjack_hand")) new_blackjack_hand(hand) else hand
 }
