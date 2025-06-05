@@ -46,5 +46,7 @@ reset_game_data <- function(players_db, bankroll_history,
     bankroll_history <- list()
   }
 
+  save_players(players_db, bankroll_history)
+
   return(list(players_db = players_db, bankroll_history = bankroll_history))
 }

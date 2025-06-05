@@ -211,7 +211,6 @@ plot_player_ranking <- function(players) {
     marker = list(color = 'skyblue'),
     hovertext = ~Tooltip,
     hoverinfo = 'text',
-    textinfo = 'none',
     showlegend = FALSE
   )
 
