@@ -1,5 +1,4 @@
 # R/card-utils.R
-# for testing
 
 #' judging J/Q/K
 #'

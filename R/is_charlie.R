@@ -4,6 +4,7 @@
 #' @return TRUE if qualifies as 5-card Charlie, else FALSE
 #' @export
 is_five_card_charlie <- function(hand) {
-  cards <- vctrs::field(hand, "cards")
-  return(length(cards) >= 5 && calculate_score(hand) <= 21)
+  if (!inherits(hand, "blackjack_hand")) stop("Input must be of class 'blackjack_hand'")
+  cards <- hand$cards
+  length(cards) == 5 && calculate_score(hand) <= 21
 }

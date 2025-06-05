@@ -2,9 +2,9 @@ test_that("Computer player buys insurance and wins if dealer has Blackjack", {
   set.seed(42)  # Fix random for test consistency
 
   players <- list("Bot" = list(coins = 100, bets = 20, is_computer = TRUE))
-  dealer_hand <- new_blackjack_hand(c("A", "K"))  # Blackjack
+  dealer_hand <- new_blackjack_hand(c("A♠", "K♦"))  # Blackjack
 
-  res <- handle_insurance(dealer_hand, players)
+  res <- handle_insurance(dealer_hand, players, ai_prob = 1)
   updated_player <- res$players$Bot
 
   expect_true(res$dealer_blackjack)
