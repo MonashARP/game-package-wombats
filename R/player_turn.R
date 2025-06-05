@@ -7,6 +7,18 @@
 #' @export
 
 play_player_turns <- function(player_hands, deck, players) {
+  if (!is.list(player_hands) || length(player_hands) == 0) {
+    stop("player_hands must be a non-empty named list.")
+  }
+
+  if (length(deck) == 0) {
+    stop("Deck must not be empty.")
+  }
+
+  if (!is.list(players) || length(players) == 0) {
+    stop("players must be a non-empty named list.")
+  }
+
   current_deck <- deck
   updated_player_hands <- player_hands
 

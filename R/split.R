@@ -7,6 +7,19 @@
 #' @export
 
 handle_splitting <- function(player_hands, deck, players) {
+
+  if (!is.list(player_hands) || length(player_hands) == 0) {
+    stop("player_hands must be a non-empty named list.")
+  }
+
+  if (length(deck) == 0) {
+    stop("Deck must not be empty.")
+  }
+
+  if (!is.list(players) || length(players) == 0) {
+    stop("players must be a non-empty named list.")
+  }
+
   updated_player_hands <- player_hands
   deck_index <- 1
 
@@ -71,8 +84,15 @@ handle_splitting <- function(player_hands, deck, players) {
 # Check split condition: exactly two cards in the hand with the same point value
 #' @noRd
 needs_split <- function(hand) {
+  if (length(hand) != 2) {
+    return(FALSE)  # Can't split non-pairs or already-played hands
+  }
   ranks <- card_rank(hand)
-  length(ranks) == 2 && ranks[1] == ranks[2]
+  if (length(ranks) != 2) {
+    warning("Unexpected rank extraction in needs_split")
+    return(FALSE)
+  }
+  ranks[1] == ranks[2]
 }
 
 # AI decision: split if 8 or A in hand, otherwise no split
@@ -106,6 +126,10 @@ ask_human_split <- function(name, hand) {
 perform_split <- function(hand, deck, deck_index) {
   # hand: card vsrector of length 2
   # deck_index: next two cards to draw from the deck
+
+  if (deck_index + 1 > length(deck)) {
+    stop("Not enough cards remaining in deck to complete split")
+  }
   first_card  <- hand[1]
   second_card <- hand[2]
   new1 <- vctrs::vec_c(first_card, deck[deck_index])

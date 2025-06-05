@@ -6,7 +6,7 @@
 
 new_blackjack_hand <- function(cards) {
   if (!inherits(cards, "card")) {
-    stop("`cards` must be a `card` vector (rank + suit).")
+    stop("`cards` must be a `card` vector (suit + rank).")
   }
   structure(
     list(cards = cards),

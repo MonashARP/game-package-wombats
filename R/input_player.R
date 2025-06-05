@@ -47,6 +47,10 @@ input_players <- function(players_db) {
           }
 
           if (cont == "yes") {
+            if (players_db[[name]]$coins <= 0) {
+              cat("Sorry, ", name, ", you have 0 or negative coins and cannot join the game.\n", sep = "")
+              next
+            }
             cat("Welcome back, ", name, "! You have ", players_db[[name]]$coins, " coins remaining.\n", sep = "")
             session_players[[name]] <- players_db[[name]]
             session_players[[name]]$is_computer <- FALSE
@@ -77,10 +81,10 @@ input_players <- function(players_db) {
       }
 
       if (comp_name %in% names(players_db)) {
-        session_players[[comp_name]] <- players_db[[comp_name]]
-      } else {
-        players_db[[comp_name]] <- list(name = comp_name, coins = 1000, is_computer = TRUE)
-        cat("New computer player created: ", comp_name, " with 1000 coins.\n", sep = "")
+        if (players_db[[comp_name]]$coins <= 0) {
+          cat("Computer player ", comp_name, " has no coins and will not join this round.\n", sep = "")
+          next
+        }
         session_players[[comp_name]] <- players_db[[comp_name]]
       }
     }

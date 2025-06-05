@@ -68,8 +68,8 @@ handle_insurance <- function(dealer_hand, players, ai_prob = 0.5, input_fun = re
   if (upcard_rank %in% c("10", "J", "Q", "K") && dealer_has_blackjack) {
     cat("\u26a0\ufe0f Dealer has Blackjack with a 10-value upcard!\n")
     all_cards <- paste0(
-      vctrs::field(dealer_hand, "suit"),
-      vctrs::field(dealer_hand, "cards")
+      card_suit(dealer_hand$cards),
+      card_rank(dealer_hand$cards)
     )
     cat("Dealer hand: [", paste(all_cards, collapse = ", "), "]\n")
   }
@@ -82,7 +82,7 @@ handle_insurance <- function(dealer_hand, players, ai_prob = 0.5, input_fun = re
 #' @noRd
 needs_insurance <- function(dealer_hand) {
   # dealer_hand: A card vector (with a length of at least 1)
-  upcard_rank <- vctrs::field(dealer_hand, "cards")[1]
+  upcard_rank <- card_rank(dealer_hand$cards)[1]
   identical(upcard_rank, "A")
 }
 
