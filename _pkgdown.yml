@@ -24,7 +24,7 @@ navbar:
       text: "Get Started"
       href: articles/wombat21.html
     advanced-usage:
-      text: "Advanced Usage"
+      text: "Design and Usage"
       href: articles/AD_wombat21.html
     reference:
       text: "Reference"
@@ -107,7 +107,7 @@ articles:
   - title: "Getting Started"
     contents:
       - wombat21
-  - title: "Advanced Usage"
+  - title: "Design and Usage"
     contents:
       - AD_wombat21
 

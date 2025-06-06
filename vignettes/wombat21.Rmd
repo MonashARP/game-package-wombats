@@ -142,7 +142,7 @@ You can easily change how the AI plays:
 
 Examples:
 
-- Never split, never buy insurance, hit below 18:
+-   Never split, never buy insurance, hit below 18:
 
 ```{r,eval=FALSE}
 sim <- simulate_blackjack(
@@ -155,8 +155,7 @@ sim <- simulate_blackjack(
 
 -   Custom logic (split only A or 8, buy insurance only with blackjack):
 
-
-```{r eval=FALSE}
+```{r,eval=FALSE}
 # Split pairs of A or 8 only; buy insurance only when player's hand is blackjack.
 sim <- simulate_blackjack(
   num_rounds = 10000,
@@ -170,6 +169,56 @@ sim <- simulate_blackjack(
 )
 ```
 
+### 🧑‍💻 Advanced: Custom Strategy Functions
+
+You can pass any function to the `split` or `buy_insurance` argument in `simulate_blackjack()`, enabling sophisticated, context-dependent strategies.
+
+1.  **Advanced logic: Take dealer's upcard into account for split**
+
+```{r,eval=FALSE}
+# Only split A or 8, and never split if dealer shows a 10 or Ace.
+split_fn <- function(hand, dealer_hand) {
+  ranks <- card_rank(hand$cards)
+  dealer_rank <- card_rank(dealer_hand$cards[1])
+  length(ranks) == 2 &&
+    ranks[1] == ranks[2] &&
+    ranks[1] %in% c("A", "8") &&
+    !dealer_rank %in% c("10", "A")
+}
+```
+
+2.  **Advanced insurance logic**
+
+```{r,eval=FALSE}
+# Only buy insurance if player has blackjack AND dealer shows Ace.
+insurance_fn <- function(player, dealer_hand) {
+  is_blackjack(player$hand) && card_rank(dealer_hand$cards[1]) == "A"
+}
+```
+
+3.  **Compare Strategies with Batch Simulation and Visualization**
+
+```{r,eval=FALSE}
+res_advanced <- simulate_blackjack(
+  num_rounds = 10000,
+  split = split_fn,
+  buy_insurance = insurance_fn
+)
+
+res_simple <- simulate_blackjack(
+  num_rounds = 10000,
+  split = FALSE,
+  buy_insurance = FALSE
+)
+
+barplot(
+  c(Advanced = res_advanced$win_rate, Simple = res_simple$win_rate),
+  beside = TRUE, col = c("skyblue", "grey"),
+  main = "Win Rate Comparison: Advanced vs Simple Strategy"
+)
+```
+
+*These examples show how you can build, test, and visualize sophisticated blackjack strategies by passing custom logic into the simulation functions.*
 
 ### 📋 See Your Results
 
@@ -180,6 +229,8 @@ sim$win_rate
 sim$split_rate
 sim$final_coins
 ```
+
+💡Try experimenting with your own logic—`wombat21` is designed to make strategy research both powerful and fun!
 
 ## 📈 Visualize
 

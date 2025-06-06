@@ -37,7 +37,7 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
 <li class="active nav-item"><a class="nav-link" href="../articles/wombat21.html">Get Started</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/AD_wombat21.html">Advanced Usage</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/AD_wombat21.html">Design and Usage</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -238,14 +238,71 @@ blackjack):</li>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
+<h3 id="advanced-custom-strategy-functions">🧑‍💻 Advanced: Custom Strategy Functions<a class="anchor" aria-label="anchor" href="#advanced-custom-strategy-functions"></a>
+</h3>
+<p>You can pass any function to the <code>split</code> or
+<code>buy_insurance</code> argument in
+<code><a href="../reference/simulate_blackjack.html">simulate_blackjack()</a></code>, enabling sophisticated,
+context-dependent strategies.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Advanced logic: Take dealer’s upcard into account for
+split</strong></li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Only split A or 8, and never split if dealer shows a 10 or Ace.</span></span>
+<span><span class="va">split_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">hand</span>, <span class="va">dealer_hand</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ranks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/card_rank.html">card_rank</a></span><span class="op">(</span><span class="va">hand</span><span class="op">$</span><span class="va">cards</span><span class="op">)</span></span>
+<span>  <span class="va">dealer_rank</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/card_rank.html">card_rank</a></span><span class="op">(</span><span class="va">dealer_hand</span><span class="op">$</span><span class="va">cards</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ranks</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">&amp;&amp;</span></span>
+<span>    <span class="va">ranks</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">==</span> <span class="va">ranks</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&amp;&amp;</span></span>
+<span>    <span class="va">ranks</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"8"</span><span class="op">)</span> <span class="op">&amp;&amp;</span></span>
+<span>    <span class="op">!</span><span class="va">dealer_rank</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10"</span>, <span class="st">"A"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Advanced insurance logic</strong></li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Only buy insurance if player has blackjack AND dealer shows Ace.</span></span>
+<span><span class="va">insurance_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">player</span>, <span class="va">dealer_hand</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/is_blackjack.html">is_blackjack</a></span><span class="op">(</span><span class="va">player</span><span class="op">$</span><span class="va">hand</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="../reference/card_rank.html">card_rank</a></span><span class="op">(</span><span class="va">dealer_hand</span><span class="op">$</span><span class="va">cards</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="st">"A"</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Compare Strategies with Batch Simulation and
+Visualization</strong></li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res_advanced</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
+<span>  num_rounds <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>  split <span class="op">=</span> <span class="va">split_fn</span>,</span>
+<span>  buy_insurance <span class="op">=</span> <span class="va">insurance_fn</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
+<span>  num_rounds <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>  split <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  buy_insurance <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Advanced <span class="op">=</span> <span class="va">res_advanced</span><span class="op">$</span><span class="va">win_rate</span>, Simple <span class="op">=</span> <span class="va">res_simple</span><span class="op">$</span><span class="va">win_rate</span><span class="op">)</span>,</span>
+<span>  beside <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"skyblue"</span>, <span class="st">"grey"</span><span class="op">)</span>,</span>
+<span>  main <span class="op">=</span> <span class="st">"Win Rate Comparison: Advanced vs Simple Strategy"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><em>These examples show how you can build, test, and visualize
+sophisticated blackjack strategies by passing custom logic into the
+simulation functions.</em></p>
+</div>
+<div class="section level3">
 <h3 id="see-your-results">📋 See Your Results<a class="anchor" aria-label="anchor" href="#see-your-results"></a>
 </h3>
 <p>Check the win rate, loss rate, and other stats in the returned
 list:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim</span><span class="op">$</span><span class="va">win_rate</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="va">split_rate</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="va">final_coins</span></span></code></pre></div>
+<p>💡Try experimenting with your own logic—<code>wombat21</code> is
+designed to make strategy research both powerful and fun!</p>
 </div>
 </div>
 <div class="section level2">
@@ -259,7 +316,7 @@ list:</p>
 </ul>
 <p>After running a simulation, you can export your results for further
 analysis:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span>num_rounds <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/save_players.html">save_players</a></span><span class="op">(</span></span>
 <span>  players <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>You <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>coins <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="va">final_coins</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -270,14 +327,14 @@ analysis:</p>
 </ul>
 <p>After finishing an interactive game (using <code><a href="../reference/play.html">play()</a></code>), you
 can export your results for further analysis:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/save_players.html">save_players</a></span><span class="op">(</span><span class="va">players</span>, <span class="va">bankroll_history</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plot-bankroll-history">💹 Plot Bankroll History<a class="anchor" aria-label="anchor" href="#plot-bankroll-history"></a>
 </h3>
 <p>Visualize how each player’s coin balance changes over time.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"../data/my_simulation_results.rds"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_bankroll_history.html">plot_bankroll_history</a></span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">bankroll_history</span><span class="op">)</span></span></code></pre></div>
@@ -288,7 +345,7 @@ round.</em></p>
 <h3 id="plot-player-rankings">📊 Plot Player Rankings<a class="anchor" aria-label="anchor" href="#plot-player-rankings"></a>
 </h3>
 <p>Compare player coin totals and see who’s on top.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"../data/players_data.rda"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_player_ranking.html">plot_player_ranking</a></span><span class="op">(</span>players <span class="op">=</span> <span class="va">players_data</span><span class="op">$</span><span class="va">players</span><span class="op">)</span></span></code></pre></div>

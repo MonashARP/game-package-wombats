@@ -37,7 +37,7 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
 <li class="nav-item"><a class="nav-link" href="../articles/wombat21.html">Get Started</a></li>
-<li class="active nav-item"><a class="nav-link" href="../articles/AD_wombat21.html">Advanced Usage</a></li>
+<li class="active nav-item"><a class="nav-link" href="../articles/AD_wombat21.html">Design and Usage</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -65,6 +65,93 @@ Ma, Wei Zhu Chen, Aneesh Agarwal</h4>
 
     
     
+<div class="section level2">
+<h2 id="design-philosophy">🎯 Design Philosophy<a class="anchor" aria-label="anchor" href="#design-philosophy"></a>
+</h2>
+<p><strong>wombat21</strong> is built for three main usage
+modes—<strong>interactive gameplay</strong>, <strong>batch
+simulation</strong>, and <strong>advanced visualization</strong>—all
+with a modular, extensible, and high-performance architecture.</p>
+<ul>
+<li><p><strong>Interactive Play:</strong><br>
+All user-facing gameplay logic is modular and transparent.<br>
+Players can interact with human or AI opponents, with clear APIs for
+betting, splitting, insurance, and persistent progress
+tracking.</p></li>
+<li><p><strong>Flexible Simulation:</strong><br>
+The simulation engine is fully programmable:<br>
+Users can run thousands of games automatically, passing custom strategy
+functions (for splitting, insurance, etc.) and exploring the effects of
+advanced rule variations or AI behavior.</p></li>
+<li><p><strong>Rich Visualization:</strong><br>
+Game results, player history, and simulation outcomes can be visualized
+interactively—making it easy to analyze trends, compare strategies, and
+communicate findings.</p></li>
+</ul>
+<p><strong>Modularity, extensibility, and performance</strong> are at
+the core of wombat21’s design.<br>
+All core components (cards, hands, strategies, players) are built using
+robust object systems (vctrs, S3), and the scoring logic is accelerated
+with C++ for fast, large-scale analysis.</p>
+<p>This design philosophy ensures wombat21 is not just a game, but a
+flexible engine for research, teaching, and advanced experimentation in
+R.</p>
+</div>
+<div class="section level2">
+<h2 id="function-names-and-arguments">🏷️ Function Names and Arguments<a class="anchor" aria-label="anchor" href="#function-names-and-arguments"></a>
+</h2>
+<p>All user-facing functions in <code>wombat21</code> are named to be
+clear, concise, and consistent, following common R conventions:</p>
+<ul>
+<li><p><strong>Verb-based names:</strong><br>
+Functions perform an action and are named accordingly (e.g.,
+<code><a href="../reference/play.html">play()</a></code>, <code><a href="../reference/simulate_blackjack.html">simulate_blackjack()</a></code>,
+<code><a href="../reference/calculate_score.html">calculate_score()</a></code>).</p></li>
+<li><p><strong>Explicit parameter names:</strong><br>
+Arguments are descriptive, self-explanatory, and use snake_case (e.g.,
+<code>num_rounds</code>, <code>bet_amount</code>,
+<code>buy_insurance</code>, <code>split</code>).</p></li>
+<li><p><strong>Strategy customization:</strong><br>
+Where applicable, functions accept logical values or user-defined
+functions as parameters (<code>split</code>,
+<code>buy_insurance</code>), supporting flexible and advanced
+gameplay.</p></li>
+<li><p><strong>Consistent interface:</strong><br>
+The same function can be used interactively (<code><a href="../reference/play.html">play()</a></code>), for
+simulation (<code><a href="../reference/simulate_blackjack.html">simulate_blackjack()</a></code>), or for visualization
+(<code><a href="../reference/plot_bankroll_history.html">plot_bankroll_history()</a></code>), all using familiar argument
+conventions.</p></li>
+<li><p><strong>Object arguments:</strong><br>
+Game logic functions expect well-defined objects (e.g.,
+<code>blackjack_hand</code>, <code>card</code>), ensuring type safety
+and clear data flow.</p></li>
+</ul>
+<p><strong>Internal functions</strong> (not exported) are named with
+clear, specific purposes, and marked with <code>@noRd</code> and
+<code>@keywords internal</code> (e.g.,
+<code>generate_blackjack_hands()</code>,
+<code>calculate_score_r()</code>). These utilities support testing,
+benchmarking, or code reuse, but are not part of the main user API.</p>
+<p>This consistent naming and argument style makes the package intuitive
+to use and easy to extend for both new and advanced users.</p>
+</div>
+<div class="section level2">
+<h2 id="core-data-structures">🗃️ Core Data Structures<a class="anchor" aria-label="anchor" href="#core-data-structures"></a>
+</h2>
+<ul>
+<li>
+<strong>card</strong>: Represents a single playing card (fields:
+<code>rank</code>, <code>suit</code>)</li>
+<li>
+<strong>blackjack_hand</strong>: Represents a player’s hand (field:
+<code>cards</code>, a vector of card objects)</li>
+<li>
+<strong>players</strong>: List of player objects (fields:
+<code>name</code>, <code>coins</code>, <code>is_computer</code>, …)</li>
+</ul>
+<p>This structure supports flexible extension, validation, and efficient
+manipulation via vctrs and S3.</p>
+</div>
 <div class="section level2">
 <h2 id="object-system-with-vctrs">🧩 Object System with vctrs<a class="anchor" aria-label="anchor" href="#object-system-with-vctrs"></a>
 </h2>
@@ -196,6 +283,7 @@ dispatch</p></li>
 <div class="section level3">
 <h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h3>
+<div style="width:100%">
 <table style="width:99%;" class="table">
 <colgroup>
 <col width="22%">
@@ -227,6 +315,7 @@ dispatch</p></li>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div class="section level3">
 <h3 id="want-to-do-more">Want to do more?<a class="anchor" aria-label="anchor" href="#want-to-do-more"></a>
@@ -293,7 +382,13 @@ advanced users can test or use it directly:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/calculate_score_cpp.html">calculate_score_cpp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"9"</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Returns 21</span></span></code></pre></div>
 <p><strong>Speed Comparison (10,000 hands)</strong></p>
-<table class="table">
+<div style="width:100%">
+<table style="width:99%;" class="table">
+<colgroup>
+<col width="41%">
+<col width="28%">
+<col width="28%">
+</colgroup>
 <thead><tr class="header">
 <th>Method</th>
 <th>Elapsed Time (sec)</th>
@@ -314,71 +409,163 @@ advanced users can test or use it directly:</p>
 </table>
 </div>
 </div>
+</div>
 <div class="section level2">
-<h2 id="advanced-custom-strategy-functions">🧑‍💻 Advanced: Custom Strategy Functions<a class="anchor" aria-label="anchor" href="#advanced-custom-strategy-functions"></a>
+<h2 id="testing-and-data-persistence">✅ Testing and Data Persistence<a class="anchor" aria-label="anchor" href="#testing-and-data-persistence"></a>
 </h2>
-<p>You can pass any function to the <code>split</code> or
-<code>buy_insurance</code> argument in
-<code><a href="../reference/simulate_blackjack.html">simulate_blackjack()</a></code>, enabling sophisticated,
-context-dependent strategies.</p>
+<p>The package uses unit tests (via testthat) and persistent storage
+(e.g., <code><a href="../reference/save_players.html">save_players()</a></code>/<code><a href="../reference/load_players.html">load_players()</a></code>) to
+ensure reliability and reproducibility for all features.</p>
+</div>
+<div class="section level2">
+<h2 id="limitations">🚧 Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>
+</h2>
+<ul>
+<li><p><strong>wombat21</strong> is designed for flexibility and
+extensibility, but there are still some current limitations:</p></li>
+<li><p><strong>Single-deck only:</strong> Only single-deck Blackjack is
+implemented; multi-deck or shoe games are not directly
+supported.</p></li>
+<li><p><strong>Standard rules only:</strong> Nonstandard Blackjack
+variants (e.g., double exposure, Spanish 21) are not included but could
+be added via user extensions.</p></li>
+<li><p><strong>Strategy granularity:</strong> Simulation strategies are
+customizable via function parameters, but built-in logic is
+intentionally simple.</p></li>
+<li><p><strong>No GUI:</strong> The package is console-based; no
+graphical interface is provided (though plots are interactive).</p></li>
+<li><p><strong>Persistence:</strong> Player data is saved locally, not
+in a centralized/cloud-based system.</p></li>
+<li><p><strong>Performance:</strong> Scoring uses C++ for speed, but
+some highly complex batch simulations may be slower than pure
+C++/Python.</p></li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="alternative-designs">🔄 Alternative Designs<a class="anchor" aria-label="anchor" href="#alternative-designs"></a>
+</h2>
+<p>We considered several alternative approaches in developing
+<strong>wombat21</strong>:</p>
+<ul>
+<li><p><strong>Pure S3 vs vctrs:</strong> Adopted vctrs for safer
+extensible objects, could have used pure S3.</p></li>
+<li><p><strong>R-only vs C++ backend:</strong> Chose C++ for batch
+speed; R only is simpler but slower.</p></li>
+<li><p><strong>Functional vs OOP:</strong> Prioritized functional
+interfaces over OOP for composability.</p></li>
+<li><p><strong>Integrated GUI:</strong> Focused on core logic, left out
+Shiny/desktop GUI for clarity.</p></li>
+<li><p><strong>Database/data.table support:</strong> Used R lists/local
+files for simplicity; future work could add database
+integration.</p></li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="ai-statement">🤖 AI Statement<a class="anchor" aria-label="anchor" href="#ai-statement"></a>
+</h2>
+<p>In compliance with University policy on responsible AI use, we openly
+and clearly acknowledge <strong>extensive use of generative AI
+tools—including OpenAI ChatGPT and GitHub Copilot—in the development of
+this assignment.</strong></p>
 <div class="section level3">
-<h3 id="advanced-logic-take-dealers-upcard-into-account-for-split">1. Advanced logic: Take dealer’s upcard into account for split<a class="anchor" aria-label="anchor" href="#advanced-logic-take-dealers-upcard-into-account-for-split"></a>
+<h3 id="how-ai-was-used">How AI Was Used<a class="anchor" aria-label="anchor" href="#how-ai-was-used"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Only split A or 8, and never split if dealer shows a 10 or Ace.</span></span>
-<span><span class="va">split_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">hand</span>, <span class="va">dealer_hand</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">ranks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/card_rank.html">card_rank</a></span><span class="op">(</span><span class="va">hand</span><span class="op">$</span><span class="va">cards</span><span class="op">)</span></span>
-<span>  <span class="va">dealer_rank</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/card_rank.html">card_rank</a></span><span class="op">(</span><span class="va">dealer_hand</span><span class="op">$</span><span class="va">cards</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ranks</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">&amp;&amp;</span></span>
-<span>    <span class="va">ranks</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">==</span> <span class="va">ranks</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&amp;&amp;</span></span>
-<span>    <span class="va">ranks</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"8"</span><span class="op">)</span> <span class="op">&amp;&amp;</span></span>
-<span>    <span class="op">!</span><span class="va">dealer_rank</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10"</span>, <span class="st">"A"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<ul>
+<li><p><strong>Initial code generation and scaffolding:</strong><br>
+Many basic functions, S3 class constructors, and control-flow templates
+(such as for card creation, game setup, simulation loops, and some unit
+tests) were generated with ChatGPT, then thoroughly reviewed, modified,
+and integrated by the team.</p></li>
+<li><p><strong>Language and documentation refinement:</strong><br>
+AI was used to polish English language in the README, function
+documentation, and code comments.</p></li>
+<li><p><strong>Debugging and best practices:</strong><br>
+We consulted ChatGPT for error explanations and debugging advice, always
+reviewing and adapting outputs before inclusion.</p></li>
+<li><p><strong>Design discussion and alternatives:</strong><br>
+AI was used as a “second opinion” in discussions about object systems,
+file structure, and testing coverage, with all final design decisions
+made by the team.</p></li>
+</ul>
 </div>
 <div class="section level3">
-<h3 id="advanced-insurance-logic">2. Advanced insurance logic<a class="anchor" aria-label="anchor" href="#advanced-insurance-logic"></a>
+<h3 id="how-ai-was-not-used">How AI Was <strong>Not</strong> Used<a class="anchor" aria-label="anchor" href="#how-ai-was-not-used"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Only buy insurance if player has blackjack AND dealer shows Ace.</span></span>
-<span><span class="va">insurance_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">player</span>, <span class="va">dealer_hand</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="../reference/is_blackjack.html">is_blackjack</a></span><span class="op">(</span><span class="va">player</span><span class="op">$</span><span class="va">hand</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="../reference/card_rank.html">card_rank</a></span><span class="op">(</span><span class="va">dealer_hand</span><span class="op">$</span><span class="va">cards</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="st">"A"</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<ul>
+<li><p>AI was <strong>never</strong> used to submit unreviewed or
+unedited answers.</p></li>
+<li><p>No material was copied blindly from AI outputs—every section was
+checked, rewritten, and adapted.</p></li>
+<li><p>All decisions and code integrations reflect our own understanding
+and academic responsibility.</p></li>
+</ul>
 </div>
 <div class="section level3">
-<h3 id="compare-strategies-with-batch-simulation-and-visualization">3. Compare Strategies with Batch Simulation and Visualization<a class="anchor" aria-label="anchor" href="#compare-strategies-with-batch-simulation-and-visualization"></a>
+<h3 id="accountability-and-academic-integrity">Accountability and Academic Integrity<a class="anchor" aria-label="anchor" href="#accountability-and-academic-integrity"></a>
 </h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res_advanced</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
-<span>  num_rounds <span class="op">=</span> <span class="fl">10000</span>,</span>
-<span>  split <span class="op">=</span> <span class="va">split_fn</span>,</span>
-<span>  buy_insurance <span class="op">=</span> <span class="va">insurance_fn</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
-<span>  num_rounds <span class="op">=</span> <span class="fl">10000</span>,</span>
-<span>  split <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  buy_insurance <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Advanced <span class="op">=</span> <span class="va">res_advanced</span><span class="op">$</span><span class="va">win_rate</span>, Simple <span class="op">=</span> <span class="va">res_simple</span><span class="op">$</span><span class="va">win_rate</span><span class="op">)</span>,</span>
-<span>  beside <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"skyblue"</span>, <span class="st">"grey"</span><span class="op">)</span>,</span>
-<span>  main <span class="op">=</span> <span class="st">"Win Rate Comparison: Advanced vs Simple Strategy"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><em>These examples show how you can build, test, and visualize
-sophisticated blackjack strategies by passing custom logic into the
-simulation functions.</em></p>
-<p>💡Try experimenting with your own logic—<code>wombat21</code> is
-designed to make strategy research both powerful and fun!</p>
+<ul>
+<li><p>We accept full responsibility for all code, documentation, and
+design decisions.</p></li>
+<li><p>AI was used as an assistant for efficiency and idea generation,
+not as a replacement for our learning.</p></li>
+<li><p>All AI use is fully documented here, following University
+transparency and integrity policies.</p></li>
+<li><p>We are prepared to discuss or demonstrate any part of our work as
+evidence of our engagement and understanding.</p></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="limitations-and-reflection">Limitations and Reflection<a class="anchor" aria-label="anchor" href="#limitations-and-reflection"></a>
+</h3>
+<ul>
+<li><p>AI-generated code often required significant rewriting or
+adaptation to meet our standards.</p></li>
+<li><p>Some AI suggestions were inefficient or incomplete; we improved
+or replaced these sections as needed.</p></li>
+<li><p>Test coverage currently emphasizes core logic; auxiliary features
+may be less robust.</p></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="example-prompts-used">Example Prompts Used<a class="anchor" aria-label="anchor" href="#example-prompts-used"></a>
+</h3>
+<ul>
+<li><p>“Write an S3 constructor for a card object in R.”</p></li>
+<li><p>“How to generate a unit test for splitting hands in Blackjack
+using testthat?”</p></li>
+<li><p>“Polish the English in this README section.”</p></li>
+<li><p>“Explain how to fix this vctrs error in an R test.”</p></li>
+<li><p>“Suggest a yaml grouping for pkgdown user-facing and internal
+functions.”</p></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="statement-of-responsibility">Statement of Responsibility<a class="anchor" aria-label="anchor" href="#statement-of-responsibility"></a>
+</h3>
+<p>We affirm that:</p>
+<ul>
+<li><p>All team members participated in using and reviewing AI-assisted
+code and documentation, and all share responsibility for the submitted
+work.</p></li>
+<li><p>AI was used only as an aid; all logic, structure, and integration
+reflect our own skills and decision-making.</p></li>
+<li><p>Our use of AI aligns with University expectations for
+responsible, transparent, and ethical assessment practice.</p></li>
+</ul>
+<div style="text-align: right;">
+<p>Prepared by: Weizhu Chen, Sun Yan Joanna Ma, Aneesh Agarwal<br>
+Date: 2025-06-06</p>
+</div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="team-contribution-summary">🧑‍🤝‍🧑 Team Contribution Summary<a class="anchor" aria-label="anchor" href="#team-contribution-summary"></a>
 </h2>
+<div style="width:100%">
 <table class="table">
 <colgroup>
-<col width="15%">
-<col width="84%">
+<col width="16%">
+<col width="83%">
 </colgroup>
 <thead><tr class="header">
 <th>Name</th>
@@ -414,10 +601,18 @@ metaprogramming choices)<br>
 </tr>
 </tbody>
 </table>
-<blockquote>
+</div>
+<div style="text-align: right;">
 <p>For full details of team member roles, see the <a href="https://github.com/MonashARP/game-package-wombats" class="external-link">project
 repository</a>.</p>
-</blockquote>
+</div>
+</div>
+<div class="section level2">
+<h2 id="conclusion-contribution">🤝 Conclusion &amp; Contribution<a class="anchor" aria-label="anchor" href="#conclusion-contribution"></a>
+</h2>
+<p>We welcome feature requests, bug reports, and community
+contributions. Feel free to open an issue or submit a pull request to
+help make <code>wombat21</code> even better!</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
