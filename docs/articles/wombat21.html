@@ -37,6 +37,7 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
 <li class="active nav-item"><a class="nav-link" href="../articles/wombat21.html">Get Started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/AD_wombat21.html">Advanced Usage</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -50,10 +51,8 @@
 
 
 
-<link href="wombat21_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
-<script src="wombat21_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="wombat21_files/plotly-binding-4.10.4/plotly.js"></script><script src="wombat21_files/typedarray-0.1/typedarray.min.js"></script><link href="wombat21_files/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
-<script src="wombat21_files/crosstalk-1.2.1/js/crosstalk.min.js"></script><link href="wombat21_files/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
-<script src="wombat21_files/plotly-main-2.11.1/plotly-latest.min.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>wombat21: Multiplayer Blackjack in R</h1>
                         <h4 data-toc-skip class="author">Sun Yan Joanna
@@ -69,32 +68,55 @@ Ma, Wei Zhu Chen, Aneesh Agarwal</h4>
 <div class="section level2">
 <h2 id="what-is-wombat21">🃏 What is <code>wombat21</code>?<a class="anchor" aria-label="anchor" href="#what-is-wombat21"></a>
 </h2>
-<p><strong><code>wombat21</code></strong> is a fun and interactive
-Blackjack package built in R. It supports multiplayer games with both
-human and computer players, coin betting, and persistent tracking of
-player performance over multiple sessions.</p>
-<p>Whether you’re learning R or love card games, this package is a
-playful and engaging way to explore programming concepts through
-Blackjack.</p>
+<p><strong><code>wombat21</code></strong> is a modern, fully-featured
+Blackjack game engine for R. It lets you play with friends or AI,
+simulate thousands of games, and analyze results—all with advanced
+Blackjack rules and persistent player records.</p>
+<p>Whether you’re a fan of card games or want to explore R programming
+with real-world logic, <strong><code>wombat21</code></strong> offers a
+fun, hands-on way to learn, play, and experiment.</p>
 <p>Install dependencies (if needed):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rlang"</span>, <span class="st">"vctrs"</span>, <span class="st">"plotly"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>, <span class="st">"Rcpp"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Tip: <code><a href="../reference/plot_bankroll_history.html">plot_bankroll_history()</a></code> uses <code>plotly</code>
+for interactive charts. If you want the HTML website docs
+(<code>pkgdown</code>), install <code>pkgdown</code> as well.</p>
 </div>
 <div class="section level2">
 <h2 id="features">🎮 Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h2>
 <ul>
-<li><p>Human and AI players (up to 6)</p></li>
-<li><p>Split, double down, insurance, and bust rules</p></li>
-<li><p>Persistent coin balances (saved locally)</p></li>
-<li><p>Validated betting system</p></li>
-<li><p>Graphs of coin trends</p></li>
-<li><p>Leaderboard/rankings</p></li>
+<li><p><strong>Multi-player support:</strong> Up to 6 human or AI
+players per game</p></li>
+<li><p><strong>Full rules:</strong> Split, double down, insurance,
+five-card Charlie, bust detection</p></li>
+<li><p><strong>Persistent progress:</strong> Automatic saving of player
+coin balances and game history</p></li>
+<li><p><strong>Validated betting system:</strong> Safe and flexible coin
+betting with input checks</p></li>
+<li><p><strong>Interactive visualization:</strong> Track and plot
+bankroll history and session trends</p></li>
+<li><p><strong>Leaderboard &amp; rankings:</strong> Real-time rankings
+and post-game stats</p></li>
+<li>
+<p><strong>Flexible strategy simulation:</strong></p>
+<ul>
+<li><p>Simulate thousands of games with custom betting, splitting, and
+insurance strategies</p></li>
+<li><p>User-defined strategy functions for advanced scenario
+analysis</p></li>
+<li><p>Batch analysis of win rates, insurance efficacy, split success,
+and more</p></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="start-playing">🚀 Start Playing<a class="anchor" aria-label="anchor" href="#start-playing"></a>
+<h2 id="interactive-gameplay">🎲 Interactive Gameplay<a class="anchor" aria-label="anchor" href="#interactive-gameplay"></a>
 </h2>
+<div class="section level3">
+<h3 id="start-playing">🚀 Start Playing<a class="anchor" aria-label="anchor" href="#start-playing"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/play.html">play</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>To begin a game, simply run:</p>
@@ -106,9 +128,9 @@ Blackjack.</p>
 <li><p>Make moves (hit, stand, split, etc.)</p></li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="betting-and-coins">💸 Betting and Coins<a class="anchor" aria-label="anchor" href="#betting-and-coins"></a>
-</h2>
+<div class="section level3">
+<h3 id="betting-and-coins">💸 Betting and Coins<a class="anchor" aria-label="anchor" href="#betting-and-coins"></a>
+</h3>
 <p>Each player starts with a coin balance. You bet each round. Outcomes
 impact your balance:</p>
 <ul>
@@ -121,9 +143,9 @@ impact your balance:</p>
 name.</p></li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="computer-players">🤖 Computer Players<a class="anchor" aria-label="anchor" href="#computer-players"></a>
-</h2>
+<div class="section level3">
+<h3 id="computer-players">🤖 Computer Players<a class="anchor" aria-label="anchor" href="#computer-players"></a>
+</h3>
 <p>AI players follow simple strategy:</p>
 <ul>
 <li><p>Bet 10 coins or remaining balance (whichever is less)</p></li>
@@ -131,36 +153,147 @@ name.</p></li>
 <li><p>They participate fully in the round, including betting and
 insurance logic.</p></li>
 </ul>
+</div>
 <div class="section level3">
 <h3 id="player-rankings">🏆 Player Rankings<a class="anchor" aria-label="anchor" href="#player-rankings"></a>
 </h3>
-<p>Shows the current coin totals of all players at the end of a
-round:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"../data/players_data.rda"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/plot_player_ranking.html">plot_player_ranking</a></span><span class="op">(</span>players <span class="op">=</span> <span class="va">players_data</span><span class="op">$</span><span class="va">players</span><span class="op">)</span></span></code></pre></div>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:700px;height:432.632880098888px;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"visdat":{"42fc786a501a":["function () ","plotlyVisDat"]},"cur_data":"42fc786a501a","attrs":{"42fc786a501a":{"x":{},"y":{},"marker":{"color":"skyblue"},"hovertext":{},"hoverinfo":"text","showlegend":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":100,"l":60,"t":25,"r":10},"title":"📊 Player Coin Ranking","xaxis":{"domain":[0,1],"automargin":true,"title":"Player","type":"category","categoryorder":"array","categoryarray":["Sun","Weizhu","Computer_2","Computer_1","Computer_3","Aneesh"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Coins"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Sun","Weizhu","Computer_2","Computer_1","Computer_3","Aneesh"],"y":[1050,1050,1010,1000,990,850],"marker":{"color":"skyblue","line":{"color":"rgba(31,119,180,1)"}},"hovertext":["Rank: 1<br>Player: Sun<br>Coins: 1050","Rank: 2<br>Player: Weizhu<br>Coins: 1050","Rank: 3<br>Player: Computer_2<br>Coins: 1010","Rank: 4<br>Player: Computer_1<br>Coins: 1000","Rank: 5<br>Player: Computer_3<br>Coins: 990","Rank: 6<br>Player: Aneesh<br>Coins: 850"],"hoverinfo":["text","text","text","text","text","text"],"showlegend":false,"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>At the end of each round, an updated leader-board is displayed,
+showing every player’s current coin total. All rankings are refreshed
+automatically, so you can see how you stack up against friends or AI
+opponents without any manual steps.</p>
 </div>
 <div class="section level3">
-<h3 id="bankroll-history">📈 Bankroll History<a class="anchor" aria-label="anchor" href="#bankroll-history"></a>
+<h3 id="bankroll-history">📝 Bankroll History<a class="anchor" aria-label="anchor" href="#bankroll-history"></a>
 </h3>
-<p>Plot each player’s coin balance over time:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_bankroll_history.html">plot_bankroll_history</a></span><span class="op">(</span>bankroll_history <span class="op">=</span> <span class="va">players_data</span><span class="op">$</span><span class="va">bankroll_history</span><span class="op">)</span></span></code></pre></div>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:700px;height:432.632880098888px;"></div>
-<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"visdat":{"42fc89f4c1f":["function () ","plotlyVisDat"]},"cur_data":"42fc89f4c1f","attrs":{"42fc89f4c1f":{"x":{},"y":{},"mode":"lines+markers","text":{},"hoverinfo":"text","showlegend":false,"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"💰 Bankroll Over Time","xaxis":{"domain":[0,1],"automargin":true,"title":"Round"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Coins"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3],"y":[1050,1000,850],"mode":"lines+markers","text":["Player: Aneesh<br>Coins: 1050","Player: Aneesh<br>Coins: 1000","Player: Aneesh<br>Coins: 850"],"hoverinfo":["text","text","text"],"showlegend":false,"type":"scatter","name":"Aneesh","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,3],"y":[1010,1010,1000],"mode":"lines+markers","text":["Player: Computer_1<br>Coins: 1010","Player: Computer_1<br>Coins: 1010","Player: Computer_1<br>Coins: 1000"],"hoverinfo":["text","text","text"],"showlegend":false,"type":"scatter","name":"Computer_1","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,3],"y":[1010,1000,1010],"mode":"lines+markers","text":["Player: Computer_2<br>Coins: 1010","Player: Computer_2<br>Coins: 1000","Player: Computer_2<br>Coins: 1010"],"hoverinfo":["text","text","text"],"showlegend":false,"type":"scatter","name":"Computer_2","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,3],"y":[1010,1000,990],"mode":"lines+markers","text":["Player: Computer_3<br>Coins: 1010","Player: Computer_3<br>Coins: 1000","Player: Computer_3<br>Coins: 990"],"hoverinfo":["text","text","text"],"showlegend":false,"type":"scatter","name":"Computer_3","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"line":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,3],"y":[1050,1000,1050],"mode":"lines+markers","text":["Player: Sun<br>Coins: 1050","Player: Sun<br>Coins: 1000","Player: Sun<br>Coins: 1050"],"hoverinfo":["text","text","text"],"showlegend":false,"type":"scatter","name":"Sun","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"line":{"color":"rgba(166,216,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,3],"y":[1050,1000,1050],"mode":"lines+markers","text":["Player: Weizhu<br>Coins: 1050","Player: Weizhu<br>Coins: 1000","Player: Weizhu<br>Coins: 1050"],"hoverinfo":["text","text","text"],"showlegend":false,"type":"scatter","name":"Weizhu","marker":{"color":"rgba(255,217,47,1)","line":{"color":"rgba(255,217,47,1)"}},"textfont":{"color":"rgba(255,217,47,1)"},"error_y":{"color":"rgba(255,217,47,1)"},"error_x":{"color":"rgba(255,217,47,1)"},"line":{"color":"rgba(255,217,47,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>During game-play, your coin balance is automatically tracked and
+visualized after each round. There’s no need to run any extra code—just
+play the game and watch your bankroll trends update in real time.</p>
+</div>
+<div class="section level3">
+<h3 id="play-again-or-exit">🔁 Play Again or Exit<a class="anchor" aria-label="anchor" href="#play-again-or-exit"></a>
+</h3>
+<p>At the end of each game, you’ll see:</p>
+<blockquote>
+<p>Type <code>again</code> to play another game, or <code>exit</code> to
+quit:</p>
+</blockquote>
+<p>Simply type your choice at the prompt to continue playing or leave
+the game.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="play-again-or-exit">🔁 Play Again or Exit<a class="anchor" aria-label="anchor" href="#play-again-or-exit"></a>
+<h2 id="custom-strategy-simulation">🧠 Custom Strategy Simulation<a class="anchor" aria-label="anchor" href="#custom-strategy-simulation"></a>
 </h2>
-<p>At the end of each round, you’ll be prompted to either continue or
-exit:</p>
+<p>Simulate thousands of Blackjack games to test your strategies
+automatically. You can control whether to split, buy insurance, or
+change your hit/stand threshold—just by passing simple options or your
+own functions.</p>
+<div class="section level3">
+<h3 id="basic-example">🚦 Basic Example<a class="anchor" aria-label="anchor" href="#basic-example"></a>
+</h3>
+<p>Run a quick simulation with the default strategy (hit below 17,
+always buy insurance and always split pairs):</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span>num_rounds <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">win_rate</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="customize-your-strategy">⚙️ Customize Your Strategy<a class="anchor" aria-label="anchor" href="#customize-your-strategy"></a>
+</h3>
+<p>You can easily change how the AI plays:</p>
+<ul>
+<li><p>Adjust the hit/stand rule:Hit if below your chosen score,
+otherwise stand.</p></li>
+<li><p>Choose to always/never split or buy insurance:Set split or
+buy_insurance to TRUE or FALSE.</p></li>
+<li><p>Write your own decision logic:Pass a function to control split or
+insurance behavior.</p></li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>Never split, never buy insurance, hit below 18:</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
+<span>  num_rounds <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>  threshold <span class="op">=</span> <span class="fl">18</span>,</span>
+<span>  split <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  buy_insurance <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li>Custom logic (split only A or 8, buy insurance only with
+blackjack):</li>
+</ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">again</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Split pairs of A or 8 only; buy insurance only when player's hand is blackjack.</span></span>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
+<span>  num_rounds <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>  split <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">hand</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ranks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/card_rank.html">card_rank</a></span><span class="op">(</span><span class="va">hand</span><span class="op">$</span><span class="va">cards</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ranks</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">&amp;&amp;</span> <span class="va">ranks</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">==</span> <span class="va">ranks</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&amp;&amp;</span> <span class="va">ranks</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"8"</span>, <span class="st">"A"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  buy_insurance <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">player</span>, <span class="va">dealer_hand</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="../reference/is_blackjack.html">is_blackjack</a></span><span class="op">(</span><span class="va">player</span><span class="op">$</span><span class="va">hand</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="see-your-results">📋 See Your Results<a class="anchor" aria-label="anchor" href="#see-your-results"></a>
+</h3>
+<p>Check the win rate, loss rate, and other stats in the returned
+list:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sim</span><span class="op">$</span><span class="va">win_rate</span></span>
+<span><span class="va">sim</span><span class="op">$</span><span class="va">split_rate</span></span>
+<span><span class="va">sim</span><span class="op">$</span><span class="va">final_coins</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="visualize">📈 Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a>
+</h2>
+<div class="section level3">
+<h3 id="export-results">📦 Export Results<a class="anchor" aria-label="anchor" href="#export-results"></a>
+</h3>
+<ul>
+<li><strong>Strategy Simulation Results</strong></li>
+</ul>
+<p>After running a simulation, you can export your results for further
+analysis:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span>num_rounds <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/save_players.html">save_players</a></span><span class="op">(</span></span>
+<span>  players <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>You <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>coins <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="va">final_coins</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  bankroll_history <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="va">bankroll_history</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li><strong>Interactive Game Results</strong></li>
+</ul>
+<p>After finishing an interactive game (using <code><a href="../reference/play.html">play()</a></code>), you
+can export your results for further analysis:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/save_players.html">save_players</a></span><span class="op">(</span><span class="va">players</span>, <span class="va">bankroll_history</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="plot-bankroll-history">💹 Plot Bankroll History<a class="anchor" aria-label="anchor" href="#plot-bankroll-history"></a>
+</h3>
+<p>Visualize how each player’s coin balance changes over time.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"../data/my_simulation_results.rds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/plot_bankroll_history.html">plot_bankroll_history</a></span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">bankroll_history</span><span class="op">)</span></span></code></pre></div>
+<p><em>Creates an interactive line chart showing bankroll trends by
+round.</em></p>
+</div>
+<div class="section level3">
+<h3 id="plot-player-rankings">📊 Plot Player Rankings<a class="anchor" aria-label="anchor" href="#plot-player-rankings"></a>
+</h3>
+<p>Compare player coin totals and see who’s on top.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"../data/players_data.rda"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/plot_player_ranking.html">plot_player_ranking</a></span><span class="op">(</span>players <span class="op">=</span> <span class="va">players_data</span><span class="op">$</span><span class="va">players</span><span class="op">)</span></span></code></pre></div>
+<p><em>Displays a bar chart ranking all players by coins.</em></p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

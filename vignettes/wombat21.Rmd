@@ -17,35 +17,47 @@ knitr::opts_chunk$set(
 
 ## 🃏 What is `wombat21`?
 
-**`wombat21`** is a fun and interactive Blackjack package built in R. It supports multiplayer games with both human and computer players, coin betting, and persistent tracking of player performance over multiple sessions.
+**`wombat21`** is a modern, fully-featured Blackjack game engine for R. It lets you play with friends or AI, simulate thousands of games, and analyze results—all with advanced Blackjack rules and persistent player records.
 
 ```{r eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 library(wombat21)
 ```
 
-Whether you're learning R or love card games, this package is a playful and engaging way to explore programming concepts through Blackjack.
+Whether you're a fan of card games or want to explore R programming with real-world logic, **`wombat21`** offers a fun, hands-on way to learn, play, and experiment.
 
 Install dependencies (if needed):
 
 ```{r eval=FALSE}
-install.packages(c("ggplot2", "dplyr"))
+install.packages(c("rlang", "vctrs", "plotly", "dplyr", "ggplot2", "Rcpp"))
 ```
+
+Tip: `plot_bankroll_history()` uses `plotly` for interactive charts. If you want the HTML website docs (`pkgdown`), install `pkgdown` as well.
 
 ## 🎮 Features
 
--   Human and AI players (up to 6)
+-   **Multi-player support:** Up to 6 human or AI players per game
 
--   Split, double down, insurance, and bust rules
+-   **Full rules:** Split, double down, insurance, five-card Charlie, bust detection
 
--   Persistent coin balances (saved locally)
+-   **Persistent progress:** Automatic saving of player coin balances and game history
 
--   Validated betting system
+-   **Validated betting system:** Safe and flexible coin betting with input checks
 
--   Graphs of coin trends
+-   **Interactive visualization:** Track and plot bankroll history and session trends
 
--   Leaderboard/rankings
+-   **Leaderboard & rankings:** Real-time rankings and post-game stats
 
-## 🚀 Start Playing
+-   **Flexible strategy simulation:**
+
+    -   Simulate thousands of games with custom betting, splitting, and insurance strategies
+
+    -   User-defined strategy functions for advanced scenario analysis
+
+    -   Batch analysis of win rates, insurance efficacy, split success, and more
+
+## 🎲 Interactive Gameplay
+
+### 🚀 Start Playing
 
 ```{r eval = FALSE}
 play()
@@ -63,7 +75,7 @@ You’ll be prompted to:
 
 -   Make moves (hit, stand, split, etc.)
 
-## 💸 Betting and Coins
+### 💸 Betting and Coins
 
 Each player starts with a coin balance. You bet each round. Outcomes impact your balance:
 
@@ -79,7 +91,7 @@ Each player starts with a coin balance. You bet each round. Outcomes impact your
 
 -   Your coin balance is saved between sessions under your player name.
 
-## 🤖 Computer Players
+### 🤖 Computer Players
 
 AI players follow simple strategy:
 
@@ -91,27 +103,128 @@ AI players follow simple strategy:
 
 ### 🏆 Player Rankings
 
-Shows the current coin totals of all players at the end of a round:
+At the end of each round, an updated leader-board is displayed, showing every player’s current coin total. All rankings are refreshed automatically, so you can see how you stack up against friends or AI opponents without any manual steps.
 
-```{r}
+### 📝 Bankroll History
+
+During game-play, your coin balance is automatically tracked and visualized after each round. There’s no need to run any extra code—just play the game and watch your bankroll trends update in real time.
+
+### 🔁 Play Again or Exit
+
+At the end of each game, you’ll see:
+
+> Type `again` to play another game, or `exit` to quit:
+
+Simply type your choice at the prompt to continue playing or leave the game.
+
+## 🧠 Custom Strategy Simulation
+
+Simulate thousands of Blackjack games to test your strategies automatically. You can control whether to split, buy insurance, or change your hit/stand threshold—just by passing simple options or your own functions.
+
+### 🚦 Basic Example
+
+Run a quick simulation with the default strategy (hit below 17, always buy insurance and always split pairs):
+
+```{r,eval=FALSE}
+sim <- simulate_blackjack(num_rounds = 10000)
+print(sim$win_rate)
+```
+
+### ⚙️ Customize Your Strategy
+
+You can easily change how the AI plays:
+
+-   Adjust the hit/stand rule:Hit if below your chosen score, otherwise stand.
+
+-   Choose to always/never split or buy insurance:Set split or buy_insurance to TRUE or FALSE.
+
+-   Write your own decision logic:Pass a function to control split or insurance behavior.
+
+Examples:
+
+- Never split, never buy insurance, hit below 18:
+
+```{r,eval=FALSE}
+sim <- simulate_blackjack(
+  num_rounds = 10000,
+  threshold = 18,
+  split = FALSE,
+  buy_insurance = FALSE
+)
+```
+
+-   Custom logic (split only A or 8, buy insurance only with blackjack):
+
+
+```{r eval=FALSE}
+# Split pairs of A or 8 only; buy insurance only when player's hand is blackjack.
+sim <- simulate_blackjack(
+  num_rounds = 10000,
+  split = function(hand) {
+    ranks <- card_rank(hand$cards)
+    length(ranks) == 2 && ranks[1] == ranks[2] && ranks[1] %in% c("8", "A")
+  },
+  buy_insurance = function(player, dealer_hand) {
+    is_blackjack(player$hand)
+  }
+)
+```
+
+
+### 📋 See Your Results
+
+Check the win rate, loss rate, and other stats in the returned list:
+
+```{r,eval=FALSE}
+sim$win_rate
+sim$split_rate
+sim$final_coins
+```
+
+## 📈 Visualize
+
+### 📦 Export Results
+
+-   **Strategy Simulation Results**
+
+After running a simulation, you can export your results for further analysis:
+
+```{r,eval=FALSE}
+sim <- simulate_blackjack(num_rounds = 10000)
+save_players(
+  players = list(You = list(coins = sim$final_coins)),
+  bankroll_history = sim$bankroll_history
+)
+```
+
+-   **Interactive Game Results**
+
+After finishing an interactive game (using `play()`), you can export your results for further analysis:
+
+```{r,eval=FALSE}
+save_players(players, bankroll_history)
+```
+
+### 💹 Plot Bankroll History
+
+Visualize how each player’s coin balance changes over time.
+
+```{r,eval=FALSE}
+load(file = "../data/my_simulation_results.rds")
+
+plot_bankroll_history(sim$bankroll_history)
+```
+
+*Creates an interactive line chart showing bankroll trends by round.*
+
+### 📊 Plot Player Rankings
+
+Compare player coin totals and see who’s on top.
+
+```{r,eval=FALSE}
 load(file = "../data/players_data.rda")
 
 plot_player_ranking(players = players_data$players)
 ```
 
-### 📈 Bankroll History
-
-Plot each player’s coin balance over time:
-
-```{r}
-plot_bankroll_history(bankroll_history = players_data$bankroll_history)
-```
-
-## 🔁 Play Again or Exit
-
-At the end of each round, you'll be prompted to either continue or exit:
-
-```{r eval=FALSE}
-again()
-exit()
-```
+*Displays a bar chart ranking all players by coins.*

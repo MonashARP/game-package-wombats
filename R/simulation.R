@@ -5,40 +5,35 @@
 #'
 #' @description
 #' Simulate multiple rounds of Blackjack using fully automated AI logic.
-#' Allows user to specify hit/stand threshold, whether to buy insurance,
-#' and whether/when to split pairs (via logical or custom function).
+#' Allows user to specify hit/stand threshold, whether to buy insurance
+#' (logical or custom function), and whether/when to split pairs (logical or function).
 #'
 #' @param num_rounds Number of games to simulate
 #' @param bet_amount Fixed bet per round
 #' @param initial_coins Starting coins for the player
 #' @param threshold Hit if < threshold, stand if >= threshold
-#' @param buy_insurance Logical or function; if TRUE, always buy insurance when dealer shows A. If function, should return TRUE/FALSE.
-#' @param split Logical or function. If TRUE, always split when possible; if FALSE, never split; if function, apply custom logic to decide split (function takes a blackjack_hand and returns TRUE/FALSE).
+#' @param buy_insurance Logical or function; if TRUE, always buy insurance when dealer shows A.
+#'   If function, should return TRUE/FALSE given (player, dealer_hand).
+#' @param split Logical or function; if TRUE, always split when possible;
+#'   if function, custom logic (function(hand) returns TRUE/FALSE).
 #'
 #' @return A list: win/lose/tie/insurance/split stats and bankroll history
 #' @examples
 #' # Always split pairs, always buy insurance, hit <17 stand >=17
-#' res <- simulate_blackjack(
-#'   num_rounds = 10000,
-#'   threshold = 17,
-#'   buy_insurance = TRUE,
-#'   split = TRUE
-#' )
+#' res <- simulate_blackjack(num_rounds = 10000, threshold = 17, buy_insurance = TRUE, split = TRUE)
 #' print(res$win_rate)
 #'
 #' # Never split, never buy insurance, hit <18 stand >=18
-#' res <- simulate_blackjack(
-#'   num_rounds = 10000,
-#'   threshold = 18,
-#'   buy_insurance = FALSE,
-#'   split = FALSE
-#' )
+#' res <- simulate_blackjack(num_rounds = 10000, threshold = 18, buy_insurance = FALSE, split = FALSE)
 #'
-#' # split A or 8
+#' # Split only A or 8, only buy insurance if own hand is blackjack
 #' res <- simulate_blackjack(
 #'   num_rounds = 10000,
 #'   threshold = 17,
-#'   buy_insurance = FALSE,
+#'   buy_insurance = function(player, dealer_hand) {
+#'     # Only buy insurance if player has blackjack
+#'     is_blackjack(player$hand)
+#'   },
 #'   split = function(hand) {
 #'     ranks <- card_rank(hand$cards)
 #'     length(ranks) == 2 && ranks[1] == ranks[2] && ranks[1] %in% c("8", "A")
@@ -67,7 +62,7 @@ simulate_blackjack <- function(
   } else {
     stop("split must be TRUE/FALSE or a function(hand)")
   }
-  # Convert insurance into a function
+  # Convert insurance strategy into a function
   insurance_func <- if (is.logical(buy_insurance)) {
     function(player, dealer_hand) buy_insurance
   } else if (is.function(buy_insurance)) {
@@ -97,13 +92,13 @@ simulate_blackjack <- function(
     deck_char <- sample(paste0(ranks, suits))
     deck <- vctrs::vec_cast(deck_char, to = card(rank = character(), suit = character()))
     deal_result <- deal_cards(deck, num_players = 1)
-    player_hands <- list(deal_result$player_hands[[1]]) # list
+    player_hands <- list(deal_result$player_hands[[1]]) # list of hands
     dealer_hand <- deal_result$dealer_hand
     deck <- deal_result$deck
 
     # Insurance
     insurance_bet <- 0; insurance_paid <- 0
-    if (card_rank(dealer_hand$cards[1]) == "A" && insurance_func(players$Player1, dealer_hand)) {
+    if (card_rank(dealer_hand$cards[1]) == "A" && insurance_func(list(hand = player_hands[[1]], coins = players$Player1$coins), dealer_hand)) {
       insurance_bet <- bet_amount / 2
       if (players$Player1$coins >= insurance_bet) {
         players$Player1$coins <- players$Player1$coins - insurance_bet
@@ -127,7 +122,6 @@ simulate_blackjack <- function(
 
     # handling split(Only supports one first-hand split, recursively scalable)
     split_done <- FALSE
-
     hand_queue <- player_hands
     hand_results <- character(0)
     while (length(hand_queue) > 0) {
@@ -138,7 +132,6 @@ simulate_blackjack <- function(
       if (!split_done && length(hand$cards) == 2 && split_func(hand)) {
         split_count <- split_count + 1
         cards <- hand$cards
-        # Ensure that the length of the hand cards is 2 and then divide
         if (length(deck) >= 2) {
           hand1 <- new_blackjack_hand(c(cards[1], deck[1]))
           hand2 <- new_blackjack_hand(c(cards[2], deck[2]))
@@ -151,11 +144,8 @@ simulate_blackjack <- function(
 
       # automatically hit/stand process
       repeat {
-
         score <- calculate_score(hand)
-        if (length(hand$cards) >= 5 && score <= 21) {
-          break
-        }
+        if (length(hand$cards) >= 5 && score <= 21) break
         if (score < threshold) {
           if (length(deck) < 1) break
           hand <- new_blackjack_hand(c(hand$cards, deck[1]))
@@ -169,18 +159,17 @@ simulate_blackjack <- function(
       dealer_res <- dealer_action(dealer_hand, deck)
       dealer_hand <- dealer_res$hand
 
-      # dudging
+      # judging
       result <- determine_winner(hand, dealer_hand)
       hand_results <- c(hand_results, result)
 
-      # handling split
       if (split_count > 0) {
         if (grepl("^Player wins", result)) split_win <- split_win + 1
         if (grepl("^Dealer wins", result)) split_lose <- split_lose + 1
       }
     }
 
-    # single rand settlement(win/lose/tie)
+    # single round settlement(win/lose/tie)
     if (any(grepl("^Player wins", hand_results))) {
       win <- win + 1
       players$Player1$coins <- players$Player1$coins + bet_amount
@@ -205,4 +194,3 @@ simulate_blackjack <- function(
     bankroll_history = bankroll_history
   )
 }
-

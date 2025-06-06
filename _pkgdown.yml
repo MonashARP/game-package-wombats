@@ -13,7 +13,7 @@ home:
 
 navbar:
   structure:
-    left: ["home", "get-started", "reference"]
+    left: ["home", "get-started", "advanced-usage", "reference"]
     right: ["GitHub"]
 
   components:
@@ -23,6 +23,9 @@ navbar:
     get-started:
       text: "Get Started"
       href: articles/wombat21.html
+    advanced-usage:
+      text: "Advanced Usage"
+      href: articles/AD_wombat21.html
     reference:
       text: "Reference"
       href: reference/index.html
@@ -104,6 +107,9 @@ articles:
   - title: "Getting Started"
     contents:
       - wombat21
+  - title: "Advanced Usage"
+    contents:
+      - AD_wombat21
 
 authors:
   "Sun Yan Joanna Ma":

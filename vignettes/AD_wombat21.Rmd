@@ -1,0 +1,287 @@
+---
+title: "Advanced Features and Design of wombat21"
+author: "Sun Yan Joanna Ma, Wei Zhu Chen, Aneesh Agarwal"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Advanced Features and Design of wombat21}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## 🧩 Object System with vctrs
+
+### **Why Use vctrs?**
+
+The `vctrs` package provides a robust foundation for type-safe, extensible object-oriented programming in R. In **`wombat21`**, it powers the entire game logic for cards and hands.
+
+**1. Custom Card and Hand Classes**
+
+`wombat21` defines:
+
+-   **`card`**: an object with `rank` and `suit`, e.g., `"A♠"`, `"10♦"`
+
+-   **`blackjack_hand`**: a player hand consisting of `card` objects
+
+Both are built with `vctrs::new_rcrd()`, enabling compact storage and automatic validation.
+
+```{r eval=FALSE}
+card <- function(rank, suit) {
+  vctrs::new_rcrd(list(rank = rank, suit = suit), class = "card")
+}
+
+new_blackjack_hand <- function(cards) {
+  vctrs::new_rcrd(list(cards = cards), class = "blackjack_hand")
+}
+```
+
+**2. Helper Functions and Safe Manipulation**
+
+Custom card and hand objects can be safely manipulated using helper functions:
+
+```{r eval=FALSE}
+# Create cards and a hand
+c1 <- card("A", "♠")
+c2 <- card("10", "♦")
+hand <- new_blackjack_hand(c(c1, c2))
+
+card_rank(hand$cards)    # Returns c("A", "10")
+card_value(hand$cards)   # Returns c(11, 10)
+```
+
+*These functions ensure your game logic is **clean**, **type-safe**, and **readable**.*
+
+**3. Extending with S3 + vctrs**
+
+All relevant behaviors—printing, type coercion, equality—are registered explicitly via `vctrs::s3_register()`.
+
+```{r eval=FALSE}
+# Custom print method for card objects
+print.card <- function(x, ...) {
+  cat(sprintf("<card: %s of %s>\n", card_rank(x), card_suit(x)))
+}
+
+# Register vctrs casting and type methods for cards
+vctrs::s3_register("vctrs::vec_cast", "card.character")
+vctrs::s3_register("vctrs::vec_cast", "character.card")
+vctrs::s3_register("vctrs::vec_ptype2", "card.character")
+vctrs::s3_register("vctrs::vec_ptype2", "character.card")
+vctrs::s3_register("vctrs::vec_ptype2", "card.card")
+```
+
+*This design ensures smooth interoperation with base R vectors and custom behaviors.*
+
+### Benefits for Advanced Users & Developers
+
+-   **Safer code:** Bugs from invalid card or hand objects are caught early
+
+-   **Clearer APIs:** Functions clearly expect and return game objects
+
+-   **Easy extension:** Add new rules or card types with minimal refactoring
+
+-   **Better debugging:** Informative errors when misuse is detected
+
+## 🧵 Metaprogramming & Generic Interfaces
+
+While **`wombat21`** does not heavily rely on *metaprogramming*, it demonstrates simple use of **expression evaluation** and **S3 generics** to enable flexible logic and modular game components.
+
+### Metaprogramming in Action
+
+A notable use of metaprogramming appears in our AI hit/stand decision logic:
+
+```{r eval=FALSE}
+while (rlang::eval_tidy(rlang::expr(!!current_score < 17))) {
+  ...
+}
+```
+
+This pattern lets us **evaluate conditional logic dynamically**, which could be extended to support more advanced decision trees or strategy DSLs.
+
+Although simple here, this approach allows:
+
+-   Dynamic game strategies (e.g., thresholds that are formula-based)
+
+-   Pluggable control flows without hardcoding
+
+-   Compatibility with user-defined logic in future extensions
+
+### Interface Design via S3
+
+Beyond that, **interface extensibility** in `wombat21` is achieved through clean **S3 generics**:
+
+-   `card_rank()`, `card_value()`, and `calculate_score()` all support **class dispatch**
+
+-   Functions like `card_rank.card()` and `card_rank.character()` make logic reusable across both S3 `card` objects and plain characters
+
+This gives:
+
+-   **Clear separation** between internal logic and user-visible objects
+
+-   **Easy extension** of new types (e.g., `joker_card`, `double_card`)
+
+-   Consistent API behavior with helpful fallbacks and method dispatch
+
+### Summary
+
++---------------------+--------------------------+---------------------------------------------+
+| Aspect              | Technique Used           | Purpose                                     |
++=====================+==========================+=============================================+
+| Hit/stand condition | `rlang::eval_tidy()`     | Dynamically evaluate game thresholds        |
++---------------------+--------------------------+---------------------------------------------+
+| Rank/value logic    | S3 generic dispatch      | Allow multiple input types (`card`, `char`) |
++---------------------+--------------------------+---------------------------------------------+
+| Extendability       | `vctrs::new_rcrd()` + S3 | Build and validate extensible game types    |
++---------------------+--------------------------+---------------------------------------------+
+
+### Want to do more?
+
+-   For more advanced *metaprogramming*, consider:
+
+-   User-defined strategy expressions via quosures
+
+-   Parameterized hit/stand rules embedded in `play()` flow
+
+-   Callable logic passed in as closures (e.g., `split_func`, `insurance_func` – which you already support)
+
+## ⚡ Boosting Performance with Rcpp
+
+To speed up critical logic like **score calculation**, `wombat21` uses a C++ backend via `Rcpp`. This ensures fast, reliable, and vectorized performance even during **high-volume simulation**.
+
+### What’s Accelerated
+
+The most computationally intense operation in Blackjack is score calculation—especially due to the **variable value of Aces**. Instead of handling this in pure R every round, we offload it to C++:
+
+```{r eval=FALSE}
+calculate_score(hand)
+```
+
+internally calls:
+
+```{r eval=FALSE}
+calculate_score_cpp(ranks)
+```
+
+### How It Works
+
+```{r eval=FALSE}
+# R wrapper (R/score_cal.R)
+calculate_score <- function(hand) {
+  ...
+  ranks <- card_rank(cards)
+  calculate_score_cpp(ranks)
+}
+```
+
+```{r cpp-example, eval=FALSE}
+# C++: src/calculate_score.cpp
+# int calculate_score_cpp(std::vector<std::string> ranks);
+```
+
+This ensures:
+
+-   **Low latency** even with thousands of hands
+
+-   **Correct Ace handling** (e.g., dual 1/11)
+
+-   **Seamless integration** with S3/vctrs objects
+
+### When to Use
+
+You don’t need to call the C++ version manually—`calculate_score()` handles this for you. But advanced users can test or use it directly:
+
+```{r eval=FALSE}
+calculate_score_cpp(c("A", "A", "9"))  # Returns 21
+```
+
+**Speed Comparison (10,000 hands)**
+
+| Method                       | Elapsed Time (sec) | Relative Speed |
+|------------------------------|--------------------|----------------|
+| Pure R (`calculate_score_r`) | 0.28               | 1× (baseline)  |
+| Rcpp C++ (`calculate_score`) | 0.06               | 4.7× faster    |
+
+## 🧑‍💻 Advanced: Custom Strategy Functions
+
+You can pass any function to the `split` or `buy_insurance` argument in `simulate_blackjack()`, enabling sophisticated, context-dependent strategies.
+
+### **1. Basic custom logic (split only A or 8, buy insurance only with blackjack)**
+
+### 1. Advanced logic: Take dealer's upcard into account for split
+
+```{r eval=FALSE}
+# Only split A or 8, and never split if dealer shows a 10 or Ace.
+split_fn <- function(hand, dealer_hand) {
+  ranks <- card_rank(hand$cards)
+  dealer_rank <- card_rank(dealer_hand$cards[1])
+  length(ranks) == 2 &&
+    ranks[1] == ranks[2] &&
+    ranks[1] %in% c("A", "8") &&
+    !dealer_rank %in% c("10", "A")
+}
+```
+
+### 2. Advanced insurance logic
+
+```{r eval=FALSE}
+# Only buy insurance if player has blackjack AND dealer shows Ace.
+insurance_fn <- function(player, dealer_hand) {
+  is_blackjack(player$hand) && card_rank(dealer_hand$cards[1]) == "A"
+}
+```
+
+### 3. Compare Strategies with Batch Simulation and Visualization
+
+```{r eval=FALSE}
+res_advanced <- simulate_blackjack(
+  num_rounds = 10000,
+  split = split_fn,
+  buy_insurance = insurance_fn
+)
+
+res_simple <- simulate_blackjack(
+  num_rounds = 10000,
+  split = FALSE,
+  buy_insurance = FALSE
+)
+
+barplot(
+  c(Advanced = res_advanced$win_rate, Simple = res_simple$win_rate),
+  beside = TRUE, col = c("skyblue", "grey"),
+  main = "Win Rate Comparison: Advanced vs Simple Strategy"
+)
+```
+
+*These examples show how you can build, test, and visualize sophisticated blackjack strategies by passing custom logic into the simulation functions.*
+
+💡Try experimenting with your own logic—`wombat21` is designed to make strategy research both powerful and fun!
+
+## 🧑‍🤝‍🧑 Team Contribution Summary
+
++----------------+-----------------------------------------------------------------------------------------+
+| Name           | Key Contributions                                                                       |
++================+=========================================================================================+
+| Weizhu Chen    | \- Designed and implemented main game loop and core mechanics\                          |
+|                | - Developed S3 generics/methods (e.g., `card_rank`, `vec_cast`)\                        |
+|                | - Modularized and refactored codebase\                                                  |
+|                | - Added simulation feature and usage examples\                                          |
+|                | - Improved documentation structure and naming consistency                               |
++----------------+-----------------------------------------------------------------------------------------+
+| Joanna Ma      | \- Developed multi-player and computer player support\                                  |
+|                | - Implemented betting and coin management\                                              |
+|                | - Created visualization functions for player ranking and coin history\                  |
+|                | - Debugged and enhanced S3/vctrs compatibility\                                         |
+|                | - Helped with data storage and user interface troubleshooting                           |
++----------------+-----------------------------------------------------------------------------------------+
+| Aneesh Agarwal | \- Developed and integrated C++ backend for fast hand scoring (`calculate_score_cpp`)\  |
+|                | - Provided function examples and unit tests\                                            |
+|                | - Contributed to vignette and design documentation (including metaprogramming choices)\ |
+|                | - Assisted in troubleshooting and code review                                           |
++----------------+-----------------------------------------------------------------------------------------+
+
+> For full details of team member roles, see the [project repository](https://github.com/MonashARP/game-package-wombats).

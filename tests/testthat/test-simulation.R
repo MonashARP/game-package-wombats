@@ -24,3 +24,11 @@ test_that("simulation returns correct structure", {
   res <- simulate_blackjack(num_rounds = 10)
   expect_true(all(c("win_rate", "lose_rate", "tie_rate", "final_coins") %in% names(res)))
 })
+test_that("simulate handles custom insurance function", {
+  res <- simulate_blackjack(
+    num_rounds = 10,
+    buy_insurance = function(player, dealer_hand) { FALSE }
+  )
+  expect_true(is.list(res))
+  expect_true("insurance_win_rate" %in% names(res))
+})

@@ -22,41 +22,36 @@ simulate_blackjack(
 
 \item{threshold}{Hit if < threshold, stand if >= threshold}
 
-\item{buy_insurance}{Logical or function; if TRUE, always buy insurance when dealer shows A. If function, should return TRUE/FALSE.}
+\item{buy_insurance}{Logical or function; if TRUE, always buy insurance when dealer shows A.
+If function, should return TRUE/FALSE given (player, dealer_hand).}
 
-\item{split}{Logical or function. If TRUE, always split when possible; if FALSE, never split; if function, apply custom logic to decide split (function takes a blackjack_hand and returns TRUE/FALSE).}
+\item{split}{Logical or function; if TRUE, always split when possible;
+if function, custom logic (function(hand) returns TRUE/FALSE).}
 }
 \value{
 A list: win/lose/tie/insurance/split stats and bankroll history
 }
 \description{
 Simulate multiple rounds of Blackjack using fully automated AI logic.
-Allows user to specify hit/stand threshold, whether to buy insurance,
-and whether/when to split pairs (via logical or custom function).
+Allows user to specify hit/stand threshold, whether to buy insurance
+(logical or custom function), and whether/when to split pairs (logical or function).
 }
 \examples{
 # Always split pairs, always buy insurance, hit <17 stand >=17
-res <- simulate_blackjack(
-  num_rounds = 10000,
-  threshold = 17,
-  buy_insurance = TRUE,
-  split = TRUE
-)
+res <- simulate_blackjack(num_rounds = 10000, threshold = 17, buy_insurance = TRUE, split = TRUE)
 print(res$win_rate)
 
 # Never split, never buy insurance, hit <18 stand >=18
-res <- simulate_blackjack(
-  num_rounds = 10000,
-  threshold = 18,
-  buy_insurance = FALSE,
-  split = FALSE
-)
+res <- simulate_blackjack(num_rounds = 10000, threshold = 18, buy_insurance = FALSE, split = FALSE)
 
-# split A or 8
+# Split only A or 8, only buy insurance if own hand is blackjack
 res <- simulate_blackjack(
   num_rounds = 10000,
   threshold = 17,
-  buy_insurance = FALSE,
+  buy_insurance = function(player, dealer_hand) {
+    # Only buy insurance if player has blackjack
+    is_blackjack(player$hand)
+  },
   split = function(hand) {
     ranks <- card_rank(hand$cards)
     length(ranks) == 2 && ranks[1] == ranks[2] && ranks[1] \%in\% c("8", "A")
