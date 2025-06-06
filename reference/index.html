@@ -54,26 +54,14 @@
         <dd>Ask to play again</dd>
       </dl><dl><dt>
 
-          <code><a href="play_player_turns.html">play_player_turns()</a></code>
-
-        </dt>
-        <dd>Play player turns (with coins and computer players)</dd>
-      </dl><dl><dt>
-
-          <code><a href="determine_winner.html">determine_winner()</a></code>
-
-        </dt>
-        <dd>Determine winner(s) of a Blackjack game</dd>
-      </dl><dl><dt>
-
           <code><a href="exit.html">exit()</a></code>
 
         </dt>
         <dd>Exit Blackjack session</dd>
       </dl></div><div class="section level2">
-      <h2 id="player-mechanics">Player Mechanics<a class="anchor" aria-label="anchor" href="#player-mechanics"></a></h2>
+      <h2 id="player-management">Player Management<a class="anchor" aria-label="anchor" href="#player-management"></a></h2>
 
-      <div class="section-desc"><p>Player actions, bets, input/output, and turn logic.</p></div>
+      <div class="section-desc"><p>Functions for managing and inputting player data.</p></div>
 
 
     </div><div class="section level2">
@@ -89,32 +77,126 @@
         <dd>Input and validate human and computer players</dd>
       </dl><dl><dt>
 
+          <code><a href="get_bets.html">get_bets()</a></code>
+
+        </dt>
+        <dd>Get Bets from Players</dd>
+      </dl><dl><dt>
+
           <code><a href="player_action.html">player_action()</a></code>
 
         </dt>
         <dd>Player action: hit, stand, or double (with betting)</dd>
       </dl><dl><dt>
 
+          <code><a href="play_player_turns.html">play_player_turns()</a></code>
+
+        </dt>
+        <dd>Play player turns for all players</dd>
+      </dl></div><div class="section level2">
+      <h2 id="game-setup-and-card-handling">Game Setup and Card Handling<a class="anchor" aria-label="anchor" href="#game-setup-and-card-handling"></a></h2>
+
+      <div class="section-desc"><p>Functions for dealing cards and setting up game state.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="setup_and_display_initial.html">setup_and_display_initial()</a></code>
+
+        </dt>
+        <dd>Set up the game and display initial hands with bets</dd>
+      </dl><dl><dt>
+
+          <code><a href="deal_cards.html">deal_cards()</a></code>
+
+        </dt>
+        <dd>Deal initial cards in Blackjack</dd>
+      </dl><dl><dt>
+
+          <code><a href="card.html">card()</a></code>
+
+        </dt>
+        <dd>Create a card vector</dd>
+      </dl><dl><dt>
+
+          <code><a href="new_blackjack_hand.html">new_blackjack_hand()</a></code>
+
+        </dt>
+        <dd>Create a blackjack hand (S3 vctrs)</dd>
+      </dl><dl><dt>
+
+          <code><a href="card_is_face.html">card_is_face()</a></code>
+
+        </dt>
+        <dd>judging J/Q/K</dd>
+      </dl><dl><dt>
+
+          <code><a href="card_is_ace.html">card_is_ace()</a></code>
+
+        </dt>
+        <dd>judging A (Ace)</dd>
+      </dl><dl><dt>
+
+          <code><a href="card_value.html">card_value()</a></code>
+
+        </dt>
+        <dd>Obtain the initial points of a single card in Blackjack (ensure J/Q/K == 10，A == 11)</dd>
+      </dl><dl><dt>
+
+          <code><a href="card_suit.html">card_suit()</a></code>
+
+        </dt>
+        <dd>Extract the suit from a card vector</dd>
+      </dl><dl><dt>
+
+          <code><a href="card_rank.html">card_rank()</a></code>
+
+        </dt>
+        <dd>Extract the rank of a card Generic function to extract the rank (e.g., "A", "10", "J") from an object representing a card. This function supports objects of class <code>card</code> or character strings representing cards.</dd>
+      </dl><dl><dt>
+
+          <code><a href="as.character.card.html">as.character(<i>&lt;card&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Coerce card vector to character</dd>
+      </dl><dl><dt>
+
+          <code><a href="print.card.html">print(<i>&lt;card&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a card vector</dd>
+      </dl></div><div class="section level2">
+      <h2 id="game-progression">Game Progression<a class="anchor" aria-label="anchor" href="#game-progression"></a></h2>
+
+      <div class="section-desc"><p>Functions related to splitting, insurance, and gameplay actions.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
           <code><a href="handle_splitting.html">handle_splitting()</a></code>
 
         </dt>
-        <dd>Handle splitting</dd>
+        <dd>Handle splitting of pairs</dd>
       </dl><dl><dt>
 
           <code><a href="handle_insurance.html">handle_insurance()</a></code>
 
         </dt>
-        <dd>Handle insurance and dealer blackjack check</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_bets.html">get_bets()</a></code>
-
-        </dt>
-        <dd>Get Bets from Players</dd>
+        <dd>Handle insurance offers and dealer blackjack check</dd>
       </dl></div><div class="section level2">
       <h2 id="outcome-and-scoring">Outcome and Scoring<a class="anchor" aria-label="anchor" href="#outcome-and-scoring"></a></h2>
 
-      <div class="section-desc"><p>Game ending, scoring, and decision helpers.</p></div>
+      <div class="section-desc"><p>Functions for scoring hands and determining winners.</p></div>
 
 
     </div><div class="section level2">
@@ -148,14 +230,26 @@
         <dd>Check 5-card Charlie condition</dd>
       </dl><dl><dt>
 
+          <code><a href="determine_winner.html">determine_winner()</a></code>
+
+        </dt>
+        <dd>Determine winner(s) of a Blackjack game</dd>
+      </dl><dl><dt>
+
           <code><a href="end_round.html">end_round()</a></code>
 
         </dt>
         <dd>End round processing</dd>
-      </dl></div><div class="section level2">
-      <h2 id="data-management">Data Management<a class="anchor" aria-label="anchor" href="#data-management"></a></h2>
+      </dl><dl><dt>
 
-      <div class="section-desc"><p>Saving/loading player data and managing results.</p></div>
+          <code><a href="display_final_results.html">display_final_results()</a></code>
+
+        </dt>
+        <dd>Display final results with betting outcomes</dd>
+      </dl></div><div class="section level2">
+      <h2 id="results-and-visualization">Results and Visualization<a class="anchor" aria-label="anchor" href="#results-and-visualization"></a></h2>
+
+      <div class="section-desc"><p>Functions to plot or display player and bankroll results.</p></div>
 
 
     </div><div class="section level2">
@@ -164,24 +258,6 @@
 
 
       <dl><dt>
-
-          <code><a href="save_players.html">save_players()</a></code>
-
-        </dt>
-        <dd>Save players to disk</dd>
-      </dl><dl><dt>
-
-          <code><a href="load_players.html">load_players()</a></code>
-
-        </dt>
-        <dd>Load players from disk</dd>
-      </dl><dl><dt>
-
-          <code><a href="display_final_results.html">display_final_results()</a></code>
-
-        </dt>
-        <dd>Display final results with betting outcomes</dd>
-      </dl><dl><dt>
 
           <code><a href="plot_player_ranking.html">plot_player_ranking()</a></code>
 
@@ -194,9 +270,9 @@
         </dt>
         <dd>Plot bankroll history over rounds</dd>
       </dl></div><div class="section level2">
-      <h2 id="initial-setup-utilities">Initial Setup &amp; Utilities<a class="anchor" aria-label="anchor" href="#initial-setup-utilities"></a></h2>
+      <h2 id="data-management">Data Management<a class="anchor" aria-label="anchor" href="#data-management"></a></h2>
 
-      <div class="section-desc"><p>Supporting functions for initial game state and dealer logic.</p></div>
+      <div class="section-desc"><p>Save/load/reset player data and session information.</p></div>
 
 
     </div><div class="section level2">
@@ -206,76 +282,23 @@
 
       <dl><dt>
 
-          <code><a href="card.html">card()</a></code>
+          <code><a href="save_players.html">save_players()</a></code>
 
         </dt>
-        <dd>Create a card vector</dd>
+        <dd>Save players and bankroll history to disk</dd>
       </dl><dl><dt>
 
-          <code><a href="card_is_ace.html">card_is_ace()</a></code>
+          <code><a href="load_players.html">load_players()</a></code>
 
         </dt>
-        <dd>judging A (Ace)</dd>
-      </dl><dl><dt>
-
-          <code><a href="card_is_face.html">card_is_face()</a></code>
-
-        </dt>
-        <dd>judging J/Q/K</dd>
-      </dl><dl><dt>
-
-          <code><a href="card_rank.html">card_rank()</a></code>
-
-        </dt>
-        <dd>Extract the rank of a card Generic function to extract the rank (e.g., "A", "10", "J") from an object representing a card. This function supports objects of class <code>card</code> or character strings representing cards.</dd>
-      </dl><dl><dt>
-
-          <code><a href="card_suit.html">card_suit()</a></code>
-
-        </dt>
-        <dd>Extract the suit from a card vector</dd>
-      </dl><dl><dt>
-
-          <code><a href="card_value.html">card_value()</a></code>
-
-        </dt>
-        <dd>Obtain the initial points of a single card in Blackjack (ensure J/Q/K == 10，A == 11)</dd>
-      </dl><dl><dt>
-
-          <code><a href="deal_cards.html">deal_cards()</a></code>
-
-        </dt>
-        <dd>Deal initial cards in Blackjack</dd>
-      </dl><dl><dt>
-
-          <code><a href="dealer_action.html">dealer_action()</a></code>
-
-        </dt>
-        <dd>Dealer action logic</dd>
-      </dl><dl><dt>
-
-          <code><a href="setup_and_display_initial.html">setup_and_display_initial()</a></code>
-
-        </dt>
-        <dd>Set up the game and display initial hands with bets</dd>
+        <dd>Load players and bankroll history from disk</dd>
       </dl><dl><dt>
 
           <code><a href="reset_game_data.html">reset_game_data()</a></code>
 
         </dt>
-        <dd>Reset game memory: players_db and/or bankroll_history</dd>
-      </dl></div><div class="section level2">
-      <h2 id="internal-utilities">Internal Utilities<a class="anchor" aria-label="anchor" href="#internal-utilities"></a></h2>
-
-      <div class="section-desc"><p>Useful internal helpers exposed to users.</p></div>
-
-
-    </div><div class="section level2">
-
-
-
-
-      <dl><dt>
+        <dd>Reset game memory: players and/or bankroll history</dd>
+      </dl><dl><dt>
 
           <code><a href="get_home_dir.html">get_home_dir()</a></code>
 
@@ -283,16 +306,27 @@
         <dd>Get the User's Home Directory</dd>
       </dl><dl><dt>
 
-          <code><a href="new_blackjack_hand.html">new_blackjack_hand()</a></code>
-
-        </dt>
-        <dd>Create a blackjack hand (S3 vctrs)</dd>
-      </dl><dl><dt>
-
           <code><a href="players_data.html">players_data</a></code>
 
         </dt>
         <dd>Sample players data for vignette examples</dd>
+      </dl></div><div class="section level2">
+      <h2 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a></h2>
+
+      <div class="section-desc"><p>Run AI-driven game simulations for strategy analysis.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="simulate_blackjack.html">simulate_blackjack()</a></code>
+
+        </dt>
+        <dd>Simulate Blackjack games with customizable hit, insurance, and split strategies</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

@@ -48,19 +48,19 @@ updating bankroll history, and plotting results.</p>
 
 
 <dl><dt id="arg-player-hands">player_hands<a class="anchor" aria-label="anchor" href="#arg-player-hands"></a></dt>
-<dd><p>Named list of player hands.</p></dd>
+<dd><p>Named list of player hands (each may be a list of <code>blackjack_hand</code> objects).</p></dd>
 
 
 <dt id="arg-dealer-hand">dealer_hand<a class="anchor" aria-label="anchor" href="#arg-dealer-hand"></a></dt>
-<dd><p>Dealer's hand.</p></dd>
+<dd><p>Dealer's <code>blackjack_hand</code> object.</p></dd>
 
 
 <dt id="arg-players">players<a class="anchor" aria-label="anchor" href="#arg-players"></a></dt>
-<dd><p>Named list of players with coin balances.</p></dd>
+<dd><p>Named list of player info (must include 'coins').</p></dd>
 
 
 <dt id="arg-players-db">players_db<a class="anchor" aria-label="anchor" href="#arg-players-db"></a></dt>
-<dd><p>Player Database in Local Directory</p></dd>
+<dd><p>Named list: persistent player info.</p></dd>
 
 
 <dt id="arg-bankroll-history">bankroll_history<a class="anchor" aria-label="anchor" href="#arg-bankroll-history"></a></dt>
@@ -69,9 +69,22 @@ updating bankroll history, and plotting results.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with updated `players` and `bankroll_history`.</p>
-    </div>
+    <p>A list with:</p><dl><dt>players</dt>
+<dd><p>Updated named list of player info.</p></dd>
 
+    <dt>bankroll_history</dt>
+<dd><p>Updated coin history list.</p></dd>
+
+
+</dl></div>
+
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="fu">end_round</span><span class="op">(</span><span class="va">player_hands</span>, <span class="va">dealer_hand</span>, <span class="va">players</span>, <span class="va">players_db</span>, <span class="va">bankroll_history</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
