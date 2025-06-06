@@ -210,8 +210,6 @@ calculate_score_cpp(c("A", "A", "9"))  # Returns 21
 
 You can pass any function to the `split` or `buy_insurance` argument in `simulate_blackjack()`, enabling sophisticated, context-dependent strategies.
 
-### **1. Basic custom logic (split only A or 8, buy insurance only with blackjack)**
-
 ### 1. Advanced logic: Take dealer's upcard into account for split
 
 ```{r eval=FALSE}
