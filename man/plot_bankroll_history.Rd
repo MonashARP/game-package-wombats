@@ -16,12 +16,8 @@ A plotly line chart object
 Creates a line chart of bankrolls over time using Plotly.
 }
 \examples{
-# Example data: 2 rounds, 2 players
-bhist <- list(
-  c(You = 1100, Computer_1 = 900),
-  c(You = 1200, Computer_1 = 800)
-)
-if (requireNamespace("plotly", quietly = TRUE)) {
-  plot_bankroll_history(bhist)
+\dontrun{
+bhist <- list(c(Alice = 1000, Bob = 900))
+plot_bankroll_history(bhist)
 }
 }

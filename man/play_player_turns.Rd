@@ -25,15 +25,17 @@ A list:
 Allows each player (human or computer) to play their turn for all hands (with hit/stand/double logic).
 }
 \examples{
-# Simulate a single turn for two players
-player_hands <- list(
-  Alice = list(new_blackjack_hand(c("9♠", "7♦"))),
-  Bob = list(new_blackjack_hand(c("5♣", "K♥")))
-)
-deck <- c("8♣", "2♦", "4♠")
-players <- list(
-  Alice = list(coins = 800, bets = 100, is_computer = FALSE),
-  Bob = list(coins = 800, bets = 100, is_computer = TRUE)
-)
-play_player_turns(player_hands, deck, players)
+\dontrun{
+  # Simulate a single turn for two players
+  player_hands <- list(
+    Alice = list(new_blackjack_hand(c("9♠", "7♦"))),
+    Bob = list(new_blackjack_hand(c("5♣", "K♥")))
+  )
+  deck <- c("8♣", "2♦", "4♠")
+  players <- list(
+    Alice = list(coins = 800, bets = 100, is_computer = FALSE),
+    Bob = list(coins = 800, bets = 100, is_computer = TRUE)
+  )
+  play_player_turns(player_hands, deck, players)
+}
 }

@@ -113,17 +113,19 @@ human_prompt_action <- function(first_move) {
 #'     \item{players}{Updated player info.}
 #'       }
 #' @examples
-#' # Simulate a single turn for two players
-#' player_hands <- list(
-#'   Alice = list(new_blackjack_hand(c("9♠", "7♦"))),
-#'   Bob = list(new_blackjack_hand(c("5♣", "K♥")))
-#' )
-#' deck <- c("8♣", "2♦", "4♠")
-#' players <- list(
-#'   Alice = list(coins = 800, bets = 100, is_computer = FALSE),
-#'   Bob = list(coins = 800, bets = 100, is_computer = TRUE)
-#' )
-#' play_player_turns(player_hands, deck, players)
+#' \dontrun{
+#'   # Simulate a single turn for two players
+#'   player_hands <- list(
+#'     Alice = list(new_blackjack_hand(c("9♠", "7♦"))),
+#'     Bob = list(new_blackjack_hand(c("5♣", "K♥")))
+#'   )
+#'   deck <- c("8♣", "2♦", "4♠")
+#'   players <- list(
+#'     Alice = list(coins = 800, bets = 100, is_computer = FALSE),
+#'     Bob = list(coins = 800, bets = 100, is_computer = TRUE)
+#'   )
+#'   play_player_turns(player_hands, deck, players)
+#' }
 #' @export
 play_player_turns <- function(player_hands, deck, players) {
   if (!is.list(player_hands) || length(player_hands) == 0) {
