@@ -65,13 +65,13 @@
 </h2>
 <p><strong>wombat21</strong> is an R package that simulates a fully playable game of Blackjack (21). It supports:</p>
 <ul>
-<li><p>Multiplayer (up to 6 players)</p></li>
-<li><p>Computer-controlled opponents</p></li>
+<li><p>Multiplayer mode with up to 6 players (human or AI)</p></li>
+<li><p>Customizable dealer logic with automation support</p></li>
 <li><p>Betting system with coin tracking</p></li>
 <li><p>Game logic: splitting, doubling down, and insurance</p></li>
-<li><p>Dealer logic (automated play)</p></li>
-<li><p>Player profiles saved locally</p></li>
-<li><p>Graphs for coin history and ranking</p></li>
+<li><p>Strategy simulation with user-defined rules</p></li>
+<li><p>Bankroll visualization across rounds</p></li>
+<li><p>Auto-save and resume for player profiles</p></li>
 </ul>
 </div>
 <div class="section level2">
@@ -86,9 +86,164 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://monasharp.github.io/game-package-wombats/">wombat21</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="saving-game-data">Saving Game Data<a class="anchor" aria-label="anchor" href="#saving-game-data"></a>
+<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://monasharp.github.io/game-package-wombats/">wombat21</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Start a multiplayer Blackjack game (interactive mode)</span></span>
+<span><span class="fu"><a href="reference/play.html">play</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or simulate 1000 single-player strategy games (simulation mode)</span></span>
+<span><span class="fu"><a href="reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span>num_rounds <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<p>To explore saved player data, use:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/get_home_dir.html">get_home_dir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="reference/get_home_dir.html">get_home_dir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="gameplay-mode-interactive-blackjack">Gameplay Mode: Interactive Blackjack<a class="anchor" aria-label="anchor" href="#gameplay-mode-interactive-blackjack"></a>
+</h2>
+<p>The play() function launches an interactive game for 1–6 players. Features include:</p>
+<ul>
+<li><p>Mix of human and AI players(users can choose how many AI or human players wanted)</p></li>
+<li><p>Full support for Blackjack rules: hit, stand, double down, split, insurance</p></li>
+<li><p>Dealer plays automatically using hard-coded logic(user can customize dealer logic if desired)</p></li>
+<li><p>Coin balances persist across rounds(initial amout 1000 coins, minimum 10 coins bnets per game, auto bankrupt detection)</p></li>
+<li><p>Game runs entirely in the R console</p></li>
+</ul>
+<p>Gameplay loop:</p>
+<ol style="list-style-type: decimal">
+<li><p>Enter player names and bets</p></li>
+<li><p>Deal cards</p></li>
+<li><p>Each player takes turns</p></li>
+<li><p>Dealer plays automatically</p></li>
+<li><p>Results are calculated and coins updated</p></li>
+</ol>
+<p>Example:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Start a 2-player game: 1 human, 1 AI</span></span>
+<span><span class="fu"><a href="reference/play.html">play</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Example gameplay prompt:</span></span>
+<span><span class="co"># &gt; Enter total number of players (1–6): 2</span></span>
+<span><span class="co"># &gt; Enter number of computer players (0–2): 1</span></span>
+<span><span class="co"># &gt; Enter unique name for Human Player 1: alice </span></span>
+<span><span class="co"># &gt; </span></span>
+<span><span class="co"># &gt; New player created: alice with 1000 coins.</span></span>
+<span><span class="co"># &gt; New computer player created: Computer_1 with 1000 coins.</span></span>
+<span><span class="co"># &gt; </span></span>
+<span><span class="co"># &gt; alice, enter your bet (available: 1000): 10 </span></span>
+<span><span class="co"># &gt;                       // Here,You can place bets; assume 10 coins now</span></span>
+<span><span class="co"># &gt; Computer_1 (computer) bets 10 coins.</span></span>
+<span><span class="co"># &gt; </span></span>
+<span><span class="co"># &gt; alice's hand: K♠ Q♣   |  Bet: 10</span></span>
+<span><span class="co"># &gt; Computer_1's hand: 3♣ ?   |  Bet: 10</span></span>
+<span><span class="co"># &gt; Dealer shows: 8♦ ?</span></span>
+<span><span class="co"># &gt; </span></span>
+<span><span class="co"># &gt; --- alice ('human') Playing ---</span></span>
+<span><span class="co"># &gt; Hand 1: [K♠ Q♣]</span></span>
+<span><span class="co"># &gt; Score: 20</span></span>
+<span><span class="co"># &gt; Hit, Stand or Double? (hit/stand/double/exit):</span></span>
+<span></span>
+<span><span class="co"># After making your move, the game proceeds to the dealer's turn, outcomes are revealed, and coin balances are updated automatically.</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="customizing-dealer-logic">Customizing Dealer Logic<a class="anchor" aria-label="anchor" href="#customizing-dealer-logic"></a>
+</h3>
+<p>By default, the dealer hits until reaching 17 or more, like standard Blackjack. To override this behavior, you can supply a custom function in the simulation mode (not <code><a href="reference/play.html">play()</a></code> yet):</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Custom dealer that stops at 16 instead of 17</span></span>
+<span><span class="va">custom_dealer</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">hand</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">score</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/calculate_score.html">calculate_score</a></span><span class="op">(</span><span class="va">hand</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">score</span> <span class="op">&lt;</span> <span class="fl">16</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"hit"</span><span class="op">)</span></span>
+<span>  <span class="kw">else</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"stand"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>In the current release, <code><a href="reference/play.html">play()</a></code> uses hard-coded dealer logic, but simulation (<code><a href="reference/simulate_blackjack.html">simulate_blackjack()</a></code>) allows for pluggable decision functions.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="simulation-mode-strategy-testing">Simulation Mode: Strategy Testing<a class="anchor" aria-label="anchor" href="#simulation-mode-strategy-testing"></a>
+</h2>
+<p>Use <code><a href="reference/simulate_blackjack.html">simulate_blackjack()</a></code> to test decision strategies against a standard dealer.</p>
+<p>Supports:</p>
+<ul>
+<li><p>Custom player strategies for split or insurance (pass functions)</p></li>
+<li><p>Repeated rounds with reproducible outcomes</p></li>
+<li><p>Summary of win/loss stats</p></li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
+<span>  num_rounds <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  split <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  buy_insurance <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">hand</span>, <span class="va">dealer_card</span><span class="op">)</span> <span class="va">dealer_card</span> <span class="op">==</span> <span class="st">"A"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># result checking</span></span>
+<span><span class="va">sim</span><span class="op">$</span><span class="va">win_rate</span></span>
+<span><span class="va">sim</span><span class="op">$</span><span class="va">split_rate</span></span>
+<span><span class="va">sim</span><span class="op">$</span><span class="va">final_coins</span></span></code></pre></div>
+<p>Simulation is <strong>single-player</strong> only, designed for strategy evaluation—not interactive gameplay. Make sure to set <strong>enough initial coins</strong> for large simulations.</p>
+</div>
+<div class="section level2">
+<h2 id="game-data-management">Game Data Management<a class="anchor" aria-label="anchor" href="#game-data-management"></a>
+</h2>
+<div class="section level3">
+<h3 id="saving-game-data">Saving Game Data<a class="anchor" aria-label="anchor" href="#saving-game-data"></a>
+</h3>
 <p>Player data (names, coin balances, history) are stored locally using <code><a href="reference/get_home_dir.html">get_home_dir()</a></code>. Unique player names are enforced.</p>
+<ul>
+<li><p>Coin balances and player profiles are saved between sessions</p></li>
+<li><p>Unique names prevent overwriting</p></li>
+<li><p>Use <code>unlink(get_home_dir(), recursive = TRUE)</code> to reset all</p></li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/get_home_dir.html">get_home_dir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; "/Users/yourname/.wombat21"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="reference/get_home_dir.html">get_home_dir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "players.rds" "bankroll.rds"</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="reset-game-data">Reset Game Data<a class="anchor" aria-label="anchor" href="#reset-game-data"></a>
+</h3>
+<p>To remove all saved progress and start fresh:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Permanently delete all saved players and history</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="fu"><a href="reference/get_home_dir.html">get_home_dir</a></span><span class="op">(</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>This will reset the game to its default state. New players will be prompted to enter their names and start with 1000 coins.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="results-visualization">Results Visualization<a class="anchor" aria-label="anchor" href="#results-visualization"></a>
+</h2>
+<p>You can use <code><a href="reference/plot_bankroll_history.html">plot_bankroll_history()</a></code> to visualize how each player’s coin balance changes over time:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Example: plot bankrolls from a previous game session</span></span>
+<span><span class="va">bankroll_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/load_players.html">load_players</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">bankroll_history</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/plot_bankroll_history.html">plot_bankroll_history</a></span><span class="op">(</span><span class="va">bankroll_data</span><span class="op">)</span></span></code></pre></div>
+<p>The plot shows the total coins for each player across rounds, helping users evaluate performance and strategy over time.</p>
+</div>
+<div class="section level2">
+<h2 id="learn-more">Learn More<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+</h2>
+<p>To learn more about how each function works, you can view the documentation directly in your R console:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>?<span class="sc">&lt;</span>function_name<span class="sc">&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co"># e.g.</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>?simulate_blackjack</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>?plot_bankroll_history</span></code></pre></div>
+<p>Advanced users can also explore internal helper functions by browsing the source code or calling them directly with the ::: operator:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Call an internal function (use with care)</span></span>
+<span><span class="fu">wombat21</span><span class="fu">:::</span><span class="va">play_dealer_turn</span></span></code></pre></div>
+<p>For a full overview of the package, check out the vignettes and function references:</p>
+<p>👉 Package Website (Documentation): <a href="https://monasharp.github.io/game-package-wombats/">wombat21</a></p>
+</div>
+<div class="section level2">
+<h2 id="have-a-try-now-">💡Have a try now ~<a class="anchor" aria-label="anchor" href="#have-a-try-now-"></a>
+</h2>
+<p>We hope you enjoy exploring strategies, simulations, and game logic with wombat21!</p>
+<p>By now, you probably have a pretty good idea of what this package is all about — and it’s time to put that knowledge into play.</p>
+<p>Happy coding, and enjoy the game.🍀</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
