@@ -11,19 +11,19 @@
 **wombat21** is an R package that simulates a fully playable game of
 Blackjack (21). It supports:
 
-- Multiplayer (up to 6 players)
+- Multiplayer mode with up to 6 players (human or AI)
 
-- Computer-controlled opponents
+- Customizable dealer logic with automation support
 
 - Betting system with coin tracking
 
 - Game logic: splitting, doubling down, and insurance
 
-- Dealer logic (automated play)
+- Strategy simulation with user-defined rules
 
-- Player profiles saved locally
+- Bankroll visualization across rounds
 
-- Graphs for coin history and ranking
+- Auto-save and resume for player profiles
 
 ## Installation
 
@@ -41,7 +41,214 @@ Then load the package:
 library(wombat21)
 ```
 
-## Saving Game Data
+## Quick Start
+
+``` r
+library(wombat21)
+
+# Start a multiplayer Blackjack game (interactive mode)
+play()
+
+# Or simulate 1000 single-player strategy games (simulation mode)
+simulate_blackjack(num_rounds = 1000)
+```
+
+To explore saved player data, use:
+
+``` r
+get_home_dir()
+list.files(get_home_dir())
+```
+
+## Gameplay Mode: Interactive Blackjack
+
+The play() function launches an interactive game for 1–6 players.
+Features include:
+
+- Mix of human and AI players(users can choose how many AI or human
+  players wanted)
+
+- Full support for Blackjack rules: hit, stand, double down, split,
+  insurance
+
+- Dealer plays automatically using hard-coded logic(user can customize
+  dealer logic if desired)
+
+- Coin balances persist across rounds(initial amout 1000 coins, minimum
+  10 coins bnets per game, auto bankrupt detection)
+
+- Game runs entirely in the R console
+
+Gameplay loop:
+
+1.  Enter player names and bets
+
+2.  Deal cards
+
+3.  Each player takes turns
+
+4.  Dealer plays automatically
+
+5.  Results are calculated and coins updated
+
+Example:
+
+``` r
+# Start a 2-player game: 1 human, 1 AI
+play()
+
+# Example gameplay prompt:
+# > Enter total number of players (1–6): 2
+# > Enter number of computer players (0–2): 1
+# > Enter unique name for Human Player 1: alice 
+# > 
+# > New player created: alice with 1000 coins.
+# > New computer player created: Computer_1 with 1000 coins.
+# > 
+# > alice, enter your bet (available: 1000): 10 
+# >                       // Here,You can place bets; assume 10 coins now
+# > Computer_1 (computer) bets 10 coins.
+# > 
+# > alice's hand: K♠ Q♣   |  Bet: 10
+# > Computer_1's hand: 3♣ ?   |  Bet: 10
+# > Dealer shows: 8♦ ?
+# > 
+# > --- alice ('human') Playing ---
+# > Hand 1: [K♠ Q♣]
+# > Score: 20
+# > Hit, Stand or Double? (hit/stand/double/exit):
+
+# After making your move, the game proceeds to the dealer's turn, outcomes are revealed, and coin balances are updated automatically.
+```
+
+### Customizing Dealer Logic
+
+By default, the dealer hits until reaching 17 or more, like standard
+Blackjack. To override this behavior, you can supply a custom function
+in the simulation mode (not `play()` yet):
+
+``` r
+# Custom dealer that stops at 16 instead of 17
+custom_dealer <- function(hand) {
+  score <- calculate_score(hand)
+  if (score < 16) return("hit")
+  else return("stand")
+}
+```
+
+In the current release, `play()` uses hard-coded dealer logic, but
+simulation (`simulate_blackjack()`) allows for pluggable decision
+functions.
+
+## Simulation Mode: Strategy Testing
+
+Use `simulate_blackjack()` to test decision strategies against a
+standard dealer.
+
+Supports:
+
+- Custom player strategies for split or insurance (pass functions)
+
+- Repeated rounds with reproducible outcomes
+
+- Summary of win/loss stats
+
+``` r
+simulate_blackjack(
+  num_rounds = 500,
+  split = TRUE,
+  buy_insurance = function(hand, dealer_card) dealer_card == "A"
+)
+# result checking
+sim$win_rate
+sim$split_rate
+sim$final_coins
+```
+
+Simulation is **single-player** only, designed for strategy
+evaluation—not interactive gameplay. Make sure to set **enough initial
+coins** for large simulations.
+
+## Game Data Management
+
+### Saving Game Data
 
 Player data (names, coin balances, history) are stored locally using
 `get_home_dir()`. Unique player names are enforced.
+
+- Coin balances and player profiles are saved between sessions
+
+- Unique names prevent overwriting
+
+- Use `unlink(get_home_dir(), recursive = TRUE)` to reset all
+
+``` r
+get_home_dir()
+#> "/Users/yourname/.wombat21"
+
+list.files(get_home_dir())
+#> [1] "players.rds" "bankroll.rds"
+```
+
+### Reset Game Data
+
+To remove all saved progress and start fresh:
+
+``` r
+# Permanently delete all saved players and history
+unlink(get_home_dir(), recursive = TRUE)
+```
+
+This will reset the game to its default state. New players will be
+prompted to enter their names and start with 1000 coins.
+
+## Results Visualization
+
+You can use `plot_bankroll_history()` to visualize how each player’s
+coin balance changes over time:
+
+``` r
+# Example: plot bankrolls from a previous game session
+bankroll_data <- load_players()$bankroll_history
+
+plot_bankroll_history(bankroll_data)
+```
+
+The plot shows the total coins for each player across rounds, helping
+users evaluate performance and strategy over time.
+
+## Learn More
+
+To learn more about how each function works, you can view the
+documentation directly in your R console:
+
+``` r
+?<function_name>
+# e.g.
+?simulate_blackjack
+?plot_bankroll_history
+```
+
+Advanced users can also explore internal helper functions by browsing
+the source code or calling them directly with the ::: operator:
+
+``` r
+# Call an internal function (use with care)
+wombat21:::play_dealer_turn
+```
+
+For a full overview of the package, check out the vignettes and function
+references:
+
+👉 Package Website (Documentation):
+[wombat21](https://monasharp.github.io/game-package-wombats/)
+
+## 💡Have a try now ~
+
+We hope you enjoy exploring strategies, simulations, and game logic with
+wombat21!
+
+By now, you probably have a pretty good idea of what this package is all
+about — and it’s time to put that knowledge into play.
+
+Happy coding, and enjoy the game.🍀
