@@ -25,7 +25,7 @@ navbar:
       href: articles/wombat21.html
     advanced-usage:
       text: "Design and Usage"
-      href: articles/AD_wombat21.html
+      href: articles/Design_wombat21.html
     reference:
       text: "Reference"
       href: reference/index.html
@@ -109,7 +109,7 @@ articles:
       - wombat21
   - title: "Design and Usage"
     contents:
-      - AD_wombat21
+      - Design_wombat21
 
 authors:
   "Sun Yan Joanna Ma":

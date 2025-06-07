@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 **`wombat21`** is a modern, fully-featured Blackjack game engine for R. It lets you play with friends or AI, simulate thousands of games, and analyze results—all with advanced Blackjack rules and persistent player records.
 
-```{r eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+```{r eval=TRUE, warning=FALSE, message=FALSE}
 library(wombat21)
 ```
 

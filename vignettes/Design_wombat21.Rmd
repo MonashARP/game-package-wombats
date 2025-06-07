@@ -58,6 +58,72 @@ All user-facing functions in `wombat21` are named to be clear, concise, and cons
 
 This consistent naming and argument style makes the package intuitive to use and easy to extend for both new and advanced users.
 
+## 🗂️ Functions Specification
+
+1.  **Card Objects:** Card validation and attribute extraction [*Main Arguments*: `card` ]
+
+    -   [*card_utils.R*]{style="color:gray"} ：`card_is_face()`, `card_is_ace()`, `card_value()`, `card_suit()`, `card_rank()`
+
+    -   [*card-class.R*]{style="color:gray"} ：`card()`, `format.card()`, `print.card()`, `vec_cast.card()`, `as.character.card()`
+
+2.  **Hand Objects:** Hand creation and validation [*Main Arguments*: `cards`, `hand`]
+
+    -   [*hand_utils.R*]{style="color:gray"} ：`new_blackjack_hand()`
+
+    -   [*hand_type.R*]{style="color:gray"} ：`is_five_card_charlie()`, `is_blackjack()`
+
+3.  **Scoring Logic:** Hand scoring and rules [*Main Arguments*: `hand`, `card`]
+
+    -   [*score_cal.R*]{style="color:gray"} ：`calculate_score()`
+
+    -   [*RcppExports.R*]{style="color:gray"} ：`calculate_score_cpp()`
+
+4.  **Dealing & Setup:** Initial hands and deck operations [*Main Arguments*: `players`, `deck`]
+
+    -   [*deal_card.R*]{style="color:gray"} ：`deal_cards()`
+
+    -   [*setup.R*]{style="color:gray"} ：`setup_and_display_initial()`
+
+5.  **Gameplay:** Main loop and player actions [*Main Arguments*: none]
+
+    -   [*game_loop.R*]{style="color:gray"} ：`play()`, `ask_play_again()`, `exit()`
+
+    -   [*player_logic.R*]{style="color:gray"} ：`player_action()`, `play_player_turns()`
+
+6.  **Betting and Insurance** [*Main Arguments*: `players`, `hand`]
+
+    -   [*bets.R*]{style="color:gray"} ：`get_bets()`
+
+    -   [*Insurance.R*]{style="color:gray"} ：`handle_insurance()`
+
+7.  **Splitting** [*Main Arguments*: `hand`, `players`]
+
+    -   [*split.R*]{style="color:gray"} ：`handle_splitting()`
+
+8.  **Simulation** [*Main Arguments*: `num_rounds`, `split`, `buy_insurance`]
+
+    -   [*simulation.R*]{style="color:gray"} ：`simulate_blackjack()`
+
+9.  **Result Judgement & Summary** [*Main Arguments*: `scores`, `players`, `hands`]
+
+    -   [*results.R*]{style="color:gray"} ：`end_round()`, `display_final_results()`, `determine_winner()`
+
+10. **Player I/O & Persistences** [*Main Arguments*: `players`, `bankroll`, `id_map`]
+
+    -   [*input_player.R*]{style="color:gray"} ：`input_players()`
+
+    -   [*io.R*]{style="color:gray"} ：`save_players()`, `load_players()`, `reset_game_data()`
+
+11. **Visualization** [*Main Arguments*: `bankroll_history`]
+
+    -   [*bankroll_graph.R*]{style="color:gray"} ：`plot_bankroll_history()`
+
+    -   [*results.R*]{style="color:gray"} ：`plot_player_ranking()`
+
+12. **Utilities** [*Main Arguments*: none]
+
+    -   [*data_directory.R*]{style="color:gray"} ：\`get_home_dir()
+
 ## 🗃️ Core Data Structures
 
 -   **card**: Represents a single playing card (fields: `rank`, `suit`)
@@ -181,15 +247,11 @@ This gives:
 ### Summary
 
 ::: {style="width:100%"}
-+---------------------+--------------------------+---------------------------------------------+
 | Aspect              | Technique Used           | Purpose                                     |
-+=====================+==========================+=============================================+
+|---------------------|--------------------------|---------------------------------------------|
 | Hit/stand condition | `rlang::eval_tidy()`     | Dynamically evaluate game thresholds        |
-+---------------------+--------------------------+---------------------------------------------+
 | Rank/value logic    | S3 generic dispatch      | Allow multiple input types (`card`, `char`) |
-+---------------------+--------------------------+---------------------------------------------+
 | Extendability       | `vctrs::new_rcrd()` + S3 | Build and validate extensible game types    |
-+---------------------+--------------------------+---------------------------------------------+
 :::
 
 ### Want to do more?
@@ -255,13 +317,10 @@ calculate_score_cpp(c("A", "A", "9"))  # Returns 21
 **Speed Comparison (10,000 hands)**
 
 ::: {style="width:100%"}
-+------------------------------+--------------------+--------------------+
-| Method                       | Elapsed Time (sec) | Relative Speed     |
-+==============================+====================+====================+
-| Pure R (`calculate_score_r`) | 0.28               | 1× (baseline)      |
-+------------------------------+--------------------+--------------------+
-| Rcpp C++ (`calculate_score`) | 0.06               | 4.7× faster        |
-+------------------------------+--------------------+--------------------+
+| Method                       | Elapsed Time (sec) | Relative Speed |
+|------------------------------|--------------------|----------------|
+| Pure R (`calculate_score_r`) | 0.28               | 1× (baseline)  |
+| Rcpp C++ (`calculate_score`) | 0.06               | 4.7× faster    |
 :::
 
 ## ✅ Testing and Data Persistence
@@ -372,26 +431,26 @@ Date: 2025-06-06
 ## 🧑‍🤝‍🧑 Team Contribution Summary
 
 ::: {style="width:100%"}
-+-----------------+-----------------------------------------------------------------------------------------+
-| Name            | Key Contributions                                                                       |
-+=================+=========================================================================================+
-| Weizhu Chen     | \- Designed and implemented main game loop and core mechanics\                          |
-|                 | - Developed S3 generics/methods (e.g., `card_rank`, `vec_cast`)\                        |
-|                 | - Modularized and refactored codebase\                                                  |
-|                 | - Added simulation feature and usage examples\                                          |
-|                 | - Improved documentation structure and naming consistency                               |
-+-----------------+-----------------------------------------------------------------------------------------+
-| Joanna Ma       | \- Developed multi-player and computer player support\                                  |
-|                 | - Implemented betting and coin management\                                              |
-|                 | - Created visualization functions for player ranking and coin history\                  |
-|                 | - Debugged and enhanced S3/vctrs compatibility\                                         |
-|                 | - Helped with data storage and user interface troubleshooting                           |
-+-----------------+-----------------------------------------------------------------------------------------+
-| Aneesh Agarwal  | \- Developed and integrated C++ backend for fast hand scoring (`calculate_score_cpp`)\  |
-|                 | - Provided function examples and unit tests\                                            |
-|                 | - Contributed to vignette and design documentation (including metaprogramming choices)\ |
-|                 | - Assisted in troubleshooting and code review                                           |
-+-----------------+-----------------------------------------------------------------------------------------+
++----------------+-----------------------------------------------------------------------------------------+
+| Name           | Key Contributions                                                                       |
++================+=========================================================================================+
+| Weizhu Chen    | \- Designed and implemented main game loop and core mechanics\                          |
+|                | - Developed S3 generics/methods (e.g., `card_rank`, `vec_cast`)\                        |
+|                | - Modularized and refactored codebase\                                                  |
+|                | - Added simulation feature and usage examples\                                          |
+|                | - Improved documentation structure and naming consistency                               |
++----------------+-----------------------------------------------------------------------------------------+
+| Joanna Ma      | \- Developed multi-player and computer player support\                                  |
+|                | - Implemented betting and coin management\                                              |
+|                | - Created visualization functions for player ranking and coin history\                  |
+|                | - Debugged and enhanced S3/vctrs compatibility\                                         |
+|                | - Helped with data storage and user interface troubleshooting                           |
++----------------+-----------------------------------------------------------------------------------------+
+| Aneesh Agarwal | \- Developed and integrated C++ backend for fast hand scoring (`calculate_score_cpp`)\  |
+|                | - Provided function examples and unit tests\                                            |
+|                | - Contributed to vignette and design documentation (including metaprogramming choices)\ |
+|                | - Assisted in troubleshooting and code review                                           |
++----------------+-----------------------------------------------------------------------------------------+
 :::
 
 ::: {style="text-align: right;"}
