@@ -6,3 +6,5 @@
 ^pkgdown$
 ^README\.Rmd$
 ^\.github$
+^README\.html$
+^data-raw$

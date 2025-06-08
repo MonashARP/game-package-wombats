@@ -113,15 +113,29 @@ human_prompt_action <- function(first_move) {
 #'     \item{players}{Updated player info.}
 #'       }
 #' @examples
-#' \dontrun{
-#'   # Simulate a single turn for two players
+#' # Automated play for 2 computer players (does not require user input)
+#' \donttest{
 #'   player_hands <- list(
 #'     Alice = list(new_blackjack_hand(c("9♠", "7♦"))),
 #'     Bob = list(new_blackjack_hand(c("5♣", "K♥")))
 #'   )
 #'   deck <- c("8♣", "2♦", "4♠")
 #'   players <- list(
-#'     Alice = list(coins = 800, bets = 100, is_computer = FALSE),
+#'     Alice = list(coins = 800, bets = 100, is_computer = TRUE),
+#'     Bob = list(coins = 800, bets = 100, is_computer = TRUE)
+#'   )
+#'   play_player_turns(player_hands, deck, players)
+#' }
+#'
+#' # Human-computer mix (will prompt for user input)
+#' \dontrun{
+#'   player_hands <- list(
+#'     Alice = list(new_blackjack_hand(c("9♠", "7♦"))),
+#'     Bob = list(new_blackjack_hand(c("5♣", "K♥")))
+#'   )
+#'   deck <- c("8♣", "2♦", "4♠")
+#'   players <- list(
+#'     Alice = list(coins = 800, bets = 100, is_computer = FALSE), # Will prompt for input!
 #'     Bob = list(coins = 800, bets = 100, is_computer = TRUE)
 #'   )
 #'   play_player_turns(player_hands, deck, players)

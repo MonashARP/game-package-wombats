@@ -49,8 +49,20 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co"># Prompt the user to play another round or exit.</span></span></span>
+<span class="r-in"><span><span class="co"># Returns TRUE if user types 'again', FALSE if user types 'exit'.</span></span></span>
 <span class="r-in"><span><span class="fu">ask_play_again</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># User types 'again' or 'exit' at prompt</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Typical usage inside a game loop:</span></span></span>
+<span class="r-in"><span><span class="va">keep_playing</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="kw">while</span> <span class="op">(</span><span class="va">keep_playing</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># ... (game logic here)</span></span></span>
+<span class="r-in"><span>  <span class="va">keep_playing</span> <span class="op">&lt;-</span> <span class="fu">ask_play_again</span><span class="op">(</span><span class="op">)</span>  <span class="co"># Will prompt user each round</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># At the prompt, try typing:</span></span></span>
+<span class="r-in"><span><span class="co">#   again   # (to continue)</span></span></span>
+<span class="r-in"><span><span class="co">#   exit    # (to quit)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

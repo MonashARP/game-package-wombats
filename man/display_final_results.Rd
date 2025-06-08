@@ -21,6 +21,24 @@ Determines the winner for each player, displays results, and updates coin balanc
 }
 \examples{
 \dontrun{
-display_final_results(player_hands, dealer_hand, players)
+# Example: display and settle bets after a round
+player_hands <- list(
+  Alice = list(new_blackjack_hand(c("K♠", "A♥"))),  # Blackjack!
+  Bob   = list(new_blackjack_hand(c("9♦", "9♠")),
+               new_blackjack_hand(c("5♣", "5♦", "Q♣"))) # Bob split
+)
+
+dealer_hand <- new_blackjack_hand(c("10♠", "K♦"))
+
+players <- list(
+  Alice = list(coins = 950, bets = 50, is_computer = FALSE),
+  Bob   = list(coins = 1100, bets = 100, is_computer = TRUE)
+)
+
+# Show round results and update player coin balances
+updated_players <- display_final_results(
+                             player_hands, dealer_hand, players
+                             )
+print(updated_players)
 }
 }

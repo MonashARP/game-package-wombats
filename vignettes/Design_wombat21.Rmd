@@ -122,7 +122,7 @@ This consistent naming and argument style makes the package intuitive to use and
 
 12. **Utilities** [*Main Arguments*: none]
 
-    -   [*data_directory.R*]{style="color:gray"} ：\`get_home_dir()
+    -   [*data_directory.R*]{style="color:gray"} ：`get_home_dir()`
 
 ## 🗃️ Core Data Structures
 
@@ -247,16 +247,20 @@ This gives:
 ### Summary
 
 ::: {style="width:100%"}
++---------------------+--------------------------+---------------------------------------------+
 | Aspect              | Technique Used           | Purpose                                     |
-|---------------------|--------------------------|---------------------------------------------|
++=====================+==========================+=============================================+
 | Hit/stand condition | `rlang::eval_tidy()`     | Dynamically evaluate game thresholds        |
++---------------------+--------------------------+---------------------------------------------+
 | Rank/value logic    | S3 generic dispatch      | Allow multiple input types (`card`, `char`) |
++---------------------+--------------------------+---------------------------------------------+
 | Extendability       | `vctrs::new_rcrd()` + S3 | Build and validate extensible game types    |
++---------------------+--------------------------+---------------------------------------------+
 :::
 
 ### Want to do more?
 
--   For more advanced *metaprogramming*, consider:
+For more advanced *metaprogramming*, consider:
 
 -   User-defined strategy expressions via quosures
 

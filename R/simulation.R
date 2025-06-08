@@ -88,7 +88,7 @@ simulate_blackjack <- function(
 
     # deal card
     ranks <- rep(c("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"), 4)
-    suits <- rep(c("♠","♥","♦","♣"), each = 13)
+    suits <- rep(c("\u2660", "\u2665", "\u2666", "\u2663"), each = 13)
     deck_char <- sample(paste0(ranks, suits))
     deck <- vctrs::vec_cast(deck_char, to = card(rank = character(), suit = character()))
     deal_result <- deal_cards(deck, num_players = 1)

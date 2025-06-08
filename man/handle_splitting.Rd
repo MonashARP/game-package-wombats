@@ -25,15 +25,42 @@ Allows eligible players (pair of same rank) to split their hand. Handles human/A
 }
 \examples{
 \dontrun{
+# Example 1: Human and AI, both eligible for splitting
 players <- list(
   Alice = list(is_computer = FALSE),
   Bot = list(is_computer = TRUE)
 )
 hands <- list(
-  Alice = list(new_blackjack_hand(c("8♠", "8♦"))),
-  Bot = list(new_blackjack_hand(c("A♣", "A♥")))
+  Alice = list(new_blackjack_hand(c("8♠", "8♦"))),   # Pair of 8s, human
+  Bot   = list(new_blackjack_hand(c("A♣", "A♥")))    # Pair of Aces, AI
 )
-deck <- c("10♣", "7♠", "6♥", "5♦")
-handle_splitting(hands, deck, players)
+deck <- c("10♣", "7♠", "6♥", "5♦", "4♠", "9♣")
+
+# Will prompt Alice whether to split, Bot will decide by AI logic
+split_res <- handle_splitting(hands, deck, players)
+
+# Check how many hands each player has after splitting
+lapply(split_res$player_hands, length)
+
+# Example 2: Only AI is eligible for splitting
+players2 <- list(
+  Carol = list(is_computer = FALSE),
+  Bot2  = list(is_computer = TRUE)
+)
+hands2 <- list(
+  Carol = list(new_blackjack_hand(c("10♦", "8♣"))),    # Not a pair
+  Bot2  = list(new_blackjack_hand(c("8♥", "8♣")))      # Pair, AI
+)
+deck2 <- c("J♦", "5♠", "2♥", "4♣")
+split_res2 <- handle_splitting(hands2, deck2, players2)
+
+# Example 3: Hands not eligible for splitting (function returns unchanged hands)
+players3 <- list(Dan = list(is_computer = FALSE))
+hands3 <- list(Dan = list(new_blackjack_hand(c("7♦", "8♠"))))
+deck3 <- c("9♦", "Q♣")
+split_res3 <- handle_splitting(hands3, deck3, players3)
+
+# Output: list with updated player_hands and deck_index after splitting
+print(split_res)
 }
 }

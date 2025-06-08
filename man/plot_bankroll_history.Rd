@@ -17,7 +17,13 @@ Creates a line chart of bankrolls over time using Plotly.
 }
 \examples{
 \dontrun{
-bhist <- list(c(Alice = 1000, Bob = 900))
+# Example: plotting bankroll history for two players over three rounds
+bhist <- list(
+  c(You = 1000, Computer_1 = 1000),  # Initial coins before game starts
+  c(You = 1100, Computer_1 = 900),   # After round 1
+  c(You = 1200, Computer_1 = 800)    # After round 2
+)
+# Display interactive line chart of coin balances for each player over time
 plot_bankroll_history(bhist)
 }
 }

@@ -14,7 +14,19 @@ Prompts the user to play another round or exit the game.
 }
 \examples{
 \dontrun{
+# Prompt the user to play another round or exit.
+# Returns TRUE if user types 'again', FALSE if user types 'exit'.
 ask_play_again()
-# User types 'again' or 'exit' at prompt
+
+# Typical usage inside a game loop:
+keep_playing <- TRUE
+while (keep_playing) {
+  # ... (game logic here)
+  keep_playing <- ask_play_again()  # Will prompt user each round
+}
+
+# At the prompt, try typing:
+#   again   # (to continue)
+#   exit    # (to quit)
 }
 }

@@ -22,9 +22,28 @@
 #' screen output, and updates to stored player data.
 #'
 #' @examples
-#'\dontrun{
-#'   play()
-#'}
+#' \dontrun{
+#' # Start a new interactive Blackjack session
+#' play()
+#'
+#' # Example: Playing with custom initial player names and coin balances
+#' # (Modify player list before starting)
+#' players_db <- list(
+#'   Alice = list(coins = 1500, is_computer = FALSE),
+#'   Bob   = list(coins = 1200, is_computer = FALSE),
+#'   Dealer = list(is_computer = TRUE)
+#' )
+#' bankroll_history <- list()
+#' save_players(players_db, bankroll_history)
+#' play()  # Players will be loaded with these balances
+#'
+#' # Example: Add computer opponents for more challenge
+#' # When prompted, set number of computer players (e.g., 2)
+#' play()
+#'
+#' # The game will guide you through betting, turns, splitting, doubling down, and insurance.
+#' # Play multiple rounds; balances and player info are saved automatically.
+#' }
 #'
 #' @export
 
@@ -107,8 +126,20 @@ play <- function() {
 #' @return A logical indicating whether the player wants to play again (TRUE) or exit (FALSE).
 #' @examples
 #' \dontrun{
+#' # Prompt the user to play another round or exit.
+#' # Returns TRUE if user types 'again', FALSE if user types 'exit'.
 #' ask_play_again()
-#' # User types 'again' or 'exit' at prompt
+#'
+#' # Typical usage inside a game loop:
+#' keep_playing <- TRUE
+#' while (keep_playing) {
+#'   # ... (game logic here)
+#'   keep_playing <- ask_play_again()  # Will prompt user each round
+#' }
+#'
+#' # At the prompt, try typing:
+#' #   again   # (to continue)
+#' #   exit    # (to quit)
 #' }
 #' @export
 ask_play_again <- function() {

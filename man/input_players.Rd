@@ -22,8 +22,31 @@ Allows input of human player names, creates computer players,
 }
 \examples{
 \dontrun{
-# Typical usage (prompts user for input):
-res <- input_players(players_db = list())
-str(res$session_players)
+# Typical usage: prompt for human and computer player setup.
+result <- input_players(players_db = list())
+str(result$session_players)
+
+# Example: Simulate a session with existing player data
+# Suppose previous game left Alice with 800 coins, Computer_1 with 500 coins
+players_db <- list(
+  Alice = list(name = "Alice", coins = 800, is_computer = FALSE),
+  Computer_1 = list(name = "Computer_1", coins = 500, is_computer = TRUE)
+)
+# Start a new session; try to continue as Alice, add another human, add one more computer player
+result2 <- input_players(players_db)
+
+# After running, you can check who joined this session and their starting balances:
+lapply(result2$session_players, function(x) x$coins)
+
+# Edge case: Old player with zero coins (bankrupt) tries to rejoin
+players_db3 <- list(
+  Bob = list(name = "Bob", coins = 0, is_computer = FALSE)
+)
+result3 <- input_players(players_db3)
+# Will be prompted to create a new profile or skip
+
+# The function always returns a list:
+# - $session_players: all current session players (named list)
+# - $players_db: the full player database (including new/old players)
 }
 }

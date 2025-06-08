@@ -17,6 +17,20 @@ Creates a bar chart showing player coin rankings, with rank numbers on the chart
 }
 \examples{
 \dontrun{
-plot_player_ranking(list(Alice = list(coins = 1200), Bob = list(coins = 900)))
+# Example: plot the coin ranking for three players at the end of a game session
+players <- list(
+  Alice   = list(coins = 1500),
+  Bob     = list(coins = 900),
+  Charlie = list(coins = 1200)
+)
+# Plot an interactive bar chart showing the ranking of players by their coins
+plot_player_ranking(players)
+
+# Example: plot for only two players
+players2 <- list(
+  You = list(coins = 1200),
+  Computer_1 = list(coins = 800)
+)
+plot_player_ranking(players2)
 }
 }

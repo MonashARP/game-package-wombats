@@ -82,13 +82,34 @@ list(coins = coins_new, payout = payout)
 #'   }
 #' @examples
 #' \dontrun{
-#' # Example: dealer showing Ace, with player and computer
+#' # Example 1: Dealer shows Ace, both human and computer players
 #' players <- list(
 #'   Alice = list(is_computer = FALSE, coins = 1000, bets = 100),
 #'   Bot = list(is_computer = TRUE, coins = 1000, bets = 100)
 #' )
-#' dealer_hand <- new_blackjack_hand(c("A♠", "10♦"))
-#' handle_insurance(dealer_hand, players)
+#' dealer_hand <- new_blackjack_hand(c("A♠", "10♦"))  # Dealer has Blackjack
+#' # Both players will be offered insurance. Try typing "yes" or "no" when prompted.
+#' res <- handle_insurance(dealer_hand, players)
+#' print(res)
+#'
+#' # Example 2: Dealer shows Ace, no Blackjack
+#' dealer_hand <- new_blackjack_hand(c("A♠", "5♦"))
+#' # Insurance will be offered, but dealer does not have Blackjack.
+#' res <- handle_insurance(dealer_hand, players)
+#' print(res)
+#'
+#' # Example 3: Dealer does NOT show Ace, insurance is not offered
+#' dealer_hand <- new_blackjack_hand(c("9♣", "A♦"))
+#' # No insurance prompt; function just returns dealer_blackjack and updated players
+#' res <- handle_insurance(dealer_hand, players)
+#' print(res)
+#'
+#' # Example 4: Use a custom AI insurance probability
+#' res <- handle_insurance(dealer_hand, players, ai_prob = 0.9)
+#'
+#' # The output list has two elements:
+#' # $dealer_blackjack - TRUE if dealer has blackjack, FALSE otherwise
+#' # $players          - player info after insurance (coins may change)
 #' }
 #' @export
 handle_insurance <- function(dealer_hand, players, input_fun = readline, ai_prob = 0.5) {

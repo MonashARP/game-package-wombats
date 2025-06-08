@@ -30,6 +30,25 @@ updating bankroll history, and plotting results.
 }
 \examples{
 \dontrun{
-end_round(player_hands, dealer_hand, players, players_db, bankroll_history)
+player_hands <- list(
+  Alice = list(new_blackjack_hand(c("K\u2660", "8\u2665"))),
+  Bob   = list(new_blackjack_hand(c("9\u2666", "9\u2660")),
+               new_blackjack_hand(c("5\u2663", "5\u2666", "Q\u2663")))
+)
+
+dealer_hand <- new_blackjack_hand(c("10\u2660", "A\u2666"))
+
+players <- list(
+  Alice = list(coins = 950, bets = 50, is_computer = FALSE),
+  Bob   = list(coins = 1100, bets = 100, is_computer = TRUE)
+)
+players_db <- players
+
+bankroll_history <- list(c(Alice = 1000, Bob = 1000))
+
+res <- end_round(player_hands, dealer_hand,
+                 players, players_db, bankroll_history)
+print(res$players)
+print(res$bankroll_history)
 }
 }
