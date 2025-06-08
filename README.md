@@ -137,13 +137,13 @@ custom_dealer <- function(hand) {
 ```
 
 In the current release, `play()` uses hard-coded dealer logic, but
-simulation (`simulate_blackjack()`) allows for pluggable decision
-functions.
+simulation (`simulate_multiplayer_blackjack()`) allows for pluggable
+decision functions.
 
 ## Simulation Mode: Strategy Testing
 
-Use `simulate_blackjack()` to test decision strategies against a
-standard dealer.
+Use `simulate_multiplayer_blackjack()` to test decision strategies
+against a standard dealer.
 
 Supports:
 
@@ -225,7 +225,7 @@ documentation directly in your R console:
 ``` r
 ?<function_name>
 # e.g.
-?simulate_blackjack
+?simulate_multiplayer_blackjack
 ?plot_bankroll_history
 ```
 

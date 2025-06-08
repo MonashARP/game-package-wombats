@@ -1,14 +1,12 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://monasharp.github.io/game-package-wombats/404.html</loc></url>
-<url><loc>https://monasharp.github.io/game-package-wombats/AI-statement.html</loc></url>
-<url><loc>https://monasharp.github.io/game-package-wombats/articles/AD_wombat21.html</loc></url>
-<url><loc>https://monasharp.github.io/game-package-wombats/articles/AI-statement.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/articles/Design_wombat21.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/articles/index.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/articles/wombat21.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/authors.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/index.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/LICENSE.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/analyze_multiplayer_results.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/as.character.card.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/ask_play_again.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/calculate_score.html</loc></url>
@@ -16,14 +14,12 @@
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/card.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/card_is_ace.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/card_is_face.html</loc></url>
-<url><loc>https://monasharp.github.io/game-package-wombats/reference/card_rank.blackjack_hand.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/card_rank.card.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/card_rank.character.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/card_rank.default.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/card_rank.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/card_suit.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/card_value.html</loc></url>
-<url><loc>https://monasharp.github.io/game-package-wombats/reference/dealer_action.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/deal_cards.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/determine_winner.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/display_final_results.html</loc></url>
@@ -51,7 +47,8 @@
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/reset_game_data.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/save_players.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/setup_and_display_initial.html</loc></url>
-<url><loc>https://monasharp.github.io/game-package-wombats/reference/simulate_blackjack.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/simulate_multiplayer_blackjack.html</loc></url>
+<url><loc>https://monasharp.github.io/game-package-wombats/reference/simulation_data.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/vec_cast.card.character.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/vec_cast.card.html</loc></url>
 <url><loc>https://monasharp.github.io/game-package-wombats/reference/vec_cast.character.card.html</loc></url>

@@ -101,7 +101,8 @@ reference:
   - title: "Simulation"
     desc: Run AI-driven game simulations for strategy analysis.
     contents:
-      - simulate_blackjack
+      - simulate_multiplayer_blackjack
+      - analyze_multiplayer_results
 
 articles:
   - title: "Getting Started"

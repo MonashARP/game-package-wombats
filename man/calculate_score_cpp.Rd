@@ -7,17 +7,11 @@
 calculate_score_cpp(ranks)
 }
 \arguments{
-\item{ranks}{Character vector of card ranks (e.g., c("A", "10", "K")).}
+\item{ranks}{Character vector of card ranks (e.g., c("A", "10", "K"))}
 }
 \value{
-Integer: the blackjack score for the given hand.
+Integer score of the hand
 }
 \description{
-Fast C++ implementation for calculating blackjack hand scores.
-Used internally for performance, but also available for direct use.
-}
-\examples{
-calculate_score_cpp(c("A", "10"))   # 21 (Blackjack)
-calculate_score_cpp(c("10", "7", "4")) # 21
-calculate_score_cpp(c("A", "A", "9"))  # 21 (A as 11, other as 1)
+Fast C++ implementation for calculating blackjack hand scores
 }

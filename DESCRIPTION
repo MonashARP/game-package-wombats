@@ -26,7 +26,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    withr
+    withr,
+    devtools
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://monasharp.github.io/game-package-wombats/

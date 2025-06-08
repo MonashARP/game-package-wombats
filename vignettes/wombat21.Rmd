@@ -8,11 +8,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+devtools::load_all(".")
 ```
 
 ## 🃏 What is `wombat21`?
@@ -126,8 +128,7 @@ Simulate thousands of Blackjack games to test your strategies automatically. You
 Run a quick simulation with the default strategy (hit below 17, always buy insurance and always split pairs):
 
 ```{r,eval=FALSE}
-sim <- simulate_blackjack(num_rounds = 10000)
-print(sim$win_rate)
+simulation <- simulate_multiplayer_blackjack(num_rounds = 1000)
 ```
 
 ### ⚙️ Customize Your Strategy
@@ -145,8 +146,9 @@ Examples:
 -   Never split, never buy insurance, hit below 18:
 
 ```{r,eval=FALSE}
-sim <- simulate_blackjack(
-  num_rounds = 10000,
+simulation <- simulate_multiplayer_blackjack(
+  num_players = 3,
+  num_rounds = 100,
   threshold = 18,
   split = FALSE,
   buy_insurance = FALSE
@@ -157,8 +159,8 @@ sim <- simulate_blackjack(
 
 ```{r,eval=FALSE}
 # Split pairs of A or 8 only; buy insurance only when player's hand is blackjack.
-sim <- simulate_blackjack(
-  num_rounds = 10000,
+simulation <- simulate_multiplayer_blackjack(
+  num_rounds = 100,
   split = function(hand) {
     ranks <- card_rank(hand$cards)
     length(ranks) == 2 && ranks[1] == ranks[2] && ranks[1] %in% c("8", "A")
@@ -171,19 +173,26 @@ sim <- simulate_blackjack(
 
 ### 🧑‍💻 Advanced: Custom Strategy Functions
 
-You can pass any function to the `split` or `buy_insurance` argument in `simulate_blackjack()`, enabling sophisticated, context-dependent strategies.
+You can pass any function to the `split` or `buy_insurance` argument in `simulate_multiplayer_blackjack()`, enabling sophisticated, context-dependent strategies. Additionally, vectors can also be passed to threshold, bet_amount, and initial_coins to customize each player's behavior.
 
-1.  **Advanced logic: Take dealer's upcard into account for split**
+1.  **Advanced logic: Each player has a different logic when deciding whether to split their cards or not.**
 
 ```{r,eval=FALSE}
-# Only split A or 8, and never split if dealer shows a 10 or Ace.
-split_fn <- function(hand, dealer_hand) {
+split_basic <- function(hand) {
+  # Split Aces and 8s only
   ranks <- card_rank(hand$cards)
-  dealer_rank <- card_rank(dealer_hand$cards[1])
-  length(ranks) == 2 &&
-    ranks[1] == ranks[2] &&
-    ranks[1] %in% c("A", "8") &&
-    !dealer_rank %in% c("10", "A")
+  length(ranks) == 2 && ranks[1] == ranks[2] && ranks[1] %in% c("A", "8")
+}
+
+split_aggressive <- function(hand) {
+  # Split everything except 10s and 5s
+  ranks <- card_rank(hand$cards)
+  if (length(ranks) != 2 || ranks[1] != ranks[2]) return(FALSE)
+  !ranks[1] %in% c("10", "J", "Q", "K", "5")
+}
+
+split_never <- function(hand) {
+  FALSE
 }
 ```
 
@@ -191,30 +200,38 @@ split_fn <- function(hand, dealer_hand) {
 
 ```{r,eval=FALSE}
 # Only buy insurance if player has blackjack AND dealer shows Ace.
-insurance_fn <- function(player, dealer_hand) {
+insurance_dealer <- function(player, dealer_hand) {
   is_blackjack(player$hand) && card_rank(dealer_hand$cards[1]) == "A"
+}
+
+insurance_conservative <- function(player, dealer_hand) {
+  # Only buy insurance if player has blackjack
+  is_blackjack(player$hand)
+}
+
+insurance_aggressive <- function(player, dealer_hand) {
+  # Always buy insurance when dealer shows Ace
+  TRUE
+}
+
+insurance_smart <- function(player, dealer_hand) {
+  # Buy insurance if player has 20 or blackjack
+  player_score <- calculate_score(player$hand)
+  player_score >= 20 || is_blackjack(player$hand)
 }
 ```
 
 3.  **Compare Strategies with Batch Simulation and Visualization**
 
 ```{r,eval=FALSE}
-res_advanced <- simulate_blackjack(
-  num_rounds = 10000,
-  split = split_fn,
-  buy_insurance = insurance_fn
-)
-
-res_simple <- simulate_blackjack(
-  num_rounds = 10000,
-  split = FALSE,
-  buy_insurance = FALSE
-)
-
-barplot(
-  c(Advanced = res_advanced$win_rate, Simple = res_simple$win_rate),
-  beside = TRUE, col = c("skyblue", "grey"),
-  main = "Win Rate Comparison: Advanced vs Simple Strategy"
+results <- simulate_multiplayer_blackjack(
+  num_rounds = 1000,
+  num_players = 4,
+  threshold = c(17, 18, 16, 19),
+  buy_insurance = list(insurance_conservative, insurance_aggressive, insurance_dealer, insurance_smart),
+  split = list(split_basic, split_aggressive, split_never, FALSE),
+  bet_amount = c(10, 15, 20, 25),
+  initial_coins = c(1000, 1200, 800, 1500)
 )
 ```
 
@@ -224,10 +241,13 @@ barplot(
 
 Check the win rate, loss rate, and other stats in the returned list:
 
-```{r,eval=FALSE}
-sim$win_rate
-sim$split_rate
-sim$final_coins
+```{r echo=FALSE, eval=TRUE}
+load(file = "../data/simulation_data.rda")
+```
+
+
+```{r,eval=TRUE}
+analyze_multiplayer_results(results = simulation_data)
 ```
 
 💡Try experimenting with your own logic—`wombat21` is designed to make strategy research both powerful and fun!
@@ -235,18 +255,6 @@ sim$final_coins
 ## 📈 Visualize
 
 ### 📦 Export Results
-
--   **Strategy Simulation Results**
-
-After running a simulation, you can export your results for further analysis:
-
-```{r,eval=FALSE}
-sim <- simulate_blackjack(num_rounds = 10000)
-save_players(
-  players = list(You = list(coins = sim$final_coins)),
-  bankroll_history = sim$bankroll_history
-)
-```
 
 -   **Interactive Game Results**
 
@@ -260,10 +268,8 @@ save_players(players, bankroll_history)
 
 Visualize how each player’s coin balance changes over time.
 
-```{r,eval=FALSE}
-load(file = "../data/my_simulation_results.rds")
-
-plot_bankroll_history(sim$bankroll_history)
+```{r,eval=TRUE, warning=FALSE}
+plot_bankroll_history(bankroll_history = simulation_data$bankroll_history)
 ```
 
 *Creates an interactive line chart showing bankroll trends by round.*
@@ -271,10 +277,12 @@ plot_bankroll_history(sim$bankroll_history)
 ### 📊 Plot Player Rankings
 
 Compare player coin totals and see who’s on top.
-
-```{r,eval=FALSE}
+```{r echo=FALSE, eval=TRUE}
 load(file = "../data/players_data.rda")
+```
 
+
+```{r,eval=TRUE}
 plot_player_ranking(players = players_data$players)
 ```
 
