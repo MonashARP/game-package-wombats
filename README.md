@@ -240,8 +240,15 @@ wombat21:::play_dealer_turn
 For a full overview of the package, check out the vignettes and function
 references:
 
-👉 Package Website (Documentation): [Reference
-tab](https://monasharp.github.io/game-package-wombats/reference/index.html)
+👉 Package Website (Documentation):
+
+- [Get Started
+  guide](https://monasharp.github.io/game-package-wombats/articles/wombat21.html)
+  – a walkthrough of basic usage and gameplay.
+
+- [Reference
+  tab](https://monasharp.github.io/game-package-wombats/reference/index.html)
+  – full API documentation for all user-facing functions.
 
 ## 💡Have a try now ~
 
