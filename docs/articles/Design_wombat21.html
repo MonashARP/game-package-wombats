@@ -74,18 +74,22 @@ outlines the core design philosophy behind the package—why it was built,
 how it is structured, and how key features like multiplayer play, AI
 opponents, simulation, and strategy customization are supported through
 modular functional interfaces.</p>
-<p>We also highlight the technical foundations, including:<br>
-- <strong>S3 + vctrs</strong> for safe and extensible card types<br>
-- <strong>C++</strong> for performance-critical components like
-scoring<br>
-- <strong>Functional layout</strong>, testable and transparent,
-resembling R6-style modularity without the complexity</p>
+<p>We also highlight the technical foundations, including:</p>
+<ul>
+<li><p><strong>S3 + vctrs</strong> for safe and extensible card
+types</p></li>
+<li><p><strong>C++</strong> for performance-critical components like
+scoring</p></li>
+<li><p><strong>Functional layout</strong>, testable and transparent,
+resembling R6-style modularity without the complexity</p></li>
+</ul>
 <p>If you’re unfamiliar with how to run the game or use the functions
 interactively, we recommend starting with the <a href="https://monasharp.github.io/game-package-wombats/articles/wombat21.html">Get
 Started guide</a> before returning to this design overview.</p>
-<div class="section level3">
-<h3 id="function-names-and-arguments">🏷️ Function Names and Arguments<a class="anchor" aria-label="anchor" href="#function-names-and-arguments"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="function-names-and-arguments">🏷️ Function Names and Arguments<a class="anchor" aria-label="anchor" href="#function-names-and-arguments"></a>
+</h2>
 <p>All user-facing functions in <code>wombat21</code> are named to be
 clear, concise, and consistent, following common R conventions:</p>
 <ul>
@@ -120,9 +124,9 @@ clear, specific purposes, and marked with <code>@noRd</code> and
 benchmarking, or code reuse, but are not part of the main user API.</p>
 <p>This consistent naming and argument style makes the package intuitive
 to use and easy to extend for both new and advanced users.</p>
-<div class="section level4">
-<h4 id="functions-specification">🗂️ Functions Specification<a class="anchor" aria-label="anchor" href="#functions-specification"></a>
-</h4>
+<div class="section level3">
+<h3 id="functions-specification">🗂️ Functions Specification<a class="anchor" aria-label="anchor" href="#functions-specification"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>
 <p><strong>Card Objects:</strong> Card validation and attribute
@@ -197,8 +201,6 @@ actions [<em>Main Arguments</em>: <code>players</code>,
 </li>
 </ul>
 </li>
-</ol>
-<!-- --><ol start="7" style="list-style-type: decimal">
 <li>
 <p><strong>Splitting</strong> [<em>Main Arguments</em>:
 <code>hand</code>, <code>players</code>]</p>
@@ -265,9 +267,9 @@ Arguments</em>: <code>players</code>, <code>bankroll_history</code>]</p>
 </ol>
 </div>
 </div>
-<div class="section level3">
-<h3 id="core-data-structures">🗃️ Core Data Structures<a class="anchor" aria-label="anchor" href="#core-data-structures"></a>
-</h3>
+<div class="section level2">
+<h2 id="core-data-structures">🗃️ Core Data Structures<a class="anchor" aria-label="anchor" href="#core-data-structures"></a>
+</h2>
 <ul>
 <li>
 <strong>card</strong>: Represents a single playing card (fields:
@@ -282,13 +284,13 @@ Arguments</em>: <code>players</code>, <code>bankroll_history</code>]</p>
 <p>This structure supports flexible extension, validation, and efficient
 manipulation via vctrs and S3.</p>
 </div>
+<div class="section level2">
+<h2 id="object-system-with-vctrs">🧩 Object System with vctrs<a class="anchor" aria-label="anchor" href="#object-system-with-vctrs"></a>
+</h2>
 <div class="section level3">
-<h3 id="object-system-with-vctrs">🧩 Object System with vctrs<a class="anchor" aria-label="anchor" href="#object-system-with-vctrs"></a>
-</h3>
-<div class="section level4">
-<h4 id="why-use-vctrs">
+<h3 id="why-use-vctrs">
 <strong>Why Use vctrs?</strong><a class="anchor" aria-label="anchor" href="#why-use-vctrs"></a>
-</h4>
+</h3>
 <p>The <code>vctrs</code> package provides a robust foundation for
 type-safe, extensible object-oriented programming in R. In
 <strong><code>wombat21</code></strong>, it powers the entire game logic
@@ -343,9 +345,9 @@ registered explicitly via <code><a href="https://vctrs.r-lib.org/reference/s3_re
 <p><em>This design ensures smooth interoperation with base R vectors and
 custom behaviors.</em></p>
 </div>
-<div class="section level4">
-<h4 id="benefits-for-advanced-users-developers">Benefits for Advanced Users &amp; Developers<a class="anchor" aria-label="anchor" href="#benefits-for-advanced-users-developers"></a>
-</h4>
+<div class="section level3">
+<h3 id="benefits-for-advanced-users-developers">Benefits for Advanced Users &amp; Developers<a class="anchor" aria-label="anchor" href="#benefits-for-advanced-users-developers"></a>
+</h3>
 <ul>
 <li><p><strong>Safer code:</strong> Bugs from invalid card or hand
 objects are caught early</p></li>
@@ -358,16 +360,16 @@ is detected</p></li>
 </ul>
 </div>
 </div>
-<div class="section level3">
-<h3 id="metaprogramming-generic-interfaces">🧵 Metaprogramming &amp; Generic Interfaces<a class="anchor" aria-label="anchor" href="#metaprogramming-generic-interfaces"></a>
-</h3>
+<div class="section level2">
+<h2 id="metaprogramming-generic-interfaces">🧵 Metaprogramming &amp; Generic Interfaces<a class="anchor" aria-label="anchor" href="#metaprogramming-generic-interfaces"></a>
+</h2>
 <p>While <strong><code>wombat21</code></strong> does not heavily rely on
 <em>metaprogramming</em>, it demonstrates simple use of
 <strong>expression evaluation</strong> and <strong>S3 generics</strong>
 to enable flexible logic and modular game components.</p>
-<div class="section level4">
-<h4 id="metaprogramming-in-action">Metaprogramming in Action<a class="anchor" aria-label="anchor" href="#metaprogramming-in-action"></a>
-</h4>
+<div class="section level3">
+<h3 id="metaprogramming-in-action">Metaprogramming in Action<a class="anchor" aria-label="anchor" href="#metaprogramming-in-action"></a>
+</h3>
 <p>A notable use of metaprogramming appears in our AI hit/stand decision
 logic:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -386,9 +388,9 @@ formula-based)</p></li>
 extensions</p></li>
 </ul>
 </div>
-<div class="section level4">
-<h4 id="interface-design-via-s3">Interface Design via S3<a class="anchor" aria-label="anchor" href="#interface-design-via-s3"></a>
-</h4>
+<div class="section level3">
+<h3 id="interface-design-via-s3">Interface Design via S3<a class="anchor" aria-label="anchor" href="#interface-design-via-s3"></a>
+</h3>
 <p>Beyond that, <strong>interface extensibility</strong> in
 <code>wombat21</code> is achieved through clean <strong>S3
 generics</strong>:</p>
@@ -410,9 +412,9 @@ user-visible objects</p></li>
 dispatch</p></li>
 </ul>
 </div>
-<div class="section level4">
-<h4 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
-</h4>
+<div class="section level3">
+<h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+</h3>
 <div style="width:100%">
 <table style="width:99%;" class="table">
 <colgroup>
@@ -447,9 +449,9 @@ dispatch</p></li>
 </table>
 </div>
 </div>
-<div class="section level4">
-<h4 id="want-to-do-more">Want to do more?<a class="anchor" aria-label="anchor" href="#want-to-do-more"></a>
-</h4>
+<div class="section level3">
+<h3 id="want-to-do-more">Want to do more?<a class="anchor" aria-label="anchor" href="#want-to-do-more"></a>
+</h3>
 <p>For more advanced <em>metaprogramming</em>, consider:</p>
 <ul>
 <li><p>User-defined strategy expressions via quosures</p></li>
@@ -461,16 +463,16 @@ support)</p></li>
 </ul>
 </div>
 </div>
-<div class="section level3">
-<h3 id="boosting-performance-with-rcpp">⚡ Boosting Performance with Rcpp<a class="anchor" aria-label="anchor" href="#boosting-performance-with-rcpp"></a>
-</h3>
+<div class="section level2">
+<h2 id="boosting-performance-with-rcpp">⚡ Boosting Performance with Rcpp<a class="anchor" aria-label="anchor" href="#boosting-performance-with-rcpp"></a>
+</h2>
 <p>To speed up critical logic like <strong>score calculation</strong>,
 <code>wombat21</code> uses a C++ backend via <code>Rcpp</code>. This
 ensures fast, reliable, and vectorized performance even during
 <strong>high-volume simulation</strong>.</p>
-<div class="section level4">
-<h4 id="whats-accelerated">What’s Accelerated<a class="anchor" aria-label="anchor" href="#whats-accelerated"></a>
-</h4>
+<div class="section level3">
+<h3 id="whats-accelerated">What’s Accelerated<a class="anchor" aria-label="anchor" href="#whats-accelerated"></a>
+</h3>
 <p>The most computationally intense operation in Blackjack is score
 calculation—especially due to the <strong>variable value of
 Aces</strong>. Instead of handling this in pure R every round, we
@@ -481,9 +483,9 @@ offload it to C++:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/calculate_score_cpp.html">calculate_score_cpp</a></span><span class="op">(</span><span class="va">ranks</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="how-it-works">How It Works<a class="anchor" aria-label="anchor" href="#how-it-works"></a>
-</h4>
+<div class="section level3">
+<h3 id="how-it-works">How It Works<a class="anchor" aria-label="anchor" href="#how-it-works"></a>
+</h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># R wrapper (R/score_cal.R)</span></span>
 <span><span class="va">calculate_score</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">hand</span><span class="op">)</span> <span class="op">{</span></span>
@@ -503,9 +505,9 @@ hands</p></li>
 objects</p></li>
 </ul>
 </div>
-<div class="section level4">
-<h4 id="when-to-use">When to Use<a class="anchor" aria-label="anchor" href="#when-to-use"></a>
-</h4>
+<div class="section level3">
+<h3 id="when-to-use">When to Use<a class="anchor" aria-label="anchor" href="#when-to-use"></a>
+</h3>
 <p>You don’t need to call the C++ version
 manually—<code><a href="../reference/calculate_score.html">calculate_score()</a></code> handles this for you. But
 advanced users can test or use it directly:</p>
@@ -535,16 +537,16 @@ advanced users can test or use it directly:</p>
 </div>
 </div>
 </div>
-<div class="section level3">
-<h3 id="testing-and-data-persistence">✅ Testing and Data Persistence<a class="anchor" aria-label="anchor" href="#testing-and-data-persistence"></a>
-</h3>
+<div class="section level2">
+<h2 id="testing-and-data-persistence">✅ Testing and Data Persistence<a class="anchor" aria-label="anchor" href="#testing-and-data-persistence"></a>
+</h2>
 <p>The package uses unit tests (via testthat) and persistent storage
 (e.g., <code><a href="../reference/save_players.html">save_players()</a></code>/<code><a href="../reference/load_players.html">load_players()</a></code>) to
 ensure reliability and reproducibility for all features.</p>
 </div>
-<div class="section level3">
-<h3 id="limitations">🚧 Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>
-</h3>
+<div class="section level2">
+<h2 id="limitations">🚧 Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>
+</h2>
 <p><strong>wombat21</strong> is designed for flexibility and
 extensibility, but there are still some current limitations:</p>
 <ul>
@@ -593,9 +595,9 @@ tie-break rules under exotic combinations) may need further expansion
 for production-level robustness.</p></li>
 </ul>
 </div>
-<div class="section level3">
-<h3 id="alternative-designs">🔄 Alternative Designs<a class="anchor" aria-label="anchor" href="#alternative-designs"></a>
-</h3>
+<div class="section level2">
+<h2 id="alternative-designs">🔄 Alternative Designs<a class="anchor" aria-label="anchor" href="#alternative-designs"></a>
+</h2>
 <p>We considered several alternative approaches in developing
 <strong>wombat21</strong>:</p>
 <ul>
@@ -620,16 +622,16 @@ or UUID-based IDs could improve robustness and allow cleaner back-end
 logic.</p></li>
 </ul>
 </div>
-<div class="section level3">
-<h3 id="ai-statement">🤖 AI Statement<a class="anchor" aria-label="anchor" href="#ai-statement"></a>
-</h3>
+<div class="section level2">
+<h2 id="ai-statement">🤖 AI Statement<a class="anchor" aria-label="anchor" href="#ai-statement"></a>
+</h2>
 <p>In compliance with University policy on responsible AI use, we openly
 and clearly acknowledge <strong>extensive use of generative AI
 tools—including OpenAI ChatGPT and GitHub Copilot—in the development of
 this assignment.</strong></p>
-<div class="section level4">
-<h4 id="how-ai-was-used">How AI Was Used<a class="anchor" aria-label="anchor" href="#how-ai-was-used"></a>
-</h4>
+<div class="section level3">
+<h3 id="how-ai-was-used">How AI Was Used<a class="anchor" aria-label="anchor" href="#how-ai-was-used"></a>
+</h3>
 <ul>
 <li><p><strong>Initial code generation and scaffolding:</strong><br>
 Many basic functions, S3 class constructors, and control-flow templates
@@ -648,9 +650,9 @@ file structure, and testing coverage, with all final design decisions
 made by the team.</p></li>
 </ul>
 </div>
-<div class="section level4">
-<h4 id="how-ai-was-not-used">How AI Was <strong>Not</strong> Used<a class="anchor" aria-label="anchor" href="#how-ai-was-not-used"></a>
-</h4>
+<div class="section level3">
+<h3 id="how-ai-was-not-used">How AI Was <strong>Not</strong> Used<a class="anchor" aria-label="anchor" href="#how-ai-was-not-used"></a>
+</h3>
 <ul>
 <li><p>AI was <strong>never</strong> used to submit unreviewed or
 unedited answers.</p></li>
@@ -660,9 +662,9 @@ checked, rewritten, and adapted.</p></li>
 and academic responsibility.</p></li>
 </ul>
 </div>
-<div class="section level4">
-<h4 id="accountability-and-academic-integrity">Accountability and Academic Integrity<a class="anchor" aria-label="anchor" href="#accountability-and-academic-integrity"></a>
-</h4>
+<div class="section level3">
+<h3 id="accountability-and-academic-integrity">Accountability and Academic Integrity<a class="anchor" aria-label="anchor" href="#accountability-and-academic-integrity"></a>
+</h3>
 <ul>
 <li><p>We accept full responsibility for all code, documentation, and
 design decisions.</p></li>
@@ -674,9 +676,9 @@ transparency and integrity policies.</p></li>
 evidence of our engagement and understanding.</p></li>
 </ul>
 </div>
-<div class="section level4">
-<h4 id="limitations-and-reflection">Limitations and Reflection<a class="anchor" aria-label="anchor" href="#limitations-and-reflection"></a>
-</h4>
+<div class="section level3">
+<h3 id="limitations-and-reflection">Limitations and Reflection<a class="anchor" aria-label="anchor" href="#limitations-and-reflection"></a>
+</h3>
 <ul>
 <li><p>AI-generated code often required significant rewriting or
 adaptation to meet our standards.</p></li>
@@ -686,9 +688,9 @@ or replaced these sections as needed.</p></li>
 may be less robust.</p></li>
 </ul>
 </div>
-<div class="section level4">
-<h4 id="example-prompts-used">Example Prompts Used<a class="anchor" aria-label="anchor" href="#example-prompts-used"></a>
-</h4>
+<div class="section level3">
+<h3 id="example-prompts-used">Example Prompts Used<a class="anchor" aria-label="anchor" href="#example-prompts-used"></a>
+</h3>
 <ul>
 <li><p>“Write an S3 constructor for a card object in R.”</p></li>
 <li><p>“How to generate a unit test for splitting hands in Blackjack
@@ -699,9 +701,9 @@ using testthat?”</p></li>
 functions.”</p></li>
 </ul>
 </div>
-<div class="section level4">
-<h4 id="statement-of-responsibility">Statement of Responsibility<a class="anchor" aria-label="anchor" href="#statement-of-responsibility"></a>
-</h4>
+<div class="section level3">
+<h3 id="statement-of-responsibility">Statement of Responsibility<a class="anchor" aria-label="anchor" href="#statement-of-responsibility"></a>
+</h3>
 <p>We affirm that:</p>
 <ul>
 <li><p>All team members participated in using and reviewing AI-assisted
@@ -718,9 +720,9 @@ Date: 2025-06-06</p>
 </div>
 </div>
 </div>
-<div class="section level3">
-<h3 id="team-contribution-summary">🧑‍🤝‍🧑 Team Contribution Summary<a class="anchor" aria-label="anchor" href="#team-contribution-summary"></a>
-</h3>
+<div class="section level2">
+<h2 id="team-contribution-summary">🧑‍🤝‍🧑 Team Contribution Summary<a class="anchor" aria-label="anchor" href="#team-contribution-summary"></a>
+</h2>
 <div style="width:100%">
 <table class="table">
 <colgroup>
@@ -767,13 +769,12 @@ metaprogramming choices)<br>
 repository</a>.</p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="conclusion-contribution">🤝 Conclusion &amp; Contribution<a class="anchor" aria-label="anchor" href="#conclusion-contribution"></a>
-</h3>
+<div class="section level2">
+<h2 id="conclusion-contribution">🤝 Conclusion &amp; Contribution<a class="anchor" aria-label="anchor" href="#conclusion-contribution"></a>
+</h2>
 <p>We welcome feature requests, bug reports, and community
 contributions. Feel free to open an issue or submit a pull request to
 help make <code>wombat21</code> even better!</p>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

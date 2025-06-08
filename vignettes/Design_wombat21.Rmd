@@ -15,14 +15,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-# 🎯 Design Philosophy
+## 🎯 Design Philosophy
 
 **wombat21** is a console-based Blackjack engine designed with clarity, speed, and extensibility in mind. This section outlines the core design philosophy behind the package—why it was built, how it is structured, and how key features like multiplayer play, AI opponents, simulation, and strategy customization are supported through modular functional interfaces.
 
-We also highlight the technical foundations, including:\
-- **S3 + vctrs** for safe and extensible card types\
-- **C++** for performance-critical components like scoring\
-- **Functional layout**, testable and transparent, resembling R6-style modularity without the complexity
+We also highlight the technical foundations, including:
+
+-   **S3 + vctrs** for safe and extensible card types
+
+-   **C++** for performance-critical components like scoring
+
+-   **Functional layout**, testable and transparent, resembling R6-style modularity without the complexity
 
 If you're unfamiliar with how to run the game or use the functions interactively, we recommend starting with the [Get Started guide](https://monasharp.github.io/game-package-wombats/articles/wombat21.html) before returning to this design overview.
 
@@ -89,9 +92,6 @@ This consistent naming and argument style makes the package intuitive to use and
 
     -   [*Insurance.R*]{style="color:gray"} ：`handle_insurance()`
 
-```{=html}
-<!-- -->
-```
 7.  **Splitting** [*Main Arguments*: `hand`, `players`]
 
     -   [*split.R*]{style="color:gray"} ：`handle_splitting()`
