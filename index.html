@@ -80,7 +80,7 @@
 <p>You can install the development version of wombat21 from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"MonashARP/game-package-wombats"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"MonashARP/game-package-wombats"</span><span class="op">)</span></span></code></pre></div>
 <p>Then load the package:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://monasharp.github.io/game-package-wombats/">wombat21</a></span><span class="op">)</span></span></code></pre></div>
@@ -95,7 +95,7 @@
 <span><span class="fu"><a href="reference/play.html">play</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Or simulate 1000 single-player strategy games (simulation mode)</span></span>
-<span><span class="fu"><a href="reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span>num_rounds <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">simulate_blackjack</span><span class="op">(</span>num_rounds <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <p>To explore saved player data, use:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/get_home_dir.html">get_home_dir</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -158,13 +158,13 @@
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">score</span> <span class="op">&lt;</span> <span class="fl">16</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"hit"</span><span class="op">)</span></span>
 <span>  <span class="kw">else</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"stand"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>In the current release, <code><a href="reference/play.html">play()</a></code> uses hard-coded dealer logic, but simulation (<code><a href="reference/simulate_blackjack.html">simulate_blackjack()</a></code>) allows for pluggable decision functions.</p>
+<p>In the current release, <code><a href="reference/play.html">play()</a></code> uses hard-coded dealer logic, but simulation (<code><a href="reference/simulate_multiplayer_blackjack.html">simulate_multiplayer_blackjack()</a></code>) allows for pluggable decision functions.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="simulation-mode-strategy-testing">Simulation Mode: Strategy Testing<a class="anchor" aria-label="anchor" href="#simulation-mode-strategy-testing"></a>
 </h2>
-<p>Use <code><a href="reference/simulate_blackjack.html">simulate_blackjack()</a></code> to test decision strategies against a standard dealer.</p>
+<p>Use <code><a href="reference/simulate_multiplayer_blackjack.html">simulate_multiplayer_blackjack()</a></code> to test decision strategies against a standard dealer.</p>
 <p>Supports:</p>
 <ul>
 <li><p>Custom player strategies for split or insurance (pass functions)</p></li>
@@ -172,7 +172,7 @@
 <li><p>Summary of win/loss stats</p></li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu">simulate_blackjack</span><span class="op">(</span></span>
 <span>  num_rounds <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>  split <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  buy_insurance <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">hand</span>, <span class="va">dealer_card</span><span class="op">)</span> <span class="va">dealer_card</span> <span class="op">==</span> <span class="st">"A"</span></span>
@@ -229,7 +229,7 @@
 <p>To learn more about how each function works, you can view the documentation directly in your R console:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>?<span class="sc">&lt;</span>function_name<span class="sc">&gt;</span></span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co"># e.g.</span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>?simulate_blackjack</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>?simulate_multiplayer_blackjack</span>
 <span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>?plot_bankroll_history</span></code></pre></div>
 <p>Advanced users can also explore internal helper functions by browsing the source code or calling them directly with the ::: operator:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
