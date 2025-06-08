@@ -181,6 +181,113 @@ quit:</p>
 <p>Simply type your choice at the prompt to continue playing or leave
 the game.</p>
 </div>
+<div class="section level3">
+<h3 id="function-hooks-extensionsd">🧬 Function Hooks &amp; Extensionsd<a class="anchor" aria-label="anchor" href="#function-hooks-extensionsd"></a>
+</h3>
+<p>While <code><a href="../reference/play.html">play()</a></code> and <code><a href="../reference/simulate_blackjack.html">simulate_blackjack()</a></code>
+provide complete game loops out-of-the-box, many internal components are
+modular and can be <strong>replaced or extended by advanced
+users</strong>.</p>
+<p>Key functions you can customize:</p>
+<table class="table">
+<colgroup>
+<col width="30%">
+<col width="44%">
+<col width="25%">
+</colgroup>
+<thead><tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+<th>Called Automatically?</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="../reference/player_action.html">player_action()</a></code></td>
+<td>Player decision logic (hit/stand/double)</td>
+<td>In <code><a href="../reference/play.html">play()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/handle_insurance.html">handle_insurance()</a></code></td>
+<td>Insurance decision flow</td>
+<td>In <code><a href="../reference/play.html">play()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/handle_splitting.html">handle_splitting()</a></code></td>
+<td>Whether and how to split hands</td>
+<td>In <code><a href="../reference/play.html">play()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td><code>dealer_action()</code></td>
+<td>Dealer behavior after all players acted</td>
+<td>In <code><a href="../reference/play.html">play()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/player_action.html">player_action()</a></code></td>
+<td>Your own strategy logic</td>
+<td>In <code><a href="../reference/play.html">play()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/play_player_turns.html">play_player_turns()</a></code></td>
+<td>Simulate a single player’s turn</td>
+<td>Manually usable</td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/calculate_score.html">calculate_score()</a></code></td>
+<td>Compute score of any hand</td>
+<td>Manually usable</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/simulate_blackjack.html">simulate_blackjack()</a></code></td>
+<td>Batch simulations with pluggable logic</td>
+<td>Manually usable</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<ul>
+<li>Custom Insurance Strategy</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">handle_insurance</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">player_hand</span>, <span class="va">dealer_card</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Always decline insurance</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Test insurance logic manually</span></span>
+<span><span class="fu"><a href="../reference/handle_insurance.html">handle_insurance</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10♠"</span>, <span class="st">"9♦"</span><span class="op">)</span>, <span class="st">"A♠"</span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li>Redefine Player Decision Strategy</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">player_action</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">hand</span>, <span class="va">dealer_card</span>, <span class="va">player_info</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Always hit if score &lt; 15</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="../reference/calculate_score.html">calculate_score</a></span><span class="op">(</span><span class="va">hand</span><span class="op">)</span><span class="op">$</span><span class="va">score</span> <span class="op">&lt;</span> <span class="fl">15</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"hit"</span><span class="op">)</span></span>
+<span>  <span class="kw">else</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"stand"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Call the function in isolation</span></span>
+<span><span class="fu"><a href="../reference/player_action.html">player_action</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"6♦"</span>, <span class="st">"8♣"</span><span class="op">)</span>, <span class="st">"K♠"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>coins <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li>Simulate a Single Turn</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create deck and simulate one turn manually</span></span>
+<span><span class="va">deck</span> <span class="op">&lt;-</span> <span class="fu">create_deck</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">player_hand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/new_blackjack_hand.html">new_blackjack_hand</a></span><span class="op">(</span><span class="fu">draw_cards</span><span class="op">(</span><span class="va">deck</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dealer_card</span> <span class="op">&lt;-</span> <span class="fu">draw_cards</span><span class="op">(</span><span class="va">deck</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use your own player_action() inside this function</span></span>
+<span><span class="va">updated_hand</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/play_player_turns.html">play_player_turns</a></span><span class="op">(</span><span class="va">player_hand</span>, <span class="va">deck</span>, <span class="va">dealer_card</span><span class="op">)</span></span></code></pre></div>
+<p><em>This modularity lets you explore blackjack mechanics
+piece-by-piece. For full reference of all available user-facing
+functions, visit <a href="https://monasharp.github.io/game-package-wombats/reference/index.html">Functions
+Refrence</a>.</em></p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="custom-strategy-simulation">🧠 Custom Strategy Simulation<a class="anchor" aria-label="anchor" href="#custom-strategy-simulation"></a>
@@ -194,7 +301,7 @@ own functions.</p>
 </h3>
 <p>Run a quick simulation with the default strategy (hit below 17,
 always buy insurance and always split pairs):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span>num_rounds <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">win_rate</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -214,7 +321,7 @@ insurance behavior.</p></li>
 <ul>
 <li>Never split, never buy insurance, hit below 18:</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
 <span>  num_rounds <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>  threshold <span class="op">=</span> <span class="fl">18</span>,</span>
@@ -225,7 +332,7 @@ insurance behavior.</p></li>
 <li>Custom logic (split only A or 8, buy insurance only with
 blackjack):</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Split pairs of A or 8 only; buy insurance only when player's hand is blackjack.</span></span>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
 <span>  num_rounds <span class="op">=</span> <span class="fl">10000</span>,</span>
@@ -249,7 +356,7 @@ context-dependent strategies.</p>
 <li><strong>Advanced logic: Take dealer’s upcard into account for
 split</strong></li>
 </ol>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Only split A or 8, and never split if dealer shows a 10 or Ace.</span></span>
 <span><span class="va">split_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">hand</span>, <span class="va">dealer_hand</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">ranks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/card_rank.html">card_rank</a></span><span class="op">(</span><span class="va">hand</span><span class="op">$</span><span class="va">cards</span><span class="op">)</span></span>
@@ -262,7 +369,7 @@ split</strong></li>
 <ol start="2" style="list-style-type: decimal">
 <li><strong>Advanced insurance logic</strong></li>
 </ol>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Only buy insurance if player has blackjack AND dealer shows Ace.</span></span>
 <span><span class="va">insurance_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">player</span>, <span class="va">dealer_hand</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/is_blackjack.html">is_blackjack</a></span><span class="op">(</span><span class="va">player</span><span class="op">$</span><span class="va">hand</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="../reference/card_rank.html">card_rank</a></span><span class="op">(</span><span class="va">dealer_hand</span><span class="op">$</span><span class="va">cards</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="st">"A"</span></span>
@@ -271,7 +378,7 @@ split</strong></li>
 <li><strong>Compare Strategies with Batch Simulation and
 Visualization</strong></li>
 </ol>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_advanced</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span></span>
 <span>  num_rounds <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>  split <span class="op">=</span> <span class="va">split_fn</span>,</span>
@@ -298,7 +405,7 @@ simulation functions.</em></p>
 </h3>
 <p>Check the win rate, loss rate, and other stats in the returned
 list:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim</span><span class="op">$</span><span class="va">win_rate</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="va">split_rate</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="va">final_coins</span></span></code></pre></div>
@@ -317,7 +424,7 @@ designed to make strategy research both powerful and fun!</p>
 </ul>
 <p>After running a simulation, you can export your results for further
 analysis:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_blackjack.html">simulate_blackjack</a></span><span class="op">(</span>num_rounds <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/save_players.html">save_players</a></span><span class="op">(</span></span>
 <span>  players <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>You <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>coins <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="va">final_coins</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -328,14 +435,14 @@ analysis:</p>
 </ul>
 <p>After finishing an interactive game (using <code><a href="../reference/play.html">play()</a></code>), you
 can export your results for further analysis:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/save_players.html">save_players</a></span><span class="op">(</span><span class="va">players</span>, <span class="va">bankroll_history</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plot-bankroll-history">💹 Plot Bankroll History<a class="anchor" aria-label="anchor" href="#plot-bankroll-history"></a>
 </h3>
 <p>Visualize how each player’s coin balance changes over time.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"../data/my_simulation_results.rds"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_bankroll_history.html">plot_bankroll_history</a></span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">bankroll_history</span><span class="op">)</span></span></code></pre></div>
@@ -346,7 +453,7 @@ round.</em></p>
 <h3 id="plot-player-rankings">📊 Plot Player Rankings<a class="anchor" aria-label="anchor" href="#plot-player-rankings"></a>
 </h3>
 <p>Compare player coin totals and see who’s on top.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"../data/players_data.rda"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_player_ranking.html">plot_player_ranking</a></span><span class="op">(</span>players <span class="op">=</span> <span class="va">players_data</span><span class="op">$</span><span class="va">players</span><span class="op">)</span></span></code></pre></div>
