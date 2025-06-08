@@ -119,6 +119,64 @@ At the end of each game, you’ll see:
 
 Simply type your choice at the prompt to continue playing or leave the game.
 
+### 🧬 Function Hooks & Extensionsd
+
+While `play()` and `simulate_blackjack()` provide complete game loops out-of-the-box, many internal components are modular and can be **replaced or extended by advanced users**.
+
+Key functions you can customize:
+
+| Function               | Purpose                                  | Called Automatically? |
+|----------------------|--------------------------------|------------------|
+| `player_action()`      | Player decision logic (hit/stand/double) | In `play()`           |
+| `handle_insurance()`   | Insurance decision flow                  | In `play()`           |
+| `handle_splitting()`   | Whether and how to split hands           | In `play()`           |
+| `dealer_action()`      | Dealer behavior after all players acted  | In `play()`           |
+| `player_action()`      | Your own strategy logic                  | In `play()`           |
+| `play_player_turns()`  | Simulate a single player's turn          | Manually usable       |
+| `calculate_score()`    | Compute score of any hand                | Manually usable       |
+| `simulate_blackjack()` | Batch simulations with pluggable logic   | Manually usable       |
+
+**Example:**
+
+-   Custom Insurance Strategy
+
+```{r eval=FALSE}
+handle_insurance <- function(player_hand, dealer_card) {
+  # Always decline insurance
+  return(FALSE)
+}
+
+# Test insurance logic manually
+handle_insurance(c("10♠", "9♦"), "A♠")
+```
+
+-   Redefine Player Decision Strategy
+
+```{r eval=FALSE}
+player_action <- function(hand, dealer_card, player_info) {
+  # Always hit if score < 15
+  if (calculate_score(hand)$score < 15) return("hit")
+  else return("stand")
+}
+
+# Call the function in isolation
+player_action(c("6♦", "8♣"), "K♠", list(coins = 1000))
+```
+
+-   Simulate a Single Turn
+
+```{r eval=FALSE}
+# Create deck and simulate one turn manually
+deck <- create_deck()
+player_hand <- list(new_blackjack_hand(draw_cards(deck, 2)))
+dealer_card <- draw_cards(deck, 1)
+
+# Use your own player_action() inside this function
+updated_hand <- play_player_turns(player_hand, deck, dealer_card)
+```
+
+*This modularity lets you explore blackjack mechanics piece-by-piece. For full reference of all available user-facing functions, visit [Functions Refrence](https://monasharp.github.io/game-package-wombats/reference/index.html).*
+
 ## 🧠 Custom Strategy Simulation
 
 Simulate thousands of Blackjack games to test your strategies automatically. You can control whether to split, buy insurance, or change your hit/stand threshold—just by passing simple options or your own functions.

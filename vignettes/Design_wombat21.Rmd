@@ -17,23 +17,17 @@ knitr::opts_chunk$set(
 
 ## 🎯 Design Philosophy
 
-**wombat21** is built for three main usage modes—**interactive gameplay**, **batch simulation**, and **advanced visualization**—all with a modular, extensible, and high-performance architecture.
+**wombat21** is a console-based Blackjack engine designed with clarity, speed, and extensibility in mind. This section outlines the core design philosophy behind the package—why it was built, how it is structured, and how key features like multiplayer play, AI opponents, simulation, and strategy customization are supported through modular functional interfaces.
 
--   **Interactive Play:**\
-    All user-facing gameplay logic is modular and transparent.\
-    Players can interact with human or AI opponents, with clear APIs for betting, splitting, insurance, and persistent progress tracking.
+We also highlight the technical foundations, including:
 
--   **Flexible Simulation:**\
-    The simulation engine is fully programmable:\
-    Users can run thousands of games automatically, passing custom strategy functions (for splitting, insurance, etc.) and exploring the effects of advanced rule variations or AI behavior.
+-   **S3 + vctrs** for safe and extensible card types
 
--   **Rich Visualization:**\
-    Game results, player history, and simulation outcomes can be visualized interactively—making it easy to analyze trends, compare strategies, and communicate findings.
+-   **C++** for performance-critical components like scoring
 
-**Modularity, extensibility, and performance** are at the core of wombat21’s design.\
-All core components (cards, hands, strategies, players) are built using robust object systems (vctrs, S3), and the scoring logic is accelerated with C++ for fast, large-scale analysis.
+-   **Functional layout**, testable and transparent, resembling R6-style modularity without the complexity
 
-This design philosophy ensures wombat21 is not just a game, but a flexible engine for research, teaching, and advanced experimentation in R.
+If you're unfamiliar with how to run the game or use the functions interactively, we recommend starting with the [Get Started guide](https://monasharp.github.io/game-package-wombats/articles/wombat21.html) before returning to this design overview.
 
 ## 🏷️ Function Names and Arguments
 
@@ -58,7 +52,7 @@ All user-facing functions in `wombat21` are named to be clear, concise, and cons
 
 This consistent naming and argument style makes the package intuitive to use and easy to extend for both new and advanced users.
 
-## 🗂️ Functions Specification
+### 🗂️ Functions Specification
 
 1.  **Card Objects:** Card validation and attribute extraction [*Main Arguments*: `card` ]
 
@@ -78,21 +72,23 @@ This consistent naming and argument style makes the package intuitive to use and
 
     -   [*RcppExports.R*]{style="color:gray"} ：`calculate_score_cpp()`
 
-4.  **Dealing & Setup:** Initial hands and deck operations [*Main Arguments*: `players`, `deck`]
+4.  **Dealing & Setup:** Initial hands and deck operations [*Main Arguments*: `players`, `deck`, `players_db`]
 
     -   [*deal_card.R*]{style="color:gray"} ：`deal_cards()`
 
     -   [*setup.R*]{style="color:gray"} ：`setup_and_display_initial()`
 
-5.  **Gameplay:** Main loop and player actions [*Main Arguments*: none]
+    -   [*input_player.R*]{style="color:gray"} ：`input_players()`
 
-    -   [*game_loop.R*]{style="color:gray"} ：`play()`, `ask_play_again()`, `exit()`
+5.  **Gameplay:** Main loop , betting system and player actions [*Main Arguments*: `players`, `hand`, `deck`, `action`]
+
+    -   [*game_loop.R*]{style="color:gray"} ：`play()`, `ask_play_again()`, `end_round()`, `exit()`
+
+    -   [*bets.R*]{style="color:gray"} ：`get_bets()`
 
     -   [*player_logic.R*]{style="color:gray"} ：`player_action()`, `play_player_turns()`
 
-6.  **Betting and Insurance** [*Main Arguments*: `players`, `hand`]
-
-    -   [*bets.R*]{style="color:gray"} ：`get_bets()`
+6.  **Insurance** [*Main Arguments*: `players`, `hand`]
 
     -   [*Insurance.R*]{style="color:gray"} ：`handle_insurance()`
 
@@ -106,11 +102,9 @@ This consistent naming and argument style makes the package intuitive to use and
 
 9.  **Result Judgement & Summary** [*Main Arguments*: `scores`, `players`, `hands`]
 
-    -   [*results.R*]{style="color:gray"} ：`end_round()`, `display_final_results()`, `determine_winner()`
+    -   [*results.R*]{style="color:gray"} ： `display_final_results()`, `determine_winner()`
 
-10. **Player I/O & Persistences** [*Main Arguments*: `players`, `bankroll`, `id_map`]
-
-    -   [*input_player.R*]{style="color:gray"} ：`input_players()`
+10. **Player I/O & Persistences** [*Main Arguments*: `players`, `bankroll_history`]
 
     -   [*io.R*]{style="color:gray"} ：`save_players()`, `load_players()`, `reset_game_data()`
 
@@ -333,33 +327,39 @@ The package uses unit tests (via testthat) and persistent storage (e.g., `save_p
 
 ## 🚧 Limitations
 
--   **wombat21** is designed for flexibility and extensibility, but there are still some current limitations:
+**wombat21** is designed for flexibility and extensibility, but there are still some current limitations:
 
--   **Single-deck only:** Only single-deck Blackjack is implemented; multi-deck or shoe games are not directly supported.
+-   **Single-deck only**: All games use a single 52-card deck. Multi-deck or shoe-based Blackjack (common in casinos) is not supported, though could be extended with minimal code adjustments in `deal_cards()`.
 
--   **Standard rules only:** Nonstandard Blackjack variants (e.g., double exposure, Spanish 21) are not included but could be added via user extensions.
+-   **Standard rule set**: The game adheres to conventional Blackjack rules (e.g., dealer hits on soft 17, standard payouts). Variants such as Spanish 21, Double Exposure, or Pontoon are not implemented, but could be supported via modular rule injection.
 
--   **Strategy granularity:** Simulation strategies are customizable via function parameters, but built-in logic is intentionally simple.
+-   **Strategy granularity**: The simulation engine supports customizable strategies via user-supplied functions (`buy_insurance`, `split`, `threshold`), but lacks fine-grained state-aware policy learning or reinforcement-based optimization. The logic is suitable for testing deterministic or rule-based strategies, not adaptive AI.
 
--   **No GUI:** The package is console-based; no graphical interface is provided (though plots are interactive).
+-   **Name-based player indexing**: Internally, all players are indexed by user-chosen names (e.g., `"Alice"`, `"Computer_1"`). While human-readable, this design may introduce collision or lookup inefficiencies. Using internally generated unique IDs would decouple display and data management, enabling faster simulation, easier debugging, and eventual multi-session support.
 
--   **Persistence:** Player data is saved locally, not in a centralized/cloud-based system.
+-   **No graphical user interface**: The package is designed as a command-line simulation and game environment. While interactive plots (via `plotly`) are supported for bankroll tracking and rankings, no GUI or web app layer (e.g., `shiny`) is provided.
 
--   **Performance:** Scoring uses C++ for speed, but some highly complex batch simulations may be slower than pure C++/Python.
+-   **Persistence is local-only**: Player data is stored in `.rds` files on the local file system, limiting shared access or multi-device continuity. Integration with centralized databases or cloud storage could improve realism and reusability.
+
+-   **Performance limits in high-scale simulations**: While score computation is optimized via C++ and most routines are vectorized or pre-allocated, extremely large-scale simulations (e.g., millions of rounds) may reveal memory or performance ceilings compared to optimized C++ .
+
+-   **Limited test coverage on edge cases**: The package includes unit tests for core logic and strategies, but coverage for edge scenarios (e.g., repeated splits, 5-card Charlie with insurance payout, tie-break rules under exotic combinations) may need further expansion for production-level robustness.
 
 ## 🔄 Alternative Designs
 
 We considered several alternative approaches in developing **wombat21**:
 
--   **Pure S3 vs vctrs:** Adopted vctrs for safer extensible objects, could have used pure S3.
+-   **vctrs vs base S3:** We chose vctrs for safer and stricter type behavior over traditional S3, which offers more flexibility but less protection.
 
--   **R-only vs C++ backend:** Chose C++ for batch speed; R only is simpler but slower.
+-   **R-only vs C++ backend:** Core scoring logic uses C++ via Rcpp for speed. A pure R version would be easier to maintain but much slower for large simulations.
 
--   **Functional vs OOP:** Prioritized functional interfaces over OOP for composability.
+-   **Functional vs OOP:** We followed a functional approach for composability and transparency. Object-oriented (e.g., R6) design could simplify session state but reduces modularity.
 
--   **Integrated GUI:** Focused on core logic, left out Shiny/desktop GUI for clarity.
+-   **Console vs GUI:** Focus was placed on robust terminal interaction. GUI features (e.g., Shiny) were deliberately excluded to keep logic clean and scriptable.
 
--   **Database/data.table support:** Used R lists/local files for simplicity; future work could add database integration.
+-   **File I/O vs databases:** Player data is saved via .rds for simplicity. Future extensions could support database backends (e.g., SQLite) for multiplayer tracking or dashboards.
+
+-   **Name-based vs ID-based indexing:** Players are currently indexed by names for clarity. Internally switching to numeric or UUID-based IDs could improve robustness and allow cleaner back-end logic.
 
 ## 🤖 AI Statement
 

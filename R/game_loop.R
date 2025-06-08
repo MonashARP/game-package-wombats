@@ -152,6 +152,80 @@ ask_play_again <- function() {
   }
 }
 
+#' @title End round processing
+#' @description
+#' Handles end of round operations: displaying results, saving players,
+#' updating bankroll history, and plotting results.
+#' @param player_hands Named list of player hands (each may be a list of \code{blackjack_hand} objects).
+#' @param dealer_hand Dealer's \code{blackjack_hand} object.
+#' @param players Named list of player info (must include 'coins').
+#' @param players_db Named list: persistent player info.
+#' @param bankroll_history List tracking coin balances over rounds.
+#' @return A list with:
+#'   \describe{
+#'     \item{players}{Updated named list of player info.}
+#'     \item{bankroll_history}{Updated coin history list.}
+#'   }
+#' @examples
+#' \dontrun{
+#' player_hands <- list(
+#'   Alice = list(new_blackjack_hand(c("K\u2660", "8\u2665"))),
+#'   Bob   = list(new_blackjack_hand(c("9\u2666", "9\u2660")),
+#'                new_blackjack_hand(c("5\u2663", "5\u2666", "Q\u2663")))
+#' )
+#'
+#' dealer_hand <- new_blackjack_hand(c("10\u2660", "A\u2666"))
+#'
+#' players <- list(
+#'   Alice = list(coins = 950, bets = 50, is_computer = FALSE),
+#'   Bob   = list(coins = 1100, bets = 100, is_computer = TRUE)
+#' )
+#' players_db <- players
+#'
+#' bankroll_history <- list(c(Alice = 1000, Bob = 1000))
+#'
+#' res <- end_round(player_hands, dealer_hand,
+#'                  players, players_db, bankroll_history)
+#' print(res$players)
+#' print(res$bankroll_history)
+#' }
+#' @export
+end_round <- function(player_hands, dealer_hand, players, players_db, bankroll_history) {
+  players <- display_final_results(player_hands, dealer_hand, players)
+  for (name in names(players)) {
+    players_db[[name]] <- players[[name]]
+  }
+
+  coin_snapshot <- sapply(players_db, function(p) p$coins)
+  bankroll_history[[length(bankroll_history) + 1]] <- coin_snapshot
+
+  # Create each plotly plot object
+  p1 <- plot_bankroll_history(bankroll_history)
+  p2 <- plot_player_ranking(players_db)
+
+  # Combine plots side-by-side
+  combined_plot <- plotly::subplot(
+    p1, p2,
+    nrows = 1,
+    shareX = FALSE,
+    shareY = FALSE,
+    titleX = TRUE,  # allow x-axis titles
+    titleY = TRUE   # allow y-axis titles
+  )
+
+  # Add layout without pipe
+  combined_plot <- plotly::layout(
+    combined_plot,
+    title = "\U0001f0cf Blackjack Game Summary",
+    margin = list(t = 80)
+  )
+
+  print(combined_plot)
+  cat("\n\n")
+
+  return(list(players = players, bankroll_history = bankroll_history))
+}
+
 #' Exit Blackjack session
 #' @description
 #' Intended for ending an interactive Blackjack session without using play().

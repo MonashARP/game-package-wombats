@@ -68,34 +68,24 @@ Ma, Wei Zhu Chen, Aneesh Agarwal</h4>
 <div class="section level2">
 <h2 id="design-philosophy">🎯 Design Philosophy<a class="anchor" aria-label="anchor" href="#design-philosophy"></a>
 </h2>
-<p><strong>wombat21</strong> is built for three main usage
-modes—<strong>interactive gameplay</strong>, <strong>batch
-simulation</strong>, and <strong>advanced visualization</strong>—all
-with a modular, extensible, and high-performance architecture.</p>
+<p><strong>wombat21</strong> is a console-based Blackjack engine
+designed with clarity, speed, and extensibility in mind. This section
+outlines the core design philosophy behind the package—why it was built,
+how it is structured, and how key features like multiplayer play, AI
+opponents, simulation, and strategy customization are supported through
+modular functional interfaces.</p>
+<p>We also highlight the technical foundations, including:</p>
 <ul>
-<li><p><strong>Interactive Play:</strong><br>
-All user-facing gameplay logic is modular and transparent.<br>
-Players can interact with human or AI opponents, with clear APIs for
-betting, splitting, insurance, and persistent progress
-tracking.</p></li>
-<li><p><strong>Flexible Simulation:</strong><br>
-The simulation engine is fully programmable:<br>
-Users can run thousands of games automatically, passing custom strategy
-functions (for splitting, insurance, etc.) and exploring the effects of
-advanced rule variations or AI behavior.</p></li>
-<li><p><strong>Rich Visualization:</strong><br>
-Game results, player history, and simulation outcomes can be visualized
-interactively—making it easy to analyze trends, compare strategies, and
-communicate findings.</p></li>
+<li><p><strong>S3 + vctrs</strong> for safe and extensible card
+types</p></li>
+<li><p><strong>C++</strong> for performance-critical components like
+scoring</p></li>
+<li><p><strong>Functional layout</strong>, testable and transparent,
+resembling R6-style modularity without the complexity</p></li>
 </ul>
-<p><strong>Modularity, extensibility, and performance</strong> are at
-the core of wombat21’s design.<br>
-All core components (cards, hands, strategies, players) are built using
-robust object systems (vctrs, S3), and the scoring logic is accelerated
-with C++ for fast, large-scale analysis.</p>
-<p>This design philosophy ensures wombat21 is not just a game, but a
-flexible engine for research, teaching, and advanced experimentation in
-R.</p>
+<p>If you’re unfamiliar with how to run the game or use the functions
+interactively, we recommend starting with the <a href="https://monasharp.github.io/game-package-wombats/articles/wombat21.html">Get
+Started guide</a> before returning to this design overview.</p>
 </div>
 <div class="section level2">
 <h2 id="function-names-and-arguments">🏷️ Function Names and Arguments<a class="anchor" aria-label="anchor" href="#function-names-and-arguments"></a>
@@ -134,10 +124,9 @@ clear, specific purposes, and marked with <code>@noRd</code> and
 benchmarking, or code reuse, but are not part of the main user API.</p>
 <p>This consistent naming and argument style makes the package intuitive
 to use and easy to extend for both new and advanced users.</p>
-</div>
-<div class="section level2">
-<h2 id="functions-specification">🗂️ Functions Specification<a class="anchor" aria-label="anchor" href="#functions-specification"></a>
-</h2>
+<div class="section level3">
+<h3 id="functions-specification">🗂️ Functions Specification<a class="anchor" aria-label="anchor" href="#functions-specification"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>
 <p><strong>Card Objects:</strong> Card validation and attribute
@@ -177,34 +166,39 @@ Arguments</em>: <code>hand</code>, <code>card</code>]</p>
 <li>
 <p><strong>Dealing &amp; Setup:</strong> Initial hands and deck
 operations [<em>Main Arguments</em>: <code>players</code>,
-<code>deck</code>]</p>
+<code>deck</code>, <code>players_db</code>]</p>
 <ul>
 <li><p><span style="color:gray"><em>deal_card.R</em></span>
 ：<code><a href="../reference/deal_cards.html">deal_cards()</a></code></p></li>
 <li><p><span style="color:gray"><em>setup.R</em></span>
 ：<code><a href="../reference/setup_and_display_initial.html">setup_and_display_initial()</a></code></p></li>
+<li><p><span style="color:gray"><em>input_player.R</em></span>
+：<code><a href="../reference/input_players.html">input_players()</a></code></p></li>
 </ul>
 </li>
 <li>
-<p><strong>Gameplay:</strong> Main loop and player actions [<em>Main
-Arguments</em>: none]</p>
+<p><strong>Gameplay:</strong> Main loop , betting system and player
+actions [<em>Main Arguments</em>: <code>players</code>,
+<code>hand</code>, <code>deck</code>, <code>action</code>]</p>
 <ul>
 <li><p><span style="color:gray"><em>game_loop.R</em></span>
 ：<code><a href="../reference/play.html">play()</a></code>, <code><a href="../reference/ask_play_again.html">ask_play_again()</a></code>,
-<code><a href="../reference/exit.html">exit()</a></code></p></li>
+<code><a href="../reference/end_round.html">end_round()</a></code>, <code><a href="../reference/exit.html">exit()</a></code></p></li>
+<li><p><span style="color:gray"><em>bets.R</em></span>
+：<code><a href="../reference/get_bets.html">get_bets()</a></code></p></li>
 <li><p><span style="color:gray"><em>player_logic.R</em></span>
 ：<code><a href="../reference/player_action.html">player_action()</a></code>,
 <code><a href="../reference/play_player_turns.html">play_player_turns()</a></code></p></li>
 </ul>
 </li>
 <li>
-<p><strong>Betting and Insurance</strong> [<em>Main Arguments</em>:
+<p><strong>Insurance</strong> [<em>Main Arguments</em>:
 <code>players</code>, <code>hand</code>]</p>
 <ul>
-<li><p><span style="color:gray"><em>bets.R</em></span>
-：<code><a href="../reference/get_bets.html">get_bets()</a></code></p></li>
-<li><p><span style="color:gray"><em>Insurance.R</em></span>
-：<code><a href="../reference/handle_insurance.html">handle_insurance()</a></code></p></li>
+<li>
+<span style="color:gray"><em>Insurance.R</em></span>
+：<code><a href="../reference/handle_insurance.html">handle_insurance()</a></code>
+</li>
 </ul>
 </li>
 <li>
@@ -234,22 +228,21 @@ Arguments</em>: <code>scores</code>, <code>players</code>,
 <code>hands</code>]</p>
 <ul>
 <li>
-<span style="color:gray"><em>results.R</em></span>
-：<code><a href="../reference/end_round.html">end_round()</a></code>, <code><a href="../reference/display_final_results.html">display_final_results()</a></code>,
+<span style="color:gray"><em>results.R</em></span> ：
+<code><a href="../reference/display_final_results.html">display_final_results()</a></code>,
 <code><a href="../reference/determine_winner.html">determine_winner()</a></code>
 </li>
 </ul>
 </li>
 <li>
 <p><strong>Player I/O &amp; Persistences</strong> [<em>Main
-Arguments</em>: <code>players</code>, <code>bankroll</code>,
-<code>id_map</code>]</p>
+Arguments</em>: <code>players</code>, <code>bankroll_history</code>]</p>
 <ul>
-<li><p><span style="color:gray"><em>input_player.R</em></span>
-：<code><a href="../reference/input_players.html">input_players()</a></code></p></li>
-<li><p><span style="color:gray"><em>io.R</em></span>
+<li>
+<span style="color:gray"><em>io.R</em></span>
 ：<code><a href="../reference/save_players.html">save_players()</a></code>, <code><a href="../reference/load_players.html">load_players()</a></code>,
-<code><a href="../reference/reset_game_data.html">reset_game_data()</a></code></p></li>
+<code><a href="../reference/reset_game_data.html">reset_game_data()</a></code>
+</li>
 </ul>
 </li>
 <li>
@@ -272,6 +265,7 @@ Arguments</em>: <code>players</code>, <code>bankroll</code>,
 </ul>
 </li>
 </ol>
+</div>
 </div>
 <div class="section level2">
 <h2 id="core-data-structures">🗃️ Core Data Structures<a class="anchor" aria-label="anchor" href="#core-data-structures"></a>
@@ -553,25 +547,52 @@ ensure reliability and reproducibility for all features.</p>
 <div class="section level2">
 <h2 id="limitations">🚧 Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>
 </h2>
+<p><strong>wombat21</strong> is designed for flexibility and
+extensibility, but there are still some current limitations:</p>
 <ul>
-<li><p><strong>wombat21</strong> is designed for flexibility and
-extensibility, but there are still some current limitations:</p></li>
-<li><p><strong>Single-deck only:</strong> Only single-deck Blackjack is
-implemented; multi-deck or shoe games are not directly
-supported.</p></li>
-<li><p><strong>Standard rules only:</strong> Nonstandard Blackjack
-variants (e.g., double exposure, Spanish 21) are not included but could
-be added via user extensions.</p></li>
-<li><p><strong>Strategy granularity:</strong> Simulation strategies are
-customizable via function parameters, but built-in logic is
-intentionally simple.</p></li>
-<li><p><strong>No GUI:</strong> The package is console-based; no
-graphical interface is provided (though plots are interactive).</p></li>
-<li><p><strong>Persistence:</strong> Player data is saved locally, not
-in a centralized/cloud-based system.</p></li>
-<li><p><strong>Performance:</strong> Scoring uses C++ for speed, but
-some highly complex batch simulations may be slower than pure
-C++/Python.</p></li>
+<li><p><strong>Single-deck only</strong>: All games use a single 52-card
+deck. Multi-deck or shoe-based Blackjack (common in casinos) is not
+supported, though could be extended with minimal code adjustments in
+<code><a href="../reference/deal_cards.html">deal_cards()</a></code>.</p></li>
+<li><p><strong>Standard rule set</strong>: The game adheres to
+conventional Blackjack rules (e.g., dealer hits on soft 17, standard
+payouts). Variants such as Spanish 21, Double Exposure, or Pontoon are
+not implemented, but could be supported via modular rule
+injection.</p></li>
+<li><p><strong>Strategy granularity</strong>: The simulation engine
+supports customizable strategies via user-supplied functions
+(<code>buy_insurance</code>, <code>split</code>,
+<code>threshold</code>), but lacks fine-grained state-aware policy
+learning or reinforcement-based optimization. The logic is suitable for
+testing deterministic or rule-based strategies, not adaptive
+AI.</p></li>
+<li><p><strong>Name-based player indexing</strong>: Internally, all
+players are indexed by user-chosen names (e.g., <code>"Alice"</code>,
+<code>"Computer_1"</code>). While human-readable, this design may
+introduce collision or lookup inefficiencies. Using internally generated
+unique IDs would decouple display and data management, enabling faster
+simulation, easier debugging, and eventual multi-session
+support.</p></li>
+<li><p><strong>No graphical user interface</strong>: The package is
+designed as a command-line simulation and game environment. While
+interactive plots (via <code>plotly</code>) are supported for bankroll
+tracking and rankings, no GUI or web app layer (e.g.,
+<code>shiny</code>) is provided.</p></li>
+<li><p><strong>Persistence is local-only</strong>: Player data is stored
+in <code>.rds</code> files on the local file system, limiting shared
+access or multi-device continuity. Integration with centralized
+databases or cloud storage could improve realism and
+reusability.</p></li>
+<li><p><strong>Performance limits in high-scale simulations</strong>:
+While score computation is optimized via C++ and most routines are
+vectorized or pre-allocated, extremely large-scale simulations (e.g.,
+millions of rounds) may reveal memory or performance ceilings compared
+to optimized C++ .</p></li>
+<li><p><strong>Limited test coverage on edge cases</strong>: The package
+includes unit tests for core logic and strategies, but coverage for edge
+scenarios (e.g., repeated splits, 5-card Charlie with insurance payout,
+tie-break rules under exotic combinations) may need further expansion
+for production-level robustness.</p></li>
 </ul>
 </div>
 <div class="section level2">
@@ -580,17 +601,25 @@ C++/Python.</p></li>
 <p>We considered several alternative approaches in developing
 <strong>wombat21</strong>:</p>
 <ul>
-<li><p><strong>Pure S3 vs vctrs:</strong> Adopted vctrs for safer
-extensible objects, could have used pure S3.</p></li>
-<li><p><strong>R-only vs C++ backend:</strong> Chose C++ for batch
-speed; R only is simpler but slower.</p></li>
-<li><p><strong>Functional vs OOP:</strong> Prioritized functional
-interfaces over OOP for composability.</p></li>
-<li><p><strong>Integrated GUI:</strong> Focused on core logic, left out
-Shiny/desktop GUI for clarity.</p></li>
-<li><p><strong>Database/data.table support:</strong> Used R lists/local
-files for simplicity; future work could add database
-integration.</p></li>
+<li><p><strong>vctrs vs base S3:</strong> We chose vctrs for safer and
+stricter type behavior over traditional S3, which offers more
+flexibility but less protection.</p></li>
+<li><p><strong>R-only vs C++ backend:</strong> Core scoring logic uses
+C++ via Rcpp for speed. A pure R version would be easier to maintain but
+much slower for large simulations.</p></li>
+<li><p><strong>Functional vs OOP:</strong> We followed a functional
+approach for composability and transparency. Object-oriented (e.g., R6)
+design could simplify session state but reduces modularity.</p></li>
+<li><p><strong>Console vs GUI:</strong> Focus was placed on robust
+terminal interaction. GUI features (e.g., Shiny) were deliberately
+excluded to keep logic clean and scriptable.</p></li>
+<li><p><strong>File I/O vs databases:</strong> Player data is saved via
+.rds for simplicity. Future extensions could support database backends
+(e.g., SQLite) for multiplayer tracking or dashboards.</p></li>
+<li><p><strong>Name-based vs ID-based indexing:</strong> Players are
+currently indexed by names for clarity. Internally switching to numeric
+or UUID-based IDs could improve robustness and allow cleaner back-end
+logic.</p></li>
 </ul>
 </div>
 <div class="section level2">

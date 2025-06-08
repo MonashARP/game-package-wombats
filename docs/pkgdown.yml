@@ -4,7 +4,11 @@ pkgdown_sha: ~
 articles:
   Design_wombat21: Design_wombat21.html
   wombat21: wombat21.html
+<<<<<<< HEAD
 last_built: 2025-06-08T05:30Z
+=======
+last_built: 2025-06-08T04:50Z
+>>>>>>> 9099abf70b02413018ee9aecaa44b1907d7e2a5e
 urls:
   reference: https://monasharp.github.io/game-package-wombats/reference
   article: https://monasharp.github.io/game-package-wombats/articles
