@@ -4,6 +4,8 @@
 # wombat21 <img src= "https://monasharp.github.io/game-package-wombats/logo.png" align="right" height="139" alt="" />
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/MonashARP/game-package-wombats/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/MonashARP/game-package-wombats/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## What is wombat21?
