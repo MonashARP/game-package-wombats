@@ -1,0 +1,466 @@
+---
+title: "Advanced Features and Design of wombat21"
+author: "Sun Yan Joanna Ma, Wei Zhu Chen, Aneesh Agarwal"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Advanced Features and Design of wombat21}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## 🎯 Design Philosophy
+
+**wombat21** is a console-based Blackjack engine designed with clarity, speed, and extensibility in mind. This section outlines the core design philosophy behind the package—why it was built, how it is structured, and how key features like multiplayer play, AI opponents, simulation, and strategy customization are supported through modular functional interfaces.
+
+We also highlight the technical foundations, including:
+
+-   **S3 + vctrs** for safe and extensible card types
+
+-   **C++** for performance-critical components like scoring
+
+-   **Functional layout**, testable and transparent, resembling R6-style modularity without the complexity
+
+If you're unfamiliar with how to run the game or use the functions interactively, we recommend starting with the [Get Started guide](https://monasharp.github.io/game-package-wombats/articles/wombat21.html) before returning to this design overview.
+
+## 🏷️ Function Names and Arguments
+
+All user-facing functions in `wombat21` are named to be clear, concise, and consistent, following common R conventions:
+
+-   **Verb-based names:**\
+    Functions perform an action and are named accordingly (e.g., `play()`, `simulate_blackjack()`, `calculate_score()`).
+
+-   **Explicit parameter names:**\
+    Arguments are descriptive, self-explanatory, and use snake_case (e.g., `num_rounds`, `bet_amount`, `buy_insurance`, `split`).
+
+-   **Strategy customization:**\
+    Where applicable, functions accept logical values or user-defined functions as parameters (`split`, `buy_insurance`), supporting flexible and advanced gameplay.
+
+-   **Consistent interface:**\
+    The same function can be used interactively (`play()`), for simulation (`simulate_blackjack()`), or for visualization (`plot_bankroll_history()`), all using familiar argument conventions.
+
+-   **Object arguments:**\
+    Game logic functions expect well-defined objects (e.g., `blackjack_hand`, `card`), ensuring type safety and clear data flow.
+
+**Internal functions** (not exported) are named with clear, specific purposes, and marked with `@noRd` and `@keywords internal` (e.g., `generate_blackjack_hands()`, `calculate_score_r()`). These utilities support testing, benchmarking, or code reuse, but are not part of the main user API.
+
+This consistent naming and argument style makes the package intuitive to use and easy to extend for both new and advanced users.
+
+### 🗂️ Functions Specification
+
+1.  **Card Objects:** Card validation and attribute extraction [*Main Arguments*: `card` ]
+
+    -   [*card_utils.R*]{style="color:gray"} ：`card_is_face()`, `card_is_ace()`, `card_value()`, `card_suit()`, `card_rank()`
+
+    -   [*card-class.R*]{style="color:gray"} ：`card()`, `format.card()`, `print.card()`, `vec_cast.card()`, `as.character.card()`
+
+2.  **Hand Objects:** Hand creation and validation [*Main Arguments*: `cards`, `hand`]
+
+    -   [*hand_utils.R*]{style="color:gray"} ：`new_blackjack_hand()`
+
+    -   [*hand_type.R*]{style="color:gray"} ：`is_five_card_charlie()`, `is_blackjack()`
+
+3.  **Scoring Logic:** Hand scoring and rules [*Main Arguments*: `hand`, `card`]
+
+    -   [*score_cal.R*]{style="color:gray"} ：`calculate_score()`
+
+    -   [*RcppExports.R*]{style="color:gray"} ：`calculate_score_cpp()`
+
+4.  **Dealing & Setup:** Initial hands and deck operations [*Main Arguments*: `players`, `deck`, `players_db`]
+
+    -   [*deal_card.R*]{style="color:gray"} ：`deal_cards()`
+
+    -   [*setup.R*]{style="color:gray"} ：`setup_and_display_initial()`
+
+    -   [*input_player.R*]{style="color:gray"} ：`input_players()`
+
+5.  **Gameplay:** Main loop , betting system and player actions [*Main Arguments*: `players`, `hand`, `deck`, `action`]
+
+    -   [*game_loop.R*]{style="color:gray"} ：`play()`, `ask_play_again()`, `end_round()`, `exit()`
+
+    -   [*bets.R*]{style="color:gray"} ：`get_bets()`
+
+    -   [*player_logic.R*]{style="color:gray"} ：`player_action()`, `play_player_turns()`
+
+6.  **Insurance** [*Main Arguments*: `players`, `hand`]
+
+    -   [*Insurance.R*]{style="color:gray"} ：`handle_insurance()`
+
+7.  **Splitting** [*Main Arguments*: `hand`, `players`]
+
+    -   [*split.R*]{style="color:gray"} ：`handle_splitting()`
+
+8.  **Simulation** [*Main Arguments*: `num_rounds`, `split`, `buy_insurance`]
+
+    -   [*simulation.R*]{style="color:gray"} ：`simulate_blackjack()`
+
+9.  **Result Judgement & Summary** [*Main Arguments*: `scores`, `players`, `hands`]
+
+    -   [*results.R*]{style="color:gray"} ： `display_final_results()`, `determine_winner()`
+
+10. **Player I/O & Persistences** [*Main Arguments*: `players`, `bankroll_history`]
+
+    -   [*io.R*]{style="color:gray"} ：`save_players()`, `load_players()`, `reset_game_data()`
+
+11. **Visualization** [*Main Arguments*: `bankroll_history`]
+
+    -   [*bankroll_graph.R*]{style="color:gray"} ：`plot_bankroll_history()`
+
+    -   [*results.R*]{style="color:gray"} ：`plot_player_ranking()`
+
+12. **Utilities** [*Main Arguments*: none]
+
+    -   [*data_directory.R*]{style="color:gray"} ：`get_home_dir()`
+
+## 🗃️ Core Data Structures
+
+-   **card**: Represents a single playing card (fields: `rank`, `suit`)
+-   **blackjack_hand**: Represents a player's hand (field: `cards`, a vector of card objects)
+-   **players**: List of player objects (fields: `name`, `coins`, `is_computer`, ...)
+
+This structure supports flexible extension, validation, and efficient manipulation via vctrs and S3.
+
+## 🧩 Object System with vctrs
+
+### **Why Use vctrs?**
+
+The `vctrs` package provides a robust foundation for type-safe, extensible object-oriented programming in R. In **`wombat21`**, it powers the entire game logic for cards and hands.
+
+**1. Custom Card and Hand Classes**
+
+`wombat21` defines:
+
+-   **`card`**: an object with `rank` and `suit`, e.g., `"A♠"`, `"10♦"`
+
+-   **`blackjack_hand`**: a player hand consisting of `card` objects
+
+Both are built with `vctrs::new_rcrd()`, enabling compact storage and automatic validation.
+
+```{r eval=FALSE}
+card <- function(rank, suit) {
+  vctrs::new_rcrd(list(rank = rank, suit = suit), class = "card")
+}
+
+new_blackjack_hand <- function(cards) {
+  vctrs::new_rcrd(list(cards = cards), class = "blackjack_hand")
+}
+```
+
+**2. Helper Functions and Safe Manipulation**
+
+Custom card and hand objects can be safely manipulated using helper functions:
+
+```{r eval=FALSE}
+# Create cards and a hand
+c1 <- card("A", "♠")
+c2 <- card("10", "♦")
+hand <- new_blackjack_hand(c(c1, c2))
+
+card_rank(hand$cards)    # Returns c("A", "10")
+card_value(hand$cards)   # Returns c(11, 10)
+```
+
+*These functions ensure your game logic is **clean**, **type-safe**, and **readable**.*
+
+**3. Extending with S3 + vctrs**
+
+All relevant behaviors—printing, type coercion, equality—are registered explicitly via `vctrs::s3_register()`.
+
+```{r eval=FALSE}
+# Custom print method for card objects
+print.card <- function(x, ...) {
+  cat(sprintf("<card: %s of %s>\n", card_rank(x), card_suit(x)))
+}
+
+# Register vctrs casting and type methods for cards
+vctrs::s3_register("vctrs::vec_cast", "card.character")
+vctrs::s3_register("vctrs::vec_cast", "character.card")
+vctrs::s3_register("vctrs::vec_ptype2", "card.character")
+vctrs::s3_register("vctrs::vec_ptype2", "character.card")
+vctrs::s3_register("vctrs::vec_ptype2", "card.card")
+```
+
+*This design ensures smooth interoperation with base R vectors and custom behaviors.*
+
+### Benefits for Advanced Users & Developers
+
+-   **Safer code:** Bugs from invalid card or hand objects are caught early
+
+-   **Clearer APIs:** Functions clearly expect and return game objects
+
+-   **Easy extension:** Add new rules or card types with minimal refactoring
+
+-   **Better debugging:** Informative errors when misuse is detected
+
+## 🧵 Metaprogramming & Generic Interfaces
+
+While **`wombat21`** does not heavily rely on *metaprogramming*, it demonstrates simple use of **expression evaluation** and **S3 generics** to enable flexible logic and modular game components.
+
+### Metaprogramming in Action
+
+A notable use of metaprogramming appears in our AI hit/stand decision logic:
+
+```{r eval=FALSE}
+while (rlang::eval_tidy(rlang::expr(!!current_score < 17))) {
+  ...
+}
+```
+
+This pattern lets us **evaluate conditional logic dynamically**, which could be extended to support more advanced decision trees or strategy DSLs.
+
+Although simple here, this approach allows:
+
+-   Dynamic game strategies (e.g., thresholds that are formula-based)
+
+-   Pluggable control flows without hardcoding
+
+-   Compatibility with user-defined logic in future extensions
+
+### Interface Design via S3
+
+Beyond that, **interface extensibility** in `wombat21` is achieved through clean **S3 generics**:
+
+-   `card_rank()`, `card_value()`, and `calculate_score()` all support **class dispatch**
+
+-   Functions like `card_rank.card()` and `card_rank.character()` make logic reusable across both S3 `card` objects and plain characters
+
+This gives:
+
+-   **Clear separation** between internal logic and user-visible objects
+
+-   **Easy extension** of new types (e.g., `joker_card`, `double_card`)
+
+-   Consistent API behavior with helpful fallbacks and method dispatch
+
+### Summary
+
+::: {style="width:100%"}
++---------------------+--------------------------+---------------------------------------------+
+| Aspect              | Technique Used           | Purpose                                     |
++=====================+==========================+=============================================+
+| Hit/stand condition | `rlang::eval_tidy()`     | Dynamically evaluate game thresholds        |
++---------------------+--------------------------+---------------------------------------------+
+| Rank/value logic    | S3 generic dispatch      | Allow multiple input types (`card`, `char`) |
++---------------------+--------------------------+---------------------------------------------+
+| Extendability       | `vctrs::new_rcrd()` + S3 | Build and validate extensible game types    |
++---------------------+--------------------------+---------------------------------------------+
+:::
+
+### Want to do more?
+
+For more advanced *metaprogramming*, consider:
+
+-   User-defined strategy expressions via quosures
+
+-   Parameterized hit/stand rules embedded in `play()` flow
+
+-   Callable logic passed in as closures (e.g., `split_func`, `insurance_func` – which you already support)
+
+## ⚡ Boosting Performance with Rcpp
+
+To speed up critical logic like **score calculation**, `wombat21` uses a C++ backend via `Rcpp`. This ensures fast, reliable, and vectorized performance even during **high-volume simulation**.
+
+### What’s Accelerated
+
+The most computationally intense operation in Blackjack is score calculation—especially due to the **variable value of Aces**. Instead of handling this in pure R every round, we offload it to C++:
+
+```{r eval=FALSE}
+calculate_score(hand)
+```
+
+internally calls:
+
+```{r eval=FALSE}
+calculate_score_cpp(ranks)
+```
+
+### How It Works
+
+```{r eval=FALSE}
+# R wrapper (R/score_cal.R)
+calculate_score <- function(hand) {
+  ...
+  ranks <- card_rank(cards)
+  calculate_score_cpp(ranks)
+}
+```
+
+```{r cpp-example, eval=FALSE}
+# C++: src/calculate_score.cpp
+# int calculate_score_cpp(std::vector<std::string> ranks);
+```
+
+This ensures:
+
+-   **Low latency** even with thousands of hands
+
+-   **Correct Ace handling** (e.g., dual 1/11)
+
+-   **Seamless integration** with S3/vctrs objects
+
+### When to Use
+
+You don’t need to call the C++ version manually—`calculate_score()` handles this for you. But advanced users can test or use it directly:
+
+```{r eval=FALSE}
+calculate_score_cpp(c("A", "A", "9"))  # Returns 21
+```
+
+**Speed Comparison (10,000 hands)**
+
+::: {style="width:100%"}
+| Method                       | Elapsed Time (sec) | Relative Speed |
+|------------------------------|--------------------|----------------|
+| Pure R (`calculate_score_r`) | 0.28               | 1× (baseline)  |
+| Rcpp C++ (`calculate_score`) | 0.06               | 4.7× faster    |
+:::
+
+## ✅ Testing and Data Persistence
+
+The package uses unit tests (via testthat) and persistent storage (e.g., `save_players()`/`load_players()`) to ensure reliability and reproducibility for all features.
+
+## 🚧 Limitations
+
+**wombat21** is designed for flexibility and extensibility, but there are still some current limitations:
+
+-   **Single-deck only**: All games use a single 52-card deck. Multi-deck or shoe-based Blackjack (common in casinos) is not supported, though could be extended with minimal code adjustments in `deal_cards()`.
+
+-   **Standard rule set**: The game adheres to conventional Blackjack rules (e.g., dealer hits on soft 17, standard payouts). Variants such as Spanish 21, Double Exposure, or Pontoon are not implemented, but could be supported via modular rule injection.
+
+-   **Strategy granularity**: The simulation engine supports customizable strategies via user-supplied functions (`buy_insurance`, `split`, `threshold`), but lacks fine-grained state-aware policy learning or reinforcement-based optimization. The logic is suitable for testing deterministic or rule-based strategies, not adaptive AI.
+
+-   **Name-based player indexing**: Internally, all players are indexed by user-chosen names (e.g., `"Alice"`, `"Computer_1"`). While human-readable, this design may introduce collision or lookup inefficiencies. Using internally generated unique IDs would decouple display and data management, enabling faster simulation, easier debugging, and eventual multi-session support.
+
+-   **No graphical user interface**: The package is designed as a command-line simulation and game environment. While interactive plots (via `plotly`) are supported for bankroll tracking and rankings, no GUI or web app layer (e.g., `shiny`) is provided.
+
+-   **Persistence is local-only**: Player data is stored in `.rds` files on the local file system, limiting shared access or multi-device continuity. Integration with centralized databases or cloud storage could improve realism and reusability.
+
+-   **Performance limits in high-scale simulations**: While score computation is optimized via C++ and most routines are vectorized or pre-allocated, extremely large-scale simulations (e.g., millions of rounds) may reveal memory or performance ceilings compared to optimized C++ .
+
+-   **Limited test coverage on edge cases**: The package includes unit tests for core logic and strategies, but coverage for edge scenarios (e.g., repeated splits, 5-card Charlie with insurance payout, tie-break rules under exotic combinations) may need further expansion for production-level robustness.
+
+## 🔄 Alternative Designs
+
+We considered several alternative approaches in developing **wombat21**:
+
+-   **vctrs vs base S3:** We chose vctrs for safer and stricter type behavior over traditional S3, which offers more flexibility but less protection.
+
+-   **R-only vs C++ backend:** Core scoring logic uses C++ via Rcpp for speed. A pure R version would be easier to maintain but much slower for large simulations.
+
+-   **Functional vs OOP:** We followed a functional approach for composability and transparency. Object-oriented (e.g., R6) design could simplify session state but reduces modularity.
+
+-   **Console vs GUI:** Focus was placed on robust terminal interaction. GUI features (e.g., Shiny) were deliberately excluded to keep logic clean and scriptable.
+
+-   **File I/O vs databases:** Player data is saved via .rds for simplicity. Future extensions could support database backends (e.g., SQLite) for multiplayer tracking or dashboards.
+
+-   **Name-based vs ID-based indexing:** Players are currently indexed by names for clarity. Internally switching to numeric or UUID-based IDs could improve robustness and allow cleaner back-end logic.
+
+## 🤖 AI Statement
+
+In compliance with University policy on responsible AI use, we openly and clearly acknowledge **extensive use of generative AI tools—including OpenAI ChatGPT and GitHub Copilot—in the development of this assignment.**
+
+### How AI Was Used
+
+-   **Initial code generation and scaffolding:**\
+    Many basic functions, S3 class constructors, and control-flow templates (such as for card creation, game setup, simulation loops, and some unit tests) were generated with ChatGPT, then thoroughly reviewed, modified, and integrated by the team.
+
+-   **Language and documentation refinement:**\
+    AI was used to polish English language in the README, function documentation, and code comments.
+
+-   **Debugging and best practices:**\
+    We consulted ChatGPT for error explanations and debugging advice, always reviewing and adapting outputs before inclusion.
+
+-   **Design discussion and alternatives:**\
+    AI was used as a “second opinion” in discussions about object systems, file structure, and testing coverage, with all final design decisions made by the team.
+
+### How AI Was **Not** Used
+
+-   AI was **never** used to submit unreviewed or unedited answers.
+
+-   No material was copied blindly from AI outputs—every section was checked, rewritten, and adapted.
+
+-   All decisions and code integrations reflect our own understanding and academic responsibility.
+
+### Accountability and Academic Integrity
+
+-   We accept full responsibility for all code, documentation, and design decisions.
+
+-   AI was used as an assistant for efficiency and idea generation, not as a replacement for our learning.
+
+-   All AI use is fully documented here, following University transparency and integrity policies.
+
+-   We are prepared to discuss or demonstrate any part of our work as evidence of our engagement and understanding.
+
+### Limitations and Reflection
+
+-   AI-generated code often required significant rewriting or adaptation to meet our standards.
+
+-   Some AI suggestions were inefficient or incomplete; we improved or replaced these sections as needed.
+
+-   Test coverage currently emphasizes core logic; auxiliary features may be less robust.
+
+### Example Prompts Used
+
+-   "Write an S3 constructor for a card object in R."
+
+-   "How to generate a unit test for splitting hands in Blackjack using testthat?"
+
+-   "Polish the English in this README section."
+
+-   "Explain how to fix this vctrs error in an R test."
+
+-   "Suggest a yaml grouping for pkgdown user-facing and internal functions."
+
+### Statement of Responsibility
+
+We affirm that:
+
+-   All team members participated in using and reviewing AI-assisted code and documentation, and all share responsibility for the submitted work.
+
+-   AI was used only as an aid; all logic, structure, and integration reflect our own skills and decision-making.
+
+-   Our use of AI aligns with University expectations for responsible, transparent, and ethical assessment practice.
+
+::: {style="text-align: right;"}
+Prepared by: Weizhu Chen, Sun Yan Joanna Ma, Aneesh Agarwal\
+Date: 2025-06-06
+:::
+
+## 🧑‍🤝‍🧑 Team Contribution Summary
+
+::: {style="width:100%"}
++----------------+-----------------------------------------------------------------------------------------+
+| Name           | Key Contributions                                                                       |
++================+=========================================================================================+
+| Weizhu Chen    | \- Designed and implemented main game loop and core mechanics\                          |
+|                | - Developed S3 generics/methods (e.g., `card_rank`, `vec_cast`)\                        |
+|                | - Modularized and refactored codebase\                                                  |
+|                | - Added simulation feature and usage examples\                                          |
+|                | - Improved documentation structure and naming consistency                               |
++----------------+-----------------------------------------------------------------------------------------+
+| Joanna Ma      | \- Developed multi-player and computer player support\                                  |
+|                | - Implemented betting and coin management\                                              |
+|                | - Created visualization functions for player ranking and coin history\                  |
+|                | - Debugged and enhanced S3/vctrs compatibility\                                         |
+|                | - Helped with data storage and user interface troubleshooting                           |
++----------------+-----------------------------------------------------------------------------------------+
+| Aneesh Agarwal | \- Developed and integrated C++ backend for fast hand scoring (`calculate_score_cpp`)\  |
+|                | - Provided function examples and unit tests\                                            |
+|                | - Contributed to vignette and design documentation (including metaprogramming choices)\ |
+|                | - Assisted in troubleshooting and code review                                           |
++----------------+-----------------------------------------------------------------------------------------+
+:::
+
+::: {style="text-align: right;"}
+For full details of team member roles, see the [project repository](https://github.com/MonashARP/game-package-wombats).
+:::
+
+## 🤝 Conclusion & Contribution
+
+We welcome feature requests, bug reports, and community contributions. Feel free to open an issue or submit a pull request to help make `wombat21` even better!

@@ -1,0 +1,124 @@
+url: https://monasharp.github.io/game-package-wombats/
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+
+home:
+  title: "wombat21"
+  description: >
+    An R package for simulating multiplayer Blackjack games with support for
+    human and computer players, betting systems, game logic (split, double, insurance),
+    and player history visualization.
+
+navbar:
+  structure:
+    left: ["home", "get-started", "advanced-usage", "reference"]
+    right: ["GitHub"]
+
+  components:
+    home:
+      text: "Home"
+      href: index.html
+    get-started:
+      text: "Get Started"
+      href: articles/wombat21.html
+    advanced-usage:
+      text: "Design and Usage"
+      href: articles/Design_wombat21.html
+    reference:
+      text: "Reference"
+      href: reference/index.html
+    GitHub:
+      icon: fa-github
+      href: https://github.com/MonashARP/game-package-wombats
+      aria-label: "GitHub project repository"
+
+
+reference:
+  - title: "Core Gameplay"
+    desc: Main control flow of the Blackjack game.
+    contents:
+      - play
+      - ask_play_again
+      - exit
+
+  - title: "Player Management"
+    desc: Functions for managing and inputting player data.
+    contents:
+      - input_players
+      - get_bets
+      - player_action
+      - play_player_turns
+
+  - title: "Game Setup and Card Handling"
+    desc: Functions for dealing cards and setting up game state.
+    contents:
+      - setup_and_display_initial
+      - deal_cards
+      - card
+      - new_blackjack_hand
+      - card_is_face
+      - card_is_ace
+      - card_value
+      - card_suit
+      - card_rank
+      - as.character.card
+      - print.card
+
+  - title: "Game Progression"
+    desc: Functions related to splitting, insurance, and gameplay actions.
+    contents:
+      - handle_splitting
+      - handle_insurance
+
+  - title: "Outcome and Scoring"
+    desc: Functions for scoring hands and determining winners.
+    contents:
+      - calculate_score
+      - calculate_score_cpp
+      - is_blackjack
+      - is_five_card_charlie
+      - determine_winner
+      - end_round
+      - display_final_results
+
+  - title: "Results and Visualization"
+    desc: Functions to plot or display player and bankroll results.
+    contents:
+      - plot_player_ranking
+      - plot_bankroll_history
+
+  - title: "Data Management"
+    desc: Save/load/reset player data and session information.
+    contents:
+      - save_players
+      - load_players
+      - reset_game_data
+      - get_home_dir
+      - players_data
+
+  - title: "Simulation"
+    desc: Run AI-driven game simulations for strategy analysis.
+    contents:
+      - simulate_multiplayer_blackjack
+      - analyze_multiplayer_results
+
+articles:
+  - title: "Getting Started"
+    contents:
+      - wombat21
+  - title: "Design and Usage"
+    contents:
+      - Design_wombat21
+
+authors:
+  "Sun Yan Joanna Ma":
+    roles: [aut, cre]
+    href: https://github.com/joanna1016ma
+  "Wei Zhu Chen":
+    roles: [aut]
+    href: https://github.com/WZ-Ch01
+  "Aneesh Agarwal":
+    roles: [aut]
+    href: https://github.com/AneeshAgarwala

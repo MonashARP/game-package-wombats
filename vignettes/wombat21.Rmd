@@ -1,0 +1,347 @@
+---
+title: "wombat21: Multiplayer Blackjack in R"
+author: "Sun Yan Joanna Ma, Wei Zhu Chen, Aneesh Agarwal"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{wombat21: Multiplayer Blackjack in R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+devtools::load_all(".")
+```
+
+## 🃏 What is `wombat21`?
+
+**`wombat21`** is a modern, fully-featured Blackjack game engine for R. It lets you play with friends or AI, simulate thousands of games, and analyze results—all with advanced Blackjack rules and persistent player records.
+
+```{r eval=TRUE, warning=FALSE, message=FALSE}
+library(wombat21)
+```
+
+Whether you're a fan of card games or want to explore R programming with real-world logic, **`wombat21`** offers a fun, hands-on way to learn, play, and experiment.
+
+Install dependencies (if needed):
+
+```{r eval=FALSE}
+install.packages(c("rlang", "vctrs", "plotly", "dplyr", "ggplot2", "Rcpp"))
+```
+
+Tip: `plot_bankroll_history()` uses `plotly` for interactive charts. If you want the HTML website docs (`pkgdown`), install `pkgdown` as well.
+
+## 🎮 Features
+
+-   **Multi-player support:** Up to 6 human or AI players per game
+
+-   **Full rules:** Split, double down, insurance, five-card Charlie, bust detection
+
+-   **Persistent progress:** Automatic saving of player coin balances and game history
+
+-   **Validated betting system:** Safe and flexible coin betting with input checks
+
+-   **Interactive visualization:** Track and plot bankroll history and session trends
+
+-   **Leaderboard & rankings:** Real-time rankings and post-game stats
+
+-   **Flexible strategy simulation:**
+
+    -   Simulate thousands of games with custom betting, splitting, and insurance strategies
+
+    -   User-defined strategy functions for advanced scenario analysis
+
+    -   Batch analysis of win rates, insurance efficacy, split success, and more
+
+## 🎲 Interactive Gameplay
+
+### 🚀 Start Playing
+
+```{r eval = FALSE}
+play()
+```
+
+To begin a game, simply run:
+
+You’ll be prompted to:
+
+-   Choose human or computer player
+
+-   Enter player names
+
+-   Place your bet
+
+-   Make moves (hit, stand, split, etc.)
+
+### 💸 Betting and Coins
+
+Each player starts with a coin balance. You bet each round. Outcomes impact your balance:
+
+-   Blackjack: **1.5× payout**
+
+-   Win: **1× payout**
+
+-   Push: **bet returned**
+
+-   Loss: **bet lost**
+
+-   5-card Charlie: **auto win**
+
+-   Your coin balance is saved between sessions under your player name.
+
+### 🤖 Computer Players
+
+AI players follow simple strategy:
+
+-   Bet 10 coins or remaining balance (whichever is less)
+
+-   Hit below 16, stand at 17+
+
+-   They participate fully in the round, including betting and insurance logic.
+
+### 🏆 Player Rankings
+
+At the end of each round, an updated leader-board is displayed, showing every player’s current coin total. All rankings are refreshed automatically, so you can see how you stack up against friends or AI opponents without any manual steps.
+
+### 📝 Bankroll History
+
+During game-play, your coin balance is automatically tracked and visualized after each round. There’s no need to run any extra code—just play the game and watch your bankroll trends update in real time.
+
+### 🔁 Play Again or Exit
+
+At the end of each game, you’ll see:
+
+> Type `again` to play another game, or `exit` to quit:
+
+Simply type your choice at the prompt to continue playing or leave the game.
+
+### 🧬 Function Hooks & Extensionsd
+
+While `play()` and `simulate_blackjack()` provide complete game loops out-of-the-box, many internal components are modular and can be **replaced or extended by advanced users**.
+
+Key functions you can customize:
+
+| Function               | Purpose                                  | Called Automatically? |
+|----------------------|--------------------------------|------------------|
+| `player_action()`      | Player decision logic (hit/stand/double) | In `play()`           |
+| `handle_insurance()`   | Insurance decision flow                  | In `play()`           |
+| `handle_splitting()`   | Whether and how to split hands           | In `play()`           |
+| `dealer_action()`      | Dealer behavior after all players acted  | In `play()`           |
+| `player_action()`      | Your own strategy logic                  | In `play()`           |
+| `play_player_turns()`  | Simulate a single player's turn          | Manually usable       |
+| `calculate_score()`    | Compute score of any hand                | Manually usable       |
+| `simulate_blackjack()` | Batch simulations with pluggable logic   | Manually usable       |
+
+**Example:**
+
+-   Custom Insurance Strategy
+
+```{r eval=FALSE}
+handle_insurance <- function(player_hand, dealer_card) {
+  # Always decline insurance
+  return(FALSE)
+}
+
+# Test insurance logic manually
+handle_insurance(c("10♠", "9♦"), "A♠")
+```
+
+-   Redefine Player Decision Strategy
+
+```{r eval=FALSE}
+player_action <- function(hand, dealer_card, player_info) {
+  # Always hit if score < 15
+  if (calculate_score(hand)$score < 15) return("hit")
+  else return("stand")
+}
+
+# Call the function in isolation
+player_action(c("6♦", "8♣"), "K♠", list(coins = 1000))
+```
+
+-   Simulate a Single Turn
+
+```{r eval=FALSE}
+# Create deck and simulate one turn manually
+deck <- create_deck()
+player_hand <- list(new_blackjack_hand(draw_cards(deck, 2)))
+dealer_card <- draw_cards(deck, 1)
+
+# Use your own player_action() inside this function
+updated_hand <- play_player_turns(player_hand, deck, dealer_card)
+```
+
+*This modularity lets you explore blackjack mechanics piece-by-piece. For full reference of all available user-facing functions, visit [Functions Refrence](https://monasharp.github.io/game-package-wombats/reference/index.html).*
+
+## 🧠 Custom Strategy Simulation
+
+Simulate thousands of Blackjack games to test your strategies automatically. You can control whether to split, buy insurance, or change your hit/stand threshold—just by passing simple options or your own functions.
+
+### 🚦 Basic Example
+
+Run a quick simulation with the default strategy (hit below 17, always buy insurance and always split pairs):
+
+```{r,eval=FALSE}
+simulation <- simulate_multiplayer_blackjack(num_rounds = 1000)
+```
+
+### ⚙️ Customize Your Strategy
+
+You can easily change how the AI plays:
+
+-   Adjust the hit/stand rule:Hit if below your chosen score, otherwise stand.
+
+-   Choose to always/never split or buy insurance:Set split or buy_insurance to TRUE or FALSE.
+
+-   Write your own decision logic:Pass a function to control split or insurance behavior.
+
+Examples:
+
+-   Never split, never buy insurance, hit below 18:
+
+```{r,eval=FALSE}
+simulation <- simulate_multiplayer_blackjack(
+  num_players = 3,
+  num_rounds = 100,
+  threshold = 18,
+  split = FALSE,
+  buy_insurance = FALSE
+)
+```
+
+-   Custom logic (split only A or 8, buy insurance only with blackjack):
+
+```{r,eval=FALSE}
+# Split pairs of A or 8 only; buy insurance only when player's hand is blackjack.
+simulation <- simulate_multiplayer_blackjack(
+  num_rounds = 100,
+  split = function(hand) {
+    ranks <- card_rank(hand$cards)
+    length(ranks) == 2 && ranks[1] == ranks[2] && ranks[1] %in% c("8", "A")
+  },
+  buy_insurance = function(player, dealer_hand) {
+    is_blackjack(player$hand)
+  }
+)
+```
+
+### 🧑‍💻 Advanced: Custom Strategy Functions
+
+You can pass any function to the `split` or `buy_insurance` argument in `simulate_multiplayer_blackjack()`, enabling sophisticated, context-dependent strategies. Additionally, vectors can also be passed to threshold, bet_amount, and initial_coins to customize each player's behavior.
+
+1.  **Advanced logic: Each player has a different logic when deciding whether to split their cards or not.**
+
+```{r,eval=FALSE}
+split_basic <- function(hand) {
+  # Split Aces and 8s only
+  ranks <- card_rank(hand$cards)
+  length(ranks) == 2 && ranks[1] == ranks[2] && ranks[1] %in% c("A", "8")
+}
+
+split_aggressive <- function(hand) {
+  # Split everything except 10s and 5s
+  ranks <- card_rank(hand$cards)
+  if (length(ranks) != 2 || ranks[1] != ranks[2]) return(FALSE)
+  !ranks[1] %in% c("10", "J", "Q", "K", "5")
+}
+
+split_never <- function(hand) {
+  FALSE
+}
+```
+
+2.  **Advanced insurance logic**
+
+```{r,eval=FALSE}
+# Only buy insurance if player has blackjack AND dealer shows Ace.
+insurance_dealer <- function(player, dealer_hand) {
+  is_blackjack(player$hand) && card_rank(dealer_hand$cards[1]) == "A"
+}
+
+insurance_conservative <- function(player, dealer_hand) {
+  # Only buy insurance if player has blackjack
+  is_blackjack(player$hand)
+}
+
+insurance_aggressive <- function(player, dealer_hand) {
+  # Always buy insurance when dealer shows Ace
+  TRUE
+}
+
+insurance_smart <- function(player, dealer_hand) {
+  # Buy insurance if player has 20 or blackjack
+  player_score <- calculate_score(player$hand)
+  player_score >= 20 || is_blackjack(player$hand)
+}
+```
+
+3.  **Compare Strategies with Batch Simulation and Visualization**
+
+```{r,eval=FALSE}
+results <- simulate_multiplayer_blackjack(
+  num_rounds = 1000,
+  num_players = 4,
+  threshold = c(17, 18, 16, 19),
+  buy_insurance = list(insurance_conservative, insurance_aggressive, insurance_dealer, insurance_smart),
+  split = list(split_basic, split_aggressive, split_never, FALSE),
+  bet_amount = c(10, 15, 20, 25),
+  initial_coins = c(1000, 1200, 800, 1500)
+)
+```
+
+*These examples show how you can build, test, and visualize sophisticated blackjack strategies by passing custom logic into the simulation functions.*
+
+### 📋 See Your Results
+
+Check the win rate, loss rate, and other stats in the returned list:
+
+```{r echo=FALSE, eval=TRUE}
+load(file = "../data/simulation_data.rda")
+```
+
+
+```{r,eval=TRUE}
+analyze_multiplayer_results(results = simulation_data)
+```
+
+💡Try experimenting with your own logic—`wombat21` is designed to make strategy research both powerful and fun!
+
+## 📈 Visualize
+
+### 📦 Export Results
+
+-   **Interactive Game Results**
+
+After finishing an interactive game (using `play()`), you can export your results for further analysis:
+
+```{r,eval=FALSE}
+save_players(players, bankroll_history)
+```
+
+### 💹 Plot Bankroll History
+
+Visualize how each player’s coin balance changes over time.
+
+```{r,eval=TRUE, warning=FALSE}
+plot_bankroll_history(bankroll_history = simulation_data$bankroll_history)
+```
+
+*Creates an interactive line chart showing bankroll trends by round.*
+
+### 📊 Plot Player Rankings
+
+Compare player coin totals and see who’s on top.
+```{r echo=FALSE, eval=TRUE}
+load(file = "../data/players_data.rda")
+```
+
+
+```{r,eval=TRUE}
+plot_player_ranking(players = players_data$players)
+```
+
+*Displays a bar chart ranking all players by coins.*
